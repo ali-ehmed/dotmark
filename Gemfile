@@ -8,6 +8,9 @@ gem 'coffee-rails', '~> 4.1.0'
 gem 'jquery-rails'
 gem 'turbolinks'
 gem 'jbuilder', '~> 2.0'
+
+gem "font-awesome-rails"
+gem 'devise'
 group :development, :test do
   gem 'byebug'
 end
