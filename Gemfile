@@ -11,6 +11,7 @@ gem 'jbuilder', '~> 2.0'
 
 gem "font-awesome-rails"
 gem 'devise'
+gem "breadcrumbs_on_rails"
 group :development, :test do
   gem 'byebug'
 end

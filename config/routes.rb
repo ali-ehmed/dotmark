@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
   devise_for :admins
-  
+	get "/settings" => "admins#settings"
+
   authenticated :admin do
     root 'landing#dashboard', as: :authenticated_root
   end
