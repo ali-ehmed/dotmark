@@ -10,13 +10,21 @@
           <hr/>
           <div class="modal-body">
             <p>
-              <input class="form-control" data-mask="9999-9999" name="name" placeholder="e.g 2015-2016" type="text"></input>
+              <div class="row">
+                <div class="col-md-12">
+                  <input class="form-control" data-mask="9999-9999" name="name" placeholder="e.g 2015-2016" type="text"></input>
+                </div>
+              </div>
             </p>
             <p>
-              <input class="form-control start" name="start_date" placeholder="From" type="text"></input>
-            </p>
-            <p>
-              <input class="form-control end" name="end_date" placeholder="To" type="text"></input>
+              <div class="row">
+                <div class="col-md-6">
+                  <input class="form-control start" name="start_date" placeholder="Starting From" type="text"></input>
+                </div>
+                <div class="col-md-6">
+                  <input class="form-control end" name="end_date" placeholder="End On" type="text"></input>
+                </div>
+              </div>
             </p>
           </div>
           <div class="modal-footer">

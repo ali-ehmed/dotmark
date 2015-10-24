@@ -12,6 +12,13 @@
 //
 //= require jquery
 //= require jquery_ujs
+
+//= require best_in_place
+//= require best_in_place.jquery-ui
+//= require best_in_place.purr
+
+//= require jquery.minicolors
+
 //= require admin-theme
 //= require turbolinks
 //= require bootstrap-sprockets
@@ -24,7 +31,7 @@
 
 
 $(document).ready(function(){
-	$(".alert").addClass("in").fadeOut(4500);
+	$(".alert-message").addClass("in").fadeOut(4500);
 
 	/* swap open/close side menu icons */
 	$('[data-toggle=collapse]').click(function(){

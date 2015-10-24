@@ -3,7 +3,12 @@ Rails.application.routes.draw do
 
 
   namespace :institutes do
-    resources :batches, only: [:index, :create, :destroy]
+    resources :batches, only: [:index, :create, :destroy] do
+      put "/add_sections" => "batches#add_sections", as: :add_sections
+    end
+    resources :sections, only: [:index, :update, :destroy] do
+      get "/get_sections" => "sections#get_sections", as: :get_sections, on: :collection
+    end
   end
 
   authenticated :admin do

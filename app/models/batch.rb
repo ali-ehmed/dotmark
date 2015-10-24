@@ -16,6 +16,9 @@ class Batch < ActiveRecord::Base
 	validates :end_date, presence: { message: "date can't be blank" }
 	validate :set_session_date
 
+	has_many :sections
+
+	accepts_nested_attributes_for :sections
 
 	def set_session_date
 		unless start_date.blank? || end_date.blank?

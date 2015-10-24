@@ -1,1 +1,1 @@
-$(".academic_batches").html("<%= escape_javascript(render 'listing_batches').html_safe %>")
+$(".academic_batches").hide().html("<%= escape_javascript(render 'listing_batches').html_safe %>").fadeIn(500)

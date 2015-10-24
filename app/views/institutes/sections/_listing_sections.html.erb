@@ -1,0 +1,54 @@
+<% if @sections.count > 0 %>
+	<div class="row">
+		<div class="col-md-6">
+			<ul class="list-group">
+				<li class="list-group-item"><strong>Section Name</strong></li>
+				<% @sections.each do |section| %>
+			  	<li class="list-group-item">
+			  		<%= section.name %>
+		  		</li>
+			  <% end %>
+			</ul>
+		</div>
+		<div class="col-md-6">
+			<ul class="list-group">
+				<li class="list-group-item"><strong>Color</strong></li>
+				<% @sections.each do |section| %>
+			  	<li class="list-group-item" id="section_color_<%= section.id %>">
+			  		
+			  		<%= get_color section.color %>
+			  		
+						<a href="javascript: void(0)" data-toggle="modal" data-target="#edit-section-color_<%= section.id %>"  class="pull-right glyphicon glyphicon-pencil"></a>
+
+						<!-- Modal -->
+						<div class="modal fade" id="edit-section-color_<%= section.id %>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+						  <div class="modal-dialog modal-sm" role="document">
+						    <div class="modal-content">
+						      <div class="modal-header">
+						        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						        <h4 class="modal-title" id="myModalLabel">Change Section Color</h4>
+						      </div>
+						      <div class="modal-body">
+
+						        <input name="section_color" id="section_color_input_<%= section.id %>" class="form-control section_color_picker" value="<%= section.color.present? ? section.color : '' %>"/>	
+
+						      </div>
+						      <div class="modal-footer">
+						        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+						        <button type="button" class="btn btn-primary" data-section-id="<%= section.id %>" onclick="saveSection(this);">Save changes</button>
+						      </div>
+						    </div>
+						  </div>
+						</div>
+
+		  		</li>
+			  <% end %>
+			</ul>
+		</div>
+	</div>
+<% else %>
+	<div class="alert alert-warning" role="alert">
+		<%= "No Sections are Present." %>
+	</div>
+<% end %>
+
