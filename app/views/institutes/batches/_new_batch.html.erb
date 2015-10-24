@@ -1,0 +1,30 @@
+<form action="/institutes/batches" method="<%= :post %>">
+  <div aria-hidden="true" aria-labelledby="session_modalLabel" class="modal fade" id="session_modal" role="dialog" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <h4 class="modal-title" id="myModalLabel">Add New Batch For <%= Time.now.year %></h4>
+          <hr/>
+          <div class="modal-body">
+            <p>
+              <input class="form-control" data-mask="9999-9999" name="name" placeholder="e.g 2015-2016" type="text"></input>
+            </p>
+            <p>
+              <input class="form-control start" name="start_date" placeholder="From" type="text"></input>
+            </p>
+            <p>
+              <input class="form-control end" name="end_date" placeholder="To" type="text"></input>
+            </p>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-default cancel-academic-session" data-dismiss="modal" type="button">Close</button>
+            <button class="btn btn-success" id="batch_save" type="submit">Save</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>

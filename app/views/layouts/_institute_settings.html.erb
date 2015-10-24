@@ -1,0 +1,23 @@
+<% if params[:controller].split("/").first == "institutes" %>
+  <div class="container-fluid">
+    <div class="page-heading-admin-settings">
+      Settings
+    </div>
+    <div class="row">
+      <div class="col-md-3">
+        <div class="admin-settings-list-group">
+          <a href="<%= institutes_batches_path %>" class="list-group-item">
+            Batches
+          </a>
+          <a href="#" class="list-group-item">Dapibus ac facilisis in</a>
+          <a href="#" class="list-group-item">Morbi leo risus</a>
+          <a href="#" class="list-group-item">Porta ac consectetur ac</a>
+          <a href="#" class="list-group-item">Vestibulum at eros</a>
+        </div>
+      </div>
+      <div class="col-md-9">
+        <%= yield :settings %>
+      </div>
+    </div>
+  </div>
+<% end %>

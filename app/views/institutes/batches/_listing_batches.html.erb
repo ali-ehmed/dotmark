@@ -1,0 +1,29 @@
+<table class="table table-striped">
+	<thead>
+	  <tr>
+	    <th>#</th>
+	    <th>Name</th>
+	    <th>From </th>
+	    <th>To</th>
+	  </tr>
+	</thead>
+	<tbody>
+	  <% @batches.each_with_index do |batch, counter| %>
+	  	<% count = counter + 1 %>
+	    <tr>
+	      <td>
+	        <%= count %>
+	      </td>
+	      <td>
+	        <%= batch.name %>
+	      </td>
+	      <td>
+	        <%= batch.start_date %>
+	      </td>
+	      <td>
+	        <%= batch.end_date %>
+	      </td>
+	    </tr>
+	  <% end %>
+	</tbody>
+</table>

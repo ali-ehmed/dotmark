@@ -12,10 +12,13 @@
 //
 //= require jquery
 //= require jquery_ujs
-//= require mistMenu
 //= require admin-theme
 //= require turbolinks
 //= require bootstrap-sprockets
+//= require jasny-bootstrap.min
+//= require sweet-alert
+//= require moment
+//= require bootstrap-datetimepicker
 //= require_tree .
 
 

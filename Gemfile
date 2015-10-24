@@ -12,6 +12,12 @@ gem 'jbuilder', '~> 2.0'
 gem "font-awesome-rails"
 gem 'devise'
 gem "breadcrumbs_on_rails"
+gem 'annotate'
+# DatePicker
+gem 'momentjs-rails', '>= 2.9.0'
+gem 'bootstrap3-datetimepicker-rails', '~> 4.17.37'
+# End
+gem 'jquery-ui-rails'
 group :development, :test do
   gem 'byebug'
 end

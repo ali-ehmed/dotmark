@@ -1,6 +1,10 @@
 Rails.application.routes.draw do
   devise_for :admins
-	get "/settings" => "admins#settings"
+
+
+  namespace :institutes do
+    resources :batches, only: [:index, :create, :destroy]
+  end
 
   authenticated :admin do
     root 'landing#dashboard', as: :authenticated_root

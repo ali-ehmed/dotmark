@@ -21,16 +21,19 @@
           <%= render 'layouts/navigation_links' %>
         </ul>
         
-        <ul class="nav navbar-nav navbar-right">
+        <ul class="nav navbar-nav navbar-top-links navbar-right">
           <% if admin_signed_in? %>
+            <li>
+              <%= link_to institutes_batches_path do%>
+                <i class="fa fa-university"></i> Institute
+              <% end %>
+            </li>
             <li class="dropdown">
               <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                  <i class="fa fa-user fa-fw"></i>  <i class="fa fa-caret-down"></i>
+                  <i class="fa fa-user fa-fw"></i> Settings <i class="fa fa-caret-down"></i>
               </a>
               <ul class="dropdown-menu dropdown-user">
                   <li><a href="#"><i class="fa fa-user fa-fw"></i> User Profile</a>
-                  </li>
-                  <li><a href="<%= settings_path %>"><i class="fa fa-gear fa-fw"></i> Settings</a>
                   </li>
                   <li class="divider"></li>
                   <li>
@@ -39,11 +42,8 @@
                     <% end %>
                   </li>
               </ul>
-                <!-- /.dropdown-user -->
             </li>
-
           <% end %>
-          <!-- /.dropdown -->
         </ul>
       </div>
     </div>

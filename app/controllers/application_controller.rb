@@ -4,6 +4,9 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
   helper_method :resource_signed_in?
 
+  include ActionView::Helpers::TagHelper
+  include ActionView::Context
+  
   add_breadcrumb "Dashboard"
 
   def resource_signed_in?
