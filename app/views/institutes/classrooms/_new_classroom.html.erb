@@ -1,0 +1,39 @@
+<form action="/institutes/classrooms" method="<%= :post %>">
+  <div aria-hidden="true" aria-labelledby="classroom_modalLabel" class="modal fade" id="classroom_modal" role="dialog" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <h4 class="modal-title" id="classroomLabel">Add New Classroom For Your Institute</h4>
+          <hr/>
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-md-12">
+                <label>Name:</label>
+                <input class="form-control" name="name" placeholder="Classroom Name" type="text"></input>
+              </div>
+            </div>
+            <p>
+              <div class="row">
+                <div class="col-md-6">
+                  <label>Color of Class <em>(Optional)</em>:</label>
+                  <input class="form-control classroom_color" name="classroom_color" placeholder="Pick Color From" type="text"></input>
+                </div>
+                <div class="col-md-6">
+                  <label>Strength: </label>
+                  <input class="form-control" name="classroom_strength" placeholder="Class Strength" type="text"></input>
+                </div>
+              </div>
+            </p>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-default cancel-classroom" data-dismiss="modal" type="button">Close</button>
+            <button class="btn btn-success" id="classroom_save" type="submit">Save</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>

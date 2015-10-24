@@ -1,0 +1,39 @@
+<% if @classrooms.count > 0 %>
+	<table class="table table-striped">
+		<thead>
+		  <tr>
+		    <th>#</th>
+		    <th>Name</th>
+		    <th>Color </th>
+		    <th>Strength</th>
+		    <th></th>
+		  </tr>
+		</thead>
+		<tbody>
+		  <% @classrooms.each_with_index do |classroom, counter| %>
+		  	<% count = counter + 1 %>
+		    <tr>
+		      <td>
+		        <%= count %>
+		      </td>
+		      <td>
+		        <%= classroom.name %>
+		      </td>
+		      <td>
+		        <%= get_color(classroom.color) %>
+		      </td>
+		      <td>
+		        <%= classroom.strength %>
+		      </td>
+		      <td>
+		        <%= link_to "Remove", "javascript:void(0)", "data-url" => institutes_classroom_path(classroom), class: "label label-danger", method: "delete", :onClick => "confirmation('Remove this class?', this);" %>
+		      </td>
+		    </tr>
+		  <% end %>
+		</tbody>
+	</table>
+<% else %>
+	<div class="alert alert-warning" role="alert">
+		No Classrooms Present
+	</div>
+<% end %>
