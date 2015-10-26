@@ -1,5 +1,5 @@
 setupClassroom = ->
-  $('#classroom_save').click (e) ->
+  $('#classroom_save').on "click", (e) ->
     e.preventDefault()
     $form = $(this).closest('form')
     console.log  $form.serialize()

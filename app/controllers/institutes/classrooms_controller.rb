@@ -2,10 +2,11 @@ module Institutes
 	class ClassroomsController < ApplicationController
 		def index
 			@classrooms = Classroom.all
+			@classroom = Classroom.new
 		end
 
 		def create
-			classroom = Classroom.new(:name => params[:name], color: params[:classroom_color], strength: params[:classroom_strength])
+			classroom = Classroom.new(classroom_params)
 	  	@classrooms = Classroom.all
 	  	if classroom.save
 	  		respond_to do |format|
@@ -16,10 +17,30 @@ module Institutes
 			end
 		end
 
+		def edit
+			@classroom = Classroom.find(params[:id])
+		end
+
+		def update
+			@classroom = Classroom.find(params[:id])
+	  	if @classroom.update_attributes(classroom_params)
+	  		respond_to do |format|
+	  			format.html { redirect_to institutes_classrooms_path, notice: "Classroom Updated" }
+				end
+			else
+				format.html { render :edit }
+				flash[:error] = @classroom.full_messages.to_sentence
+			end
+		end
+
 		def destroy
 			@classroom = Classroom.find params[:id]
 			@classroom.destroy
 			redirect_to institutes_classrooms_path, notice: "Classroom Removed Successfully"
+		end
+
+		def classroom_params
+			params.require(:classroom).permit(:name, :color, :strength, :type_or_room)
 		end
 	end
 end

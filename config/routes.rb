@@ -10,7 +10,7 @@ Rails.application.routes.draw do
       get "/get_sections" => "sections#get_sections", as: :get_sections, on: :collection
     end
 
-    resources :classrooms, only: [:index, :create, :update, :destroy]
+    resources :classrooms
   end
 
   authenticated :admin do

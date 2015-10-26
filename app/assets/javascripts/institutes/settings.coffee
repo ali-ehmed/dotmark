@@ -19,10 +19,14 @@ window.confirmation = (text, elem) ->
 	  return
 
 $(document).on 'page:change', ->
-  $('.admin-settings-list-group').find('a[href="' + @location.pathname + '"]').addClass 'active-list'
-  
+  get_curr_url = "/#{@location.pathname.split("/")[1]}/#{@location.pathname.split("/")[2]}"
+  $.each $('.admin-settings-list-group').find('a'), ->
+  	if get_curr_url == $(this).attr("href")
+  		$(this).addClass 'active-list'
+  		false
+
   jQuery('.best_in_place').best_in_place()
   
   jQuery('.best_in_place').unbind().on 'ajax:error', ->
     $('.purr').prepend '<span class=\'glyphicon glyphicon-exclamation-sign\'></span> '
-  return
+

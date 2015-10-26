@@ -4,9 +4,10 @@
 		  <tr>
 		    <th>#</th>
 		    <th>Name</th>
-		    <th>Color </th>
 		    <th>Strength</th>
-		    <th></th>
+		    <th>Type of Room</th>
+		    <th>Color</th>
+		    <th colspan="2"></th>
 		  </tr>
 		</thead>
 		<tbody>
@@ -20,10 +21,16 @@
 		        <%= classroom.name %>
 		      </td>
 		      <td>
+		        <%= classroom.strength %>
+		      </td>
+		      <td>
+		        <%= classroom.type_or_room.nil? ? "N/A" : classroom.type_or_room %>
+		      </td>
+		      <td>
 		        <%= get_color(classroom.color) %>
 		      </td>
 		      <td>
-		        <%= classroom.strength %>
+		        <%= link_to "Edit", edit_institutes_classroom_path(classroom), class: "label label-info" %>
 		      </td>
 		      <td>
 		        <%= link_to "Remove", "javascript:void(0)", "data-url" => institutes_classroom_path(classroom), class: "label label-danger", method: "delete", :onClick => "confirmation('Remove this class?', this);" %>
