@@ -40,7 +40,7 @@ module Institutes
 		end
 
 		def classroom_params
-			params.require(:classroom).permit(:name, :color, :strength, :type_or_room)
+			params.require(:classroom).permit(:name, :color, :strength, :type_of_room)
 		end
 	end
 end

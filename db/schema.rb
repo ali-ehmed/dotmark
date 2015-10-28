@@ -44,8 +44,9 @@ ActiveRecord::Schema.define(version: 20151024221121) do
     t.string   "name"
     t.string   "color"
     t.string   "strength"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.string   "type_of_room"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
   end
 
   create_table "sections", force: :cascade do |t|

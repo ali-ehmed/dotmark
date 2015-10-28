@@ -1,4 +1,4 @@
-<%= simple_form_for classroom, url: institutes_classrooms_path, method: "post", defaults: { input_html: { class: "form-control" } } do |f| %>
+<form action="/institutes/classrooms" method="<%= :post %>">
   <div aria-hidden="true" aria-labelledby="classroom_modalLabel" class="modal fade" id="classroom_modal" role="dialog" tabindex="-1">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -10,22 +10,20 @@
           <hr/>
           <div class="modal-body">
             <div class="row">
-              <div class="col-md-6">
-                <%= f.input :name, placeholder: "Classroom Name" %>
-              </div>
-              <div class="col-md-6">
-                <label>Type Of Room:</label>
-                <%= f.input :type_of_room, label: false, collection: [["Classroom", 1], ["Lab", 2]], prompt: "--Choose Type--" %>
+              <div class="col-md-12">
+                <label>Name:</label>
+                <input class="form-control" name="name" placeholder="Classroom Name" type="text"></input>
               </div>
             </div>
             <p>
               <div class="row">
                 <div class="col-md-6">
                   <label>Color of Class <em>(Optional)</em>:</label>
-                  <%= f.input :color, label: false, placeholder: "Pick Color", input_html: { data: { minicolors: {theme: :bootstrap, position: :right}}}  %>
+                  <input class="form-control classroom_color" name="classroom_color" placeholder="Pick Color From" type="text"></input>
                 </div>
                 <div class="col-md-6">
-                  <%= f.input :strength, placeholder: "Class Strength" %>
+                  <label>Strength: </label>
+                  <input class="form-control" name="classroom_strength" placeholder="Class Strength" type="text"></input>
                 </div>
               </div>
             </p>
@@ -38,4 +36,4 @@
       </div>
     </div>
   </div>
-<% end %>
+</form>

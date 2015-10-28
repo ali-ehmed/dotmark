@@ -4,7 +4,7 @@ class CreateClassrooms < ActiveRecord::Migration
       t.string :name
       t.string :color
       t.string :strength
-
+      t.string :type_of_room
       t.timestamps null: false
     end
   end

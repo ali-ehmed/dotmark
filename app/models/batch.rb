@@ -12,8 +12,8 @@
 
 class Batch < ActiveRecord::Base
 	validates :name, presence: { message: "can't be blank" }
-	validates :start_date, presence: { message: "date can't be blank" }
-	validates :end_date, presence: { message: "date can't be blank" }
+	validates :start_date, presence: { message: "can't be blank" }
+	validates :end_date, presence: { message: "can't be blank" }
 	validate :set_session_date
 
 	has_many :sections
