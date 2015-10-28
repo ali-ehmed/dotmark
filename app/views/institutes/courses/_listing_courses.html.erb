@@ -1,0 +1,46 @@
+<% if @courses.count > 0 %>
+	<table class="table table-striped">
+		<thead>
+		  <tr>
+		    <th>#</th>
+		    <th>Name</th>
+		    <th>Code</th>
+		    <th>Batch</th>
+		    <th>Color</th>
+		    <th colspan="2"></th>
+		  </tr>
+		</thead>
+		<tbody>
+		  <% @courses.each_with_index do |course, counter| %>
+		  	<% count = counter + 1 %>
+		    <tr>
+		      <td>
+		        <%= count %>
+		      </td>
+		      <td>
+		        <%= course.name %>
+		      </td>
+		      <td>
+		        <%= course.code %>
+		      </td>
+		      <td>
+		        <%= course.batch.name %>
+		      </td>
+		      <td>
+		        <%= get_color(course.color) %>
+		      </td>
+		      <td>
+		        <%= link_to "Edit", edit_institutes_course_path(course), class: "label label-info" %>
+		      </td>
+		      <td>
+		        <%= link_to "Remove", "javascript:void(0)", "data-url" => institutes_course_path(course), class: "label label-danger", method: "delete", :onClick => "confirmation('Remove this course?', this);" %>
+		      </td>
+		    </tr>
+		  <% end %>
+		</tbody>
+	</table>
+<% else %>
+	<div class="alert alert-warning" role="alert">
+		No Courses Present
+	</div>
+<% end %>

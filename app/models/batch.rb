@@ -17,6 +17,7 @@ class Batch < ActiveRecord::Base
 	validate :set_session_date
 
 	has_many :sections
+	has_many :courses
 
 	accepts_nested_attributes_for :sections
 

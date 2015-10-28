@@ -1,5 +1,5 @@
-setupClassroom = ->
-  $('#classroom_save').on "click", (e) ->
+setupCourse = ->
+  $('#course_save').on "click", (e) ->
     e.preventDefault()
     $form = $(this).closest('form')
     console.log  $form.serialize()
@@ -17,14 +17,15 @@ setupClassroom = ->
             html: true
           console.log 'Couldn\'t save'
         else
-          swal 'Classroom', "created", "success"
-          $('#classroom_modal').modal 'hide'
+          swal 'Course', "created", "success"
+          $('#course_modal').modal 'hide'
           $form.find(':input').val ''
       error: (response) ->
         swal 'oops', 'Something went wrong'
     false
 
-$(document).on "page:change", ->
-  setupClassroom()
 
-  $('.classroom_color').minicolors theme: 'bootstrap'
+$(document).on "page:change", ->
+  setupCourse()
+
+  $('.course_color').minicolors theme: 'bootstrap'

@@ -18,6 +18,12 @@ window.confirmation = (text, elem) ->
 	    swal 'Cancelled', '', 'error'
 	  return
 
+window.cancelForm = (elem) ->
+  $form = $(elem).closest('form')
+  $form.find(':input').val ''
+
+
+
 $(document).on 'page:change', ->
   get_curr_url = "/#{@location.pathname.split("/")[1]}/#{@location.pathname.split("/")[2]}"
   $.each $('.admin-settings-list-group').find('a'), ->

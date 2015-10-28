@@ -24,11 +24,6 @@ setupAcademicSession = ->
         swal 'oops', 'Something went wrong'
     false
 
-cancelAcademicSession = ->
-  $(".cancel-academic-session").click (e) ->
-    $form = $(this).closest('form')
-    $form.find(':input').val ''
-
 window.creatingSections = (elem) ->
   $this = $(elem)
   $batch_id = $this.data("batch-id")
@@ -48,7 +43,6 @@ window.creatingSections = (elem) ->
 
 ready = ->
   setupAcademicSession()
-  cancelAcademicSession()
   
   $(".academic_batches p:nth-child(2) input[type='text']").attr('maxlength','0') 
   $(".academic_batches p:last-child input[type='text']").attr('maxlength','0')

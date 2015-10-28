@@ -11,6 +11,7 @@ Rails.application.routes.draw do
     end
 
     resources :classrooms
+    resources :courses
   end
 
   authenticated :admin do

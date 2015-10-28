@@ -1,4 +1,4 @@
-<%= simple_form_for classroom, url: institutes_classrooms_path, method: "post", defaults: { input_html: { class: "form-control" } } do |f| %>
+<%= simple_form_for @classroom, url: institutes_classrooms_path, method: "post", defaults: { input_html: { class: "form-control" } } do |f| %>
   <div aria-hidden="true" aria-labelledby="classroom_modalLabel" class="modal fade" id="classroom_modal" role="dialog" tabindex="-1">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -15,7 +15,7 @@
               </div>
               <div class="col-md-6">
                 <label>Type Of Room:</label>
-                <%= f.input :type_of_room, label: false, collection: [["Classroom", 1], ["Lab", 2]], prompt: "--Choose Type--" %>
+                <%= f.input :type_of_room, label: false, collection: [["Classroom", "Classroom"], ["Lab", "Lab"]], prompt: "--Choose Type--" %>
               </div>
             </div>
             <p>
@@ -31,7 +31,7 @@
             </p>
           </div>
           <div class="modal-footer">
-            <button class="btn btn-default cancel-classroom" data-dismiss="modal" type="button">Close</button>
+            <button class="btn btn-default" onclick="cancelForm(this);" data-dismiss="modal" type="button">Close</button>
             <button class="btn btn-success" id="classroom_save" type="submit">Save</button>
           </div>
         </div>

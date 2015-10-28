@@ -1,15 +1,15 @@
 <% content_for :settings do %>
 	<h2>
-	  Classrooms
-	  <button class="btn btn-info pull-right" onclick="$('#classroom_modal').modal('show')">
+	  Courses
+	  <button class="btn btn-info pull-right" onclick="$('#course_modal').modal('show')">
 	    Add New
 	  </button>
 	</h2>
-	<%= render "new_classroom" %>
+	<%= render "form" %>
 	<hr />
 	<div class="scrollable">
-		<div class="classrooms">
-		  <%= render "listing_classrooms" %>
+		<div class="courses">
+		  <%= render "listing_courses" %>
 		</div>
 	</div>
 <% end %>
