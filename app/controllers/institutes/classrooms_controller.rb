@@ -1,8 +1,13 @@
 module Institutes
-	class ClassroomsController < ApplicationController
+	class ClassroomsController < BaseController
 		def index
 			@classrooms = Classroom.all
 			@classroom = Classroom.new
+
+			respond_to do |format|
+	  		format.html
+	  		format.json { render json: { data: @classrooms } }
+			end
 		end
 
 		def create

@@ -1,5 +1,5 @@
 module Institutes
-	class CoursesController < ApplicationController
+	class CoursesController < BaseController
 		def index
 			@courses = Course.all
 			@course = Course.new
@@ -40,7 +40,7 @@ module Institutes
 		end
 
 		def course_params
-			params.require(:course).permit(:name, :code, :color, :batch_id)
+			params.require(:course).permit(:name, :code, :color, :semester_id)
 		end
 	end
 end

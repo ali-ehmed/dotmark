@@ -1,5 +1,5 @@
 module Institutes
-	class SectionsController < ApplicationController
+	class SectionsController < BaseController
 		def index
 			@batches = Batch.all
 			@sections = []

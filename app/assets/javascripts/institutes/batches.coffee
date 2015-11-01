@@ -1,28 +1,6 @@
 setupAcademicSession = ->
-  $('#batch_save').click (e) ->
-    e.preventDefault()
-    $form = $(this).closest('form')
-    console.log  $form.serialize()
-    $.ajax
-      type: 'POST'
-      url: $form.attr("action")
-      data: $form.serialize()
-      cache: false
-      success: (response, data) ->
-        if response.status == 'error'
-          swal
-            title: 'Couldn\'t save'
-            text: response.errors
-            type: 'error'
-            html: true
-          console.log 'Couldn\'t save'
-        else
-          swal 'Academic session', "created", "success"
-          $('#session_modal').modal 'hide'
-          $form.find(':input').val ''
-      error: (response) ->
-        swal 'oops', 'Something went wrong'
-    false
+  $setup_session = new Institute
+  $setup_session.setupEntity("Academic Session", $('#batch_save'))
 
 window.creatingSections = (elem) ->
   $this = $(elem)
@@ -53,6 +31,10 @@ ready = ->
     
   $(".end").datetimepicker
     format: 'YYYY-MM-DD'
+
+  $(".batches_table").DataTable
+    responsive: true
+    "dom": '<"pull-left"f><"pull-right"l>tip'
 
 $(document).ready ready
 $(document).on 'page:load', ready

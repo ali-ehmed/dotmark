@@ -1,5 +1,5 @@
 module Institutes
-	class BatchesController < ApplicationController
+	class BatchesController < BaseController
 		def index
 			@batches = Batch.all
 		end
@@ -20,9 +20,7 @@ module Institutes
 			@batch = Batch.find(params[:batch_id])
 			no_of_sections = params[:no_of_sections]
 			
-			if @batch.sections.count > 0
-				@batch.sections.destroy_all
-			end
+			@batch.sections.destroy_all if @batch.sections.count > 0
 
 			("A".."F").take(no_of_sections.to_i).each do |section_name|
 				@section = @batch.sections.build

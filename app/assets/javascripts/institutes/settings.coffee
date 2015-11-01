@@ -1,3 +1,36 @@
+class window.Institute
+  setupEntity: (entity_name, elem, {type, action, params} = {}) ->
+    $elem = $(elem)
+    $elem.on "click", (e) ->
+    	e.preventDefault()
+	    $form = $elem.closest('form')
+	    console.log  entity_name
+
+	    $http_type = if type then type else $form.attr("method")
+	    $url = if action then action else $form.attr("action")
+	    $data = if params then params else $form.serialize()
+
+	    $.ajax
+	      type: $http_type
+	      url: $url
+	      data: $data
+	      cache: false
+	      success: (response, data) ->
+	      	if response.status == 'error'
+	          swal
+	            title: 'Couldn\'t save'
+	            text: response.errors
+	            type: 'error'
+	            html: true
+	          console.log 'Couldn\'t save'
+	        else
+	          swal "#{entity_name}", "created", "success"
+	          $elem.closest(".modal").modal 'hide'
+	          $form.find(':input').val ''
+	      error: (response) ->
+	        swal 'oops', 'Something went wrong'
+	    false
+
 window.confirmation = (text, elem) ->
 	$elem = $(elem)
 	url = $elem.data('url')
@@ -21,7 +54,6 @@ window.confirmation = (text, elem) ->
 window.cancelForm = (elem) ->
   $form = $(elem).closest('form')
   $form.find(':input').val ''
-
 
 
 $(document).on 'page:change', ->

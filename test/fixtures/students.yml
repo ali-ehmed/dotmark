@@ -1,0 +1,29 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  first_name: MyString
+  last_name: MyString
+  roll_number: MyString
+  phone: MyString
+  address: MyText
+  date_of_birth: 2015-11-01
+  joining_date: 2015-11-01
+  passed_out: false
+  passed_out_date: 2015-11-01
+  section_id: 1
+  batch_id: 1
+  semester_id: MyString
+
+two:
+  first_name: MyString
+  last_name: MyString
+  roll_number: MyString
+  phone: MyString
+  address: MyText
+  date_of_birth: 2015-11-01
+  joining_date: 2015-11-01
+  passed_out: false
+  passed_out_date: 2015-11-01
+  section_id: 1
+  batch_id: 1
+  semester_id: MyString

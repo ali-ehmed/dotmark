@@ -1,31 +1,13 @@
 setupCourse = ->
-  $('#course_save').on "click", (e) ->
-    e.preventDefault()
-    $form = $(this).closest('form')
-    console.log  $form.serialize()
-    $.ajax
-      type: 'POST'
-      url: $form.attr("action")
-      data: $form.serialize()
-      cache: false
-      success: (response, data) ->
-        if response.status == 'error'
-          swal
-            title: 'Couldn\'t save'
-            text: response.errors
-            type: 'error'
-            html: true
-          console.log 'Couldn\'t save'
-        else
-          swal 'Course', "created", "success"
-          $('#course_modal').modal 'hide'
-          $form.find(':input').val ''
-      error: (response) ->
-        swal 'oops', 'Something went wrong'
-    false
+  $setup_course = new Institute
+  $setup_course.setupEntity("Classroom", $('#course_save'))
 
 
 $(document).on "page:change", ->
   setupCourse()
+
+  $(".courses_table").DataTable
+    responsive: true
+    "dom": '<"pull-left"f><"pull-right"l>tip'
 
   $('.course_color').minicolors theme: 'bootstrap'

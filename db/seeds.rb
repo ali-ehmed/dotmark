@@ -60,3 +60,13 @@ Classroom.find_or_create_by!(:name => "HS-08") do |classroom|
 	classroom.strength = "60"
 	classroom.type_of_room = "Lab"
 end
+
+puts 'CREATING SEMESTERS'
+Semester.find_or_create_by!(name: "1st Semester")
+Semester.find_or_create_by!(name: "2nd Semester")
+Semester.find_or_create_by!(name: "3rd Semester")
+Semester.find_or_create_by!(name: "4th Semester")
+Semester.find_or_create_by!(name: "5th Semester")
+Semester.find_or_create_by!(name: "6th Semester")
+Semester.find_or_create_by!(name: "7th Semester")
+Semester.find_or_create_by!(name: "8th Semester")

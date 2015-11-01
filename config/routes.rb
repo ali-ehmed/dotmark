@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  devise_for :parents
+  devise_for :students
   devise_for :admins
 
 

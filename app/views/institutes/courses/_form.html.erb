@@ -25,7 +25,7 @@
                   <%= f.input :color, label: false, placeholder: "Pick Color", input_html: { data: { minicolors: {theme: :bootstrap, position: :right}}}  %>
                 </div>
                 <div class="col-md-6">
-                  <%= f.association :batch, collection: Batch.all, prompt: "Choose a Batch" %>
+                  <%= f.association :semester, collection: Semester.all, prompt: "--Choose Semester--" %>
                 </div>
               </div>
             </p>
