@@ -21,6 +21,10 @@
 
 //= require jquery.minicolors
 
+//= require bootstrap-wizard
+
+//= require typeahead
+
 //= require admin-theme
 //= require turbolinks
 //= require bootstrap-sprockets

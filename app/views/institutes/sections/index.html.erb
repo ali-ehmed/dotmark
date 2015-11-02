@@ -4,7 +4,7 @@
 	</h2>
 	<div class="row">
 		<div class="col-md-5">
-			<%= select_tag :batch, options_for_select(@batches.map{|m| [m.name, m.id]}), class: "form-control", prompt: "--Choose Batch--", id: "sections_for_batch" %>
+			<%= select_tag :batch, options_for_select(@batches.map{|m| [m.name, m.id]}), class: "form-control", prompt: "--Choose Batch--", onchange: "gettingSections(this);" %>
 		</div>
 	</div>
 	<hr />

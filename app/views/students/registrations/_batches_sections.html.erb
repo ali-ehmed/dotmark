@@ -1,0 +1,14 @@
+<ul class="list-inline">
+	<% @admission_sections.each do |section| %>
+		<li>
+			<% if defined?(new_admission) and new_admission %>
+				<%= radio_button_tag "student[section_id]", section.id, new_admission.section_id.to_s.include?(section.id.to_s) ? true : false, required: true %>
+			<% else %>
+				<%= radio_button_tag "section", section.id, false, required: true %>
+			<% end %>
+  		<%= section.name %>
+		</li>
+	<% end %>
+</ul>
+
+  

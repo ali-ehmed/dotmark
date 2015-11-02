@@ -1,0 +1,14 @@
+<% if params[:temp] == "false" %>
+	$(".batches_sections").hide().html("<%= escape_javascript(render 'listing_sections').html_safe %>").fadeIn(500);
+
+	$('.section_color_picker').minicolors({
+	  theme: 'bootstrap'
+	});
+<% else %>
+	// Students Admission Form Data
+	<% if params[:new_admission] == "false" %>
+		$(".batch_sections .form-group").hide().html("<%= escape_javascript(render 'students/registrations/batches_sections').html_safe %>").fadeIn(500);
+	<% else %>
+		$(".batch_sections .form-group").hide().html("<%= escape_javascript(render 'students/registrations/batches_sections', new_admission: @new_admission).html_safe %>").fadeIn(500);
+	<% end %>
+<% end %>

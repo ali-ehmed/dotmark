@@ -1,0 +1,58 @@
+<div class="row">
+  <div class="col-md-offset-1 col-xs-12 col-sm-6 col-md-10">
+    <div class="well" style="background: rgba(236, 236, 236, 0.1);">
+      <div class="page-header">
+        <h2><%= @parent.name %></h2>
+      </div>
+      <div class="row">
+        <div class="col-xs-6 col-md-2">
+          <a href="javascript: void(0)" class="thumbnail">
+            <%= image_tag("default-avatar.png", class: "img-rounded") %>
+          </a>
+        </div>
+        <div class="col-md-10">
+          <div class="well">
+            <div class="table-responsive">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>Phone #</th>
+                    <th>Gender</th>
+                    <th>Address</th>
+                    <th>Occupation</th>
+                    <th>Income</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><%= @parent.id %></td>
+                    <td><%= @parent.name %></td>
+                    <td><%= @parent.phone %></td>
+                    <td><%= @parent.gender %></td>
+                    <td><%= @parent.home_address %></td>
+                    <td><%= @parent.occupation %></td>
+                    <td><%= @parent.monthly_income %></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div id="searched_guardian_dependents">
+            <%#= render "guardian_dependents", searched_guardian: @searched_guardian, :new_admission => @new_admission %>
+          </div>
+          <div class="alert alert-danger alert-dismissible" role="alert">
+            <div id="relation">
+              <ul class="list-inline">
+                <li class="s_dependant" onclick="">
+                  <%= link_to "Save Relation", "javascript: void(0)", :class => "btn btn-danger btn-lg" %>
+                </li>
+              </ul>
+            </div>
+          </div>    
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151101135049) do
+ActiveRecord::Schema.define(version: 20151102181631) do
 
   create_table "admins", force: :cascade do |t|
     t.string   "email",                  default: "",    null: false
@@ -55,8 +55,10 @@ ActiveRecord::Schema.define(version: 20151101135049) do
     t.string   "color"
     t.integer  "semester_id"
     t.integer  "batch_id"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+    t.string   "credit_hours"
+    t.boolean  "lab"
   end
 
   create_table "guardian_relations", force: :cascade do |t|
@@ -85,6 +87,7 @@ ActiveRecord::Schema.define(version: 20151101135049) do
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip"
     t.string   "last_sign_in_ip"
+    t.string   "gender"
   end
 
   add_index "parents", ["email"], name: "index_parents_on_email", unique: true
@@ -102,6 +105,9 @@ ActiveRecord::Schema.define(version: 20151101135049) do
     t.string   "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.date     "start_date"
+    t.date     "end"
+    t.integer  "status"
   end
 
   create_table "students", force: :cascade do |t|
@@ -130,6 +136,8 @@ ActiveRecord::Schema.define(version: 20151101135049) do
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip"
     t.string   "last_sign_in_ip"
+    t.string   "gender"
+    t.string   "nationality"
   end
 
   add_index "students", ["email"], name: "index_students_on_email", unique: true

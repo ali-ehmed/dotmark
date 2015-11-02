@@ -28,6 +28,8 @@
 #  last_sign_in_at        :datetime
 #  current_sign_in_ip     :string
 #  last_sign_in_ip        :string
+#  gender                 :string
+#  nationality            :string
 #
 
 class Student < ActiveRecord::Base
@@ -41,4 +43,46 @@ class Student < ActiveRecord::Base
   belongs_to :batch
   has_one :parent
   has_one :parent, through: :guardian_relation
+
+  attr_accessor :admission_session
+
+  validates_presence_of :section, :semester, :batch
+  
+  after_create :creating_joining_date, :generate_username
+
+  class << self
+  	def build_admission(hash)
+	  	admission = Student.new(:section_id => hash[:section],
+	                            :batch_id => hash[:batch],
+	                            :semester_id => hash[:semester])
+	  	admission
+	  end
+
+    def enroll_new(params = nil)
+      new(params)
+    end
+	end
+
+	def email_required?
+		true if admission_session == true
+  end
+
+  def password_required?
+    !persisted? || !password.nil? || !password_confirmation.nil? if admission_session == true
+  end
+
+  def full_name
+    "#{first_name} #{last_name}"
+  end
+
+  def creating_joining_date
+    self.joining_date = created_at
+    self.save!
+  end
+
+  def generate_username
+    s_email = email
+    self.username = s_email.split('@').first
+    self.save!
+  end
 end

@@ -1,17 +1,3 @@
-gettingSections = ->
-  $("#sections_for_batch").on "change", ->
-    $this = $(this)
-    $url = "/institutes/sections/get_sections"
-    $.ajax
-      type: 'Get'
-      url: $url
-      data: {batch_id: $this.val()}
-      success: (response) ->
-        console.log "OK"
-      error: (response) ->
-        swal 'oops', 'Something went wrong'
-    false
-
 window.saveSection = (elem) ->
   $this = $(elem)
   $id = $this.data("section-id")
@@ -37,4 +23,3 @@ window.saveSection = (elem) ->
   false
 
 $(document).on "page:change", ->
-  gettingSections()

@@ -35,3 +35,12 @@
 }
 
 .scrollable{ float: left; width: 100%; position: relative; overflow-X: scroll; @include scrollable-height(500px); }
+
+// Radio Button Error CSS
+.has-error-radio {  border: 2px solid #A94442; padding: 6px; border-radius: 7px;  }
+
+.typeahead-dropdown {
+  min-width: 100% !important;
+}
+
+.parent_search_validator, .parent_search_validator:focus { border-color: rgb(239, 84, 84); }

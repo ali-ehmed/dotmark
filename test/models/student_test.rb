@@ -28,6 +28,8 @@
 #  last_sign_in_at        :datetime
 #  current_sign_in_ip     :string
 #  last_sign_in_ip        :string
+#  gender                 :string
+#  nationality            :string
 #
 
 require 'test_helper'

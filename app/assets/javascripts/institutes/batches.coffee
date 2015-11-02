@@ -32,6 +32,7 @@ ready = ->
   $(".end").datetimepicker
     format: 'YYYY-MM-DD'
 
+
   $(".batches_table").DataTable
     responsive: true
     "dom": '<"pull-left"f><"pull-right"l>tip'

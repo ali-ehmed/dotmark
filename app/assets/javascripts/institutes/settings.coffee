@@ -55,6 +55,19 @@ window.cancelForm = (elem) ->
   $form = $(elem).closest('form')
   $form.find(':input').val ''
 
+window.gettingSections = (elem, temp_param = false, new_admission_param = false) ->
+    $this = $(elem)
+    $url = "/institutes/get_sections"
+    $.ajax
+      type: 'Get'
+      url: $url
+      data: {batch_id: $this.val(), temp: temp_param, new_admission: new_admission_param}
+      success: (response) ->
+        console.log "OK"
+      error: (response) ->
+        swal 'oops', 'Something went wrong'
+    false
+
 
 $(document).on 'page:change', ->
   get_curr_url = "/#{@location.pathname.split("/")[1]}/#{@location.pathname.split("/")[2]}"
