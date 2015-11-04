@@ -8,8 +8,13 @@ class ApplicationController < ActionController::Base
   include ActionView::Context
   
   add_breadcrumb "Dashboard"
-
+  before_action :set_account
+  
   def resource_signed_in?
   	if current_admin then return true end
+  end
+
+  def set_account
+    @account = Account.find_by(subdomain: request.subdomain)
   end
 end

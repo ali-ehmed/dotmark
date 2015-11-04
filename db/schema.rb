@@ -11,7 +11,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151102181631) do
+ActiveRecord::Schema.define(version: 20151104213611) do
+
+  create_table "accounts", force: :cascade do |t|
+    t.string   "subdomain"
+    t.string   "resource_type"
+    t.integer  "resource_id"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+  end
 
   create_table "admins", force: :cascade do |t|
     t.string   "email",                  default: "",    null: false
@@ -138,8 +146,13 @@ ActiveRecord::Schema.define(version: 20151102181631) do
     t.string   "last_sign_in_ip"
     t.string   "gender"
     t.string   "nationality"
+    t.string   "confirmation_token"
+    t.datetime "confirmed_at"
+    t.datetime "confirmation_sent_at"
+    t.text     "temp_password"
   end
 
+  add_index "students", ["confirmation_token"], name: "index_students_on_confirmation_token", unique: true
   add_index "students", ["email"], name: "index_students_on_email", unique: true
   add_index "students", ["reset_password_token"], name: "index_students_on_reset_password_token", unique: true
 

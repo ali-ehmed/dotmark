@@ -37,7 +37,7 @@
 
 
 $(document).ready(function(){
-	$(".alert-message").addClass("in").fadeOut(4500);
+	$(".alert-message").addClass("in");
 
 	/* swap open/close side menu icons */
 	$('[data-toggle=collapse]').click(function(){

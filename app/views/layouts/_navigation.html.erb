@@ -44,6 +44,12 @@
                   </li>
               </ul>
             </li>
+          <% elsif student_signed_in? %>
+            <li>
+              <%= link_to destroy_student_session_path, method: "delete" do %>
+                <i class="fa fa-sign-out fa-fw"></i> Logout
+              <% end %>
+            </li>
           <% end %>
         </ul>
       </div>

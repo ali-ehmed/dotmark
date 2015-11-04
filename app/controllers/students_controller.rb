@@ -1,12 +1,9 @@
-class StudentsController < ApplicationController
-	before_action :set_index, :only [:index]
+class StudentsController < ApplicationController\
 	
 	def index
+		cookies[:students_index] = Time.now + 1.minute
 	end
 
-	private
-
-	def set_index
-		cookies[:students_index] = Time.now + 1.minute
+	def dashboard	
 	end
 end

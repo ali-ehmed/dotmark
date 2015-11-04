@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
-  devise_for :students, controllers: { registrations: "students/registrations" }
+  devise_for :students, controllers: { registrations: "students/registrations", sessions: "students/sessions", confirmations: "students/confirmations" }
   devise_scope :student do
+    get "students/login" => "students/sessions#new", as: :students_login
     get "students/admissions/:batch_name" => "students/registrations#new", as: :new_admissions
     post "/cancel_admission" => "students/registrations#cancel_admission"
     post "/setup_admission" => "students/registrations#setup_admission", as: :setup_admissions
@@ -10,7 +11,7 @@ Rails.application.routes.draw do
   resources :students, only: [:index]
 
   devise_for :parents
-  devise_for :admins
+  devise_for :admins, controllers: { sessions: "admins/sessions" }
 
 
   namespace :institutes do
@@ -25,13 +26,17 @@ Rails.application.routes.draw do
     resources :courses
   end
 
+  authenticated :student do
+    root 'students#dashboard', as: :student_authenticated_root
+  end
+
   authenticated :admin do
     root 'landing#dashboard', as: :authenticated_root
   end
 
   unauthenticated :admin do
     devise_scope :admin do 
-      get "/", to: "devise/sessions#new"
+      get "/", to: "admins/sessions#new"
     end
   end
   

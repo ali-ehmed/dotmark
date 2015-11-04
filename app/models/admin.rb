@@ -25,6 +25,8 @@ class Admin < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable
 
 
+  has_one :account, as: :resource
+  after_create :set_account
 
  	def active_for_authentication?
 	  super && self.is_admin # i.e. super && self.is_active
@@ -36,5 +38,9 @@ class Admin < ActiveRecord::Base
 
 	def is_admin?
 		if is_admin == true then return true end
+	end
+
+	def set_account
+		AdminService.setting_admin_account
 	end
 end

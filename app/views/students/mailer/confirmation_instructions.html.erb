@@ -1,5 +1,13 @@
-<p>Welcome <%= @email %>!</p>
-
-<p>You can confirm your account email through the link below:</p>
-
-<p><%= link_to 'Confirm my account', confirmation_url(@resource, confirmation_token: @token) %></p>
+<%= stylesheet_link_tag 'application', media: 'all' %>
+<div class="container">
+	<div class="page-header">
+		<h1>Welcome <small><%= @full_name %>!</small></h1>	
+	</div>
+	<blockquote>
+	  <p>To access our website, just follow the following link to get credentials.</p>
+	</blockquote>
+	<div class="alert alert-success">
+		<p><%= link_to 'Yes, Confirm my account', confirmation_url(@resource, confirmation_token: @token), class: "btn btn-danger btn-lg" %></p>
+	</div>
+	
+</div>

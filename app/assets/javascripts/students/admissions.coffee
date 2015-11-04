@@ -5,7 +5,7 @@ $admissions =
     $admissions.cancelAdmission()
     $admissions.autoCompleteGuardians()
     $admissions.searchGuardians()
-    # $admissions.generateUsername()
+    $admissions.generateUsername()
     return
 
   ### Setup Admission Form ###
@@ -76,14 +76,12 @@ $admissions =
               # $admissions.checkSelectedDependencyRelation()
               return
 
-  # generateUsername: ->
-  #   email = $("#student_email")
-  #   username = $("#student_username")
-  #   email.on "input", (e) ->
-  #     username.attr("data-email-value", this.value)
-
-
-    
+  generateUsername: ->
+    username = document.getElementById('student_username')
+    email = document.getElementById('student_email')
+    if document.contains(username)
+      username.onfocus = ->
+        this.value = email.value.split("@")[0]
 
   autoCompleteGuardians: ->
     $('input#query').typeahead 

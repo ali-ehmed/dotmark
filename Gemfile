@@ -26,12 +26,14 @@ gem 'jquery-minicolors-rails'
 gem 'jquery-datatables-rails', github: "rweng/jquery-datatables-rails", branch: "master"
 gem 'ajax-datatables-rails', git: 'git://github.com/antillas21/ajax-datatables-rails.git', branch: 'legacy'
 
+gem 'premailer-rails'
 group :development, :test do
   gem 'byebug'
 end
 group :development do
   gem 'web-console', '~> 2.0'
   gem 'spring'
+  gem "letter_opener"
 end
 gem 'bootstrap-sass'
 gem 'high_voltage'
