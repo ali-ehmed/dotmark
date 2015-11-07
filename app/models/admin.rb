@@ -28,6 +28,14 @@ class Admin < ActiveRecord::Base
   has_one :account, as: :resource
   after_create :set_account
 
+  attr_accessor :login
+
+  validates :username,
+	  :presence => true,
+	  :uniqueness => {
+	    :case_sensitive => false
+	  } # etc.
+
  	def active_for_authentication?
 	  super && self.is_admin # i.e. super && self.is_active
 	end
@@ -41,6 +49,15 @@ class Admin < ActiveRecord::Base
 	end
 
 	def set_account
-		AdminService.setting_admin_account
+		Admins::AdminService.new.setting_admin_account
 	end
+
+  def self.find_for_database_authentication(warden_conditions)
+    conditions = warden_conditions.dup
+    if login = conditions.delete(:login)
+      where(conditions.to_hash).where(conditions).where(["username = :value or email = :value", { :value => login }]).first
+    else
+      where(conditions.to_hash).first
+    end
+  end
 end

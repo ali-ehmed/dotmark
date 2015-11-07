@@ -1,9 +1,10 @@
-module AdminService
+class Admins::AdminService
   def call
     admin = Admin.find_or_create_by!(email: Rails.application.secrets.admin_email) do |admin|
       admin.password = Rails.application.secrets.admin_password
       admin.password_confirmation = Rails.application.secrets.admin_password
       admin.is_admin = true
+      admin.username = Rails.application.secrets.admin_username
       # admin.confirm!
     end
   end
@@ -16,5 +17,5 @@ module AdminService
   	@admin_account.save
   end
 
-  module_function :call, :setting_admin_account
+  # module_function :call, :setting_admin_account
 end

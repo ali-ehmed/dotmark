@@ -22,9 +22,10 @@ class StudentMailer < Devise::Mailer
 		@student = student
 		@full_name = @student.full_name
 		@login_email = "#{@student.email}"
+		@login_username = "#{@student.username}"
 		@login_password = "#{DecryptedHash.new.decrypt_hash(@student.temp_password)}"
-		puts "--------#{@login_password}"
-		@login_url = students_login_url(subdomain: "#{@student.account.subdomain}")
+		
+		@login_url = students_login_after_confirmation_url(student_login: @login_username, subdomain: "#{@student.account.subdomain}")
     mail(to: @student.email, subject: 'Account Credentials')
 	end
 end

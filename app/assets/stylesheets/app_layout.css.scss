@@ -1,0 +1,31 @@
+// .application-footer {
+// 	font-size: 18px;
+//   // position: fixed;
+//   width: 99.9%;
+//   bottom: -20px;
+//   margin-left: -15px;
+//   text-align: center;
+//   margin-top: 53px;
+// }
+
+.container-body {
+  margin-top: 88px;
+  min-height: 398px;
+}
+
+#app-nav {
+	.navbar-brand {
+		padding: 15px 7px 0px 7px !important;
+	  font-size: 26px;
+	  border-left: 3px solid;
+	  border-right: 3px solid;
+	  margin-top: 7px;
+	  margin-bottom: 7px;
+	}
+	ul.navbar-right {
+		padding: 7px;
+		li.app-active-li {
+			font-size: 19px;
+		}
+	}
+}

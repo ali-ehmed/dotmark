@@ -46,10 +46,15 @@ class Student < ActiveRecord::Base
 
   has_one :account, as: :resource
 
-  attr_accessor :admission_session
+  attr_accessor :admission_session, :login
 
   validates_presence_of :section, :semester, :batch
-  validates_uniqueness_of :username, if: :check_admission_session
+  # validates_uniqueness_of :username, if: :check_admission_session
+  validates :username,
+    :presence => true,
+    :uniqueness => {
+      :case_sensitive => false
+    }, if: :check_admission_session
   
   after_create :creating_joining_date, :set_account, :creating_name_if_blank, :send_welcome_email
   before_validation :generate_password
@@ -110,18 +115,32 @@ class Student < ActiveRecord::Base
     end
   end
 
+  def self.find_for_database_authentication(warden_conditions)
+    conditions = warden_conditions.dup
+    if login = conditions.delete(:login)
+      where(conditions.to_hash).where(conditions).where(["username = :value or email = :value", { :value => login }]).first
+    else
+      where(conditions.to_hash).first
+    end
+  end
+
   private
 
   def generate_password
     rand_string = self.generate_random_string
 
-    self.password = rand_string
-    self.password_confirmation = rand_string
-    temp_password = rand_string
+    attributes = {
+      :password => rand_string, 
+      :password_confirmation => rand_string, 
+      :temp_password => rand_string
+    }
+    self.password = attributes[:password]
+    self.password_confirmation = attributes[:password_confirmation]
 
     cipher_key = ActiveSupport::MessageEncryptor.new(Rails.application.secrets.secret_key_base)
-    encryt_temp_password = cipher_key.encrypt_and_sign(temp_password)
-    self.temp_password = encryt_temp_password
+    encryted_temp_password = cipher_key.encrypt_and_sign(attributes[:temp_password])
+    
+    self.temp_password = encryted_temp_password
   end
 
   def creating_joining_date
