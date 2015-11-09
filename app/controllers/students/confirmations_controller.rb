@@ -8,13 +8,13 @@ module Students
       if resource.errors.empty?
         # set_flash_message(:notice, :confirmed) if is_flashing_format?
         cookies[:confirm_notice] = {
-          value: "Thank you for confirming your account. Your account has been confirmed on #{resource.confirmed_at.strftime('%Y-%B-%d')} at #{resource.confirmed_at.strftime('%H:%M:%S')}. You will recieve an email shortly with your credentials.",
+          value: "Thank you for confirming your account. Your account has been confirmed on <strong>#{resource.confirmed_at.strftime('%d-%B-%Y')}</strong> at <strong>#{resource.confirmed_at.strftime('%H:%M:%S')}</strong>. You will recieve an email shortly with your credentials.",
           expires: Time.now + 30.seconds,
           domain: request.domain
         }
 
         StudentMailer.account_access(resource).deliver!
-        respond_with_navigational(resource){ redirect_to root_path }
+        respond_with_navigational(resource){ redirect_to root_url(subdomain: nil) }
       else
         respond_with_navigational(resource.errors, status: :unprocessable_entity){ render :new }
       end

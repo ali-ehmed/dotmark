@@ -14,8 +14,7 @@ class ApplicationController < ActionController::Base
 
   add_breadcrumb "Dashboard"
   
-  before_action :set_account
-  before_action :require_account!
+  before_action :set_account, :require_account!, :make_action_mailer_use_request_host_and_protocol
   
 
   def layout_by_resource
@@ -31,7 +30,7 @@ class ApplicationController < ActionController::Base
   end
 
   def resource_signed_in?
-  	if current_admin then return true end
+  	if current_admin or current_student then return true end
   end
 
   def set_account
@@ -43,21 +42,36 @@ class ApplicationController < ActionController::Base
   # end
   
   def require_account!
+    if resource_signed_in?
+      cookies[:signed_in_resource_domain] = {
+        :value => if current_admin then current_admin.account.subdomain elsif current_student then current_student.account.subdomain end,
+        :domain => request.domain,
+        :expires => Time.now + 20.seconds
+      }
+    end
+
     if request.subdomain.present?
       if @account.blank?
-        cookies[:nil_account] = {
-          :value => "This area is restricted for <strong>Unauthorized Users</strong>",
-          :domain => request.domain,
-          :expires => Time.now + 10.seconds
+        cookies[:confirm_notice] = {
+          value: "This area is restricted for <strong>Unauthorized Users</strong>",
+          expires: Time.now + 10.seconds,
+          domain: request.domain
         }
-        redirect_to root_url(subdomain: nil)
-
+        if cookies[:signed_in_resource_domain].present?
+          redirect_to student_authenticated_root_url(subdomain: cookies[:signed_in_resource_domain])
+        else
+          redirect_to root_url(subdomain: nil)
+        end
       else
         case @account.resource_type
         when :student.to_s.capitalize
-          redirect_to students_login_url(subdomain: @account.subdomain) if !current_student
+          unless current_controller?("students/sessions")
+            redirect_to students_login_url(subdomain: @account.subdomain) if !current_student
+          end
         when :admin.to_s.capitalize
-          redirect_to admin_login_path(subdomain: @account.subdomain) if !current_admin
+          unless current_controller?("admins/sessions")
+            redirect_to admin_login_path(subdomain: @account.subdomain) if !current_admin
+          end
         end
       end
     end
@@ -73,5 +87,12 @@ class ApplicationController < ActionController::Base
     if params[:action] == names
       true
     end
+  end
+  
+  private
+
+  def make_action_mailer_use_request_host_and_protocol
+    ActionMailer::Base.default_url_options[:protocol] = request.protocol
+    ActionMailer::Base.default_url_options[:host] = request.host_with_port
   end
 end

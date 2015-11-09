@@ -109,7 +109,7 @@
 
 <script type="text/javascript">
   $(function(){
-    <% if cookies[:confirm_notice].present? or cookies[:nil_account].present? %>
+    <% if cookies[:confirm_notice].present? %>
       $('#confirm_notice_modal').modal('show')
     <% end %>
   });
@@ -121,16 +121,20 @@
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <h4 class="modal-title">
-          <span class="label label-info"><%= if cookies[:confirm_notice].present? then "Hello Cadidate" else "Dear User" end %>
-          </span>
-        </h4><!-- /.modal-content -->
-      </div><!-- /.modal-content -->
+          <h4>Notice!</h4>
+        </h4>
+      </div>
       <div class="modal-body">
-        <blockquote>
-          <h3><%= if cookies[:confirm_notice].present? then cookies[:confirm_notice] elsif cookies[:nil_account].present? then cookies[:nil_account].html_safe  end %></h3><!-- /.modal-content -->
-        </blockquote><!-- /.modal-content -->
-      </div><!-- /.modal-content -->
-    </div><!-- /.modal-content -->
-  </div><!-- /.modal-dialog -->
-</div><!-- /
+        <blockquote style="margin:0;">
+          <div class="alert alert-dismissible alert-info">
+            <p><%= cookies[:confirm_notice].try("html_safe") %></p>
+          </div>
+        </blockquote>
+      </div>
+      <!-- <div class="modal-footer">
+        <p>Have a good day!</p>
+      </div> -->
+    </div>
+  </div>
+</div>
 

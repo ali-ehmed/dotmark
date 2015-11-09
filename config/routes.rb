@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  constraints :subdomain => /.+/ do
+  # constraints :subdomain => /.+/ do
     devise_for :students, controllers: { registrations: "students/registrations", sessions: "students/sessions", confirmations: "students/confirmations" }
     devise_scope :student do
       get "students/login" => "students/sessions#new", as: :students_login
@@ -10,7 +10,7 @@ Rails.application.routes.draw do
       get "/autocomplete_guardians_search" => "students/registrations#autocomplete_guardians_search"
       get "/get_parent/:parent_id" => "students/registrations#get_parent"
     end
-  end
+  # end
 
   authenticated :student do
     root 'students#dashboard', as: :student_authenticated_root

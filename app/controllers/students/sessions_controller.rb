@@ -1,7 +1,7 @@
 class Students::SessionsController < Devise::SessionsController
   # GET /resource/sign_in
   # before_action :require_account!, :except => [:new]
-  skip_before_action :require_account!
+  # skip_before_action :require_account!
   
   def new
     @student_name = @account.resource.username
