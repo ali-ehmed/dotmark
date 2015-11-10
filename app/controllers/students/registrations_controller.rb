@@ -82,7 +82,7 @@ module Students
 			params.require(:student).permit(
 				:email, :password, :password_confirmation, :username,
 				:first_name, :last_name, :date_of_birth, :roll_number, :address, :phone, 
-				:section_id, :batch_id, :semester_id
+				:section_id, :batch_id, :semester_id, :gender
 				)
 		end
 

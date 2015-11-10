@@ -57,7 +57,9 @@ class ApplicationController < ActionController::Base
           expires: Time.now + 10.seconds,
           domain: request.domain
         }
-        if cookies[:signed_in_resource_domain].present?
+        if cookies[:signed_in_resource_domain].present? and cookies[:signed_in_resource_domain] == "admin"
+          redirect_to admin_authenticated_root_url(subdomain: cookies[:signed_in_resource_domain])
+        elsif cookies[:signed_in_resource_domain].present? and cookies[:signed_in_resource_domain] == Student.find_by_username(cookies[:signed_in_resource_domain]).username
           redirect_to student_authenticated_root_url(subdomain: cookies[:signed_in_resource_domain])
         else
           redirect_to root_url(subdomain: nil)

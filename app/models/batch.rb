@@ -18,6 +18,7 @@ class Batch < ActiveRecord::Base
 
 	has_many :sections
 	has_many :courses
+	has_many :students
 
 	accepts_nested_attributes_for :sections
 
@@ -25,5 +26,9 @@ class Batch < ActiveRecord::Base
 		unless start_date.blank? || end_date.blank?
 			errors.add :base, "End date must be greater than Start date" if self.start_date > self.end_date
 		end
+	end
+
+	def batch_name
+		name.split("-").first
 	end
 end

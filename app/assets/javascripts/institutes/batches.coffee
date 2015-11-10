@@ -26,11 +26,18 @@ ready = ->
   $(".academic_batches p:last-child input[type='text']").attr('maxlength','0')
     
   # Date picker
-  $(".start").datetimepicker
-    format: 'YYYY-MM-DD'
-    
-  $(".end").datetimepicker
-    format: 'YYYY-MM-DD'
+
+  $('.end').datepicker(
+      format: 'yyyy-M-dd'
+      orientation: 'bottom left'
+    ).on 'changeDate', (e) ->
+      $(this).datepicker 'hide'
+
+  $('.start').datepicker(
+      format: 'yyyy-M-dd'
+      orientation: 'bottom left'
+    ).on 'changeDate', (e) ->
+      $(this).datepicker 'hide'
 
 
   $(".batches_table").DataTable

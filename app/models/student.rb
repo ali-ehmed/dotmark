@@ -58,6 +58,7 @@ class Student < ActiveRecord::Base
   
   after_create :creating_joining_date, :set_account, :creating_name_if_blank, :send_welcome_email
   before_validation :generate_password
+  after_initialize :default_values
 
   class << self
   	def build_admission(hash)
@@ -124,7 +125,21 @@ class Student < ActiveRecord::Base
     end
   end
 
+  def passed_out
+    if read_attribute(:passed_out) == true
+      "Yes"
+    else
+      "No"
+    end
+  end
+
+
   private
+
+  def default_values
+    self.passed_out ||= false
+    self.roll_number ||= "#{self.batch.try(:batch_name)}-CS-#{self.class.last.present? ? (self.class.last.id.to_i + 1).to_s : '1'}"
+  end
 
   def generate_password
     rand_string = self.generate_random_string

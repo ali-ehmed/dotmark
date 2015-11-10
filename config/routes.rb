@@ -1,8 +1,8 @@
 class Subdomain
   def self.matches?(request)
     if request.subdomain.present? && request.subdomain != 'www'
-        account = Account.find_by subdomain: request.subdomain
-        return true if account # -> if account is not found, return false (IE no route)
+      account = Account.find_by subdomain: request.subdomain
+      return true if account # -> if account is not found, return false (IE no route)
     end
   end
 end
@@ -23,10 +23,8 @@ Rails.application.routes.draw do
   end
 
   authenticated :student do
-    root 'students#dashboard', as: :student_authenticated_root
+    root 'students/dashboard#index', as: :student_authenticated_root
   end
-  resources :students, only: [:index]
-
 
   devise_for :parents
 
@@ -35,8 +33,12 @@ Rails.application.routes.draw do
     devise_scope :admin do
       get "/login" => "admins/sessions#new", as: :admin_login
     end
+
+    match "/students" => "admins/students#index", via: :get
+    match "/students/search" => "admins/students#search_students", via: :get
+
     authenticated :admin do
-      root 'admins#dashboard', as: :admin_authenticated_root
+      root 'admins/dashboard#index', as: :admin_authenticated_root
     end
   end
 

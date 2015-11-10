@@ -32,7 +32,7 @@
         </div>
         <div class="form-group">
 	        <div class="input-group date" id="form_student_dob">
-	          <%= f.input :date_of_birth, label: false, placeholder: "Date of Birth", :as => :string %>
+	          <%= f.input :date_of_birth, label: false, placeholder: "Date of Birth", :as => :string, input_html: { id: "" } %>
 	          <span class="input-group-addon">
 	            <span class="fa fa-calendar"></span>
 	          </span>

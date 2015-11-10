@@ -1,0 +1,59 @@
+<div class="page-header">
+	<h2>Students <small>Enrolled</small></h2>
+</div>
+<%= form_tag students_search_path(format: :js), method: :get, id: "search_students_form" do %>
+	<%= hidden_field_tag :batch_id_param %>
+	<div class="row">
+		<div class="col-md-12">
+			<div class="row">
+				<div class="col-md-3">
+					<label>Roll No:</label>
+					<%= text_field_tag :roll_no, params[:roll_no], class: "form-control", placeholder: "Enter Roll Number" %>
+				</div>
+				<div class="col-md-3">
+					<label>Name:</label>
+					<%= text_field_tag :student_name, params[:student_name], class: "form-control", placeholder: "Enter Name" %>
+				</div>
+				<div class="col-md-3">
+					<label>Section:</label>
+					<%= select_tag :student_section, options_for_select(@sections.map{|section| [section.name, section.id]}), class: "form-control", prompt: "Select Section" %>
+				</div>
+			</div>
+		</div>
+	</div>
+	<br />
+	<div class="row">
+		<div class="col-md-6">
+			<%= submit_tag "Search", class: "btn btn-danger" %>
+			<%= link_to "Clear", students_path, class: "btn btn-default" %>
+		</div>
+	</div>
+<% end %>
+<br />
+<div class="row">
+	<div class="col-md-12 col-sm-12 col-xs-12">
+		<!-- Nav tabs -->
+	  <ul class="nav nav-tabs students_search_index" role="tablist">
+	  	<% @batches.each_with_index do |batch, count| %>
+	  		<% count += 1 %>
+	    	<li role="presentation">
+	    		<%= link_to students_search_path(batch_id_param: batch.id, format: :js), remote: true, "data-target" => "##{batch.batch_name}_#{count}", "data-toggle" => "tab", onclick: "getBatchid(this, #{batch.id});", id: "tab_student_#{batch.id}" do %>
+	    			<%= "#{batch.batch_name} (#{batch.students.count})" %>
+	    		<% end %>
+    		</li>
+    	<% end %>
+	  </ul>
+
+	  <!-- Tab panes -->
+	  <div class="tab-content students_search_index">
+	  	<% @batches.each_with_index do |batch, count| %>
+	  		<% count += 1 %>
+		    <div role="tabpanel" class="tab-pane fade in" data-batch-id="<%= batch.id %>" id="<%= batch.batch_name %>_<%= count %>">
+		    	<div id="students_in_<%= batch.id %>">
+		    		<%= render "students_list", students: batch.students, batch: batch %>
+	    		</div>
+		    </div>
+	    <% end %>
+	  </div>
+	</div>
+</div>

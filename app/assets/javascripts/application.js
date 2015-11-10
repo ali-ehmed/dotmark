@@ -25,13 +25,15 @@
 
 //= require typeahead
 
+//= require bootstrap-datepicker
+//= require bootstrap-datepicker.min
+
 //= require admin-theme
 //= require turbolinks
 //= require bootstrap-sprockets
 //= require jasny-bootstrap.min
 //= require sweet-alert
-//= require moment
-//= require bootstrap-datetimepicker
+
 //= require_tree .
 
 
