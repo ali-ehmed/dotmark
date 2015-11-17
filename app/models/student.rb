@@ -30,6 +30,10 @@
 #  last_sign_in_ip        :string
 #  gender                 :string
 #  nationality            :string
+#  confirmation_token     :string
+#  confirmed_at           :datetime
+#  confirmation_sent_at   :datetime
+#  temp_password          :text
 #
 
 class Student < ActiveRecord::Base
@@ -45,6 +49,9 @@ class Student < ActiveRecord::Base
   has_one :parent, through: :guardian_relation
 
   has_one :account, as: :resource
+  has_many :notifications, as: :resource
+
+  scope :current_batches, -> { joins(:batch).where("batches.name like ?", "#{Time.now.year - 5}%") }
 
   attr_accessor :admission_session, :login
 

@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  start_time: 2015-11-18 00:22:38
+  end_time: 2015-11-18 00:22:38
+  week_day_id: 1
+
+two:
+  start_time: 2015-11-18 00:22:38
+  end_time: 2015-11-18 00:22:38
+  week_day_id: 1

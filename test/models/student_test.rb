@@ -30,6 +30,10 @@
 #  last_sign_in_ip        :string
 #  gender                 :string
 #  nationality            :string
+#  confirmation_token     :string
+#  confirmed_at           :datetime
+#  confirmation_sent_at   :datetime
+#  temp_password          :text
 #
 
 require 'test_helper'

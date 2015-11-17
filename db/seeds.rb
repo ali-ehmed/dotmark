@@ -70,3 +70,32 @@ Semester.find_or_create_by!(name: "5th Semester")
 Semester.find_or_create_by!(name: "6th Semester")
 Semester.find_or_create_by!(name: "7th Semester")
 Semester.find_or_create_by!(name: "8th Semester")
+
+
+puts 'CREATING WEEKDAYS'
+@normal_day = WeekDay.find_or_create_by!(name: "Monday")
+WeekDay.find_or_create_by!(name: "Tuesday")
+WeekDay.find_or_create_by!(name: "Wednesday")
+WeekDay.find_or_create_by!(name: "Thursday")
+@friday = WeekDay.find_or_create_by!(name: "Friday")
+
+
+puts 'CREATING TIMINGS FOR NORMAL DAYS'
+Timing.find_or_create_by!(start_time: "08:30", end_time: "09:20", week_day_type: "Normal Day")
+Timing.find_or_create_by!(start_time: "09:20", end_time: "10:10", week_day_type: "Normal Day")
+Timing.find_or_create_by!(start_time: "10:10", end_time: "11:00", week_day_type: "Normal Day")
+Timing.find_or_create_by!(start_time: "11:00", end_time: "11:50", week_day_type: "Normal Day")
+Timing.find_or_create_by!(start_time: "13:40", end_time: "14:30", week_day_type: "Normal Day")
+Timing.find_or_create_by!(start_time: "14:30", end_time: "15:20", week_day_type: "Normal Day")
+Timing.find_or_create_by!(start_time: "15:20", end_time: "16:10", week_day_type: "Normal Day")
+Timing.find_or_create_by!(start_time: "16:10", end_time: "17:00", week_day_type: "Normal Day")
+
+puts 'CREATING TIMINGS FOR FRIDAYs'
+Timing.find_or_create_by!(start_time: "08:30", end_time: "09:10", week_day_type: "FriDay")
+Timing.find_or_create_by!(start_time: "09:10", end_time: "10:00", week_day_type: "FriDay")
+Timing.find_or_create_by!(start_time: "10:00", end_time: "10:50", week_day_type: "FriDay")
+Timing.find_or_create_by!(start_time: "10:50", end_time: "11:40", week_day_type: "FriDay")
+Timing.find_or_create_by!(start_time: "11:40", end_time: "13:30", week_day_type: "FriDay")
+Timing.find_or_create_by!(start_time: "14:30", end_time: "15:00", week_day_type: "FriDay")
+Timing.find_or_create_by!(start_time: "15:00", end_time: "16:00", week_day_type: "FriDay")
+Timing.find_or_create_by!(start_time: "16:00", end_time: "16:50", week_day_type: "FriDay")

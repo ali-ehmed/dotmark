@@ -11,14 +11,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151107224826) do
+ActiveRecord::Schema.define(version: 20151117192544) do
 
   create_table "accounts", force: :cascade do |t|
     t.string   "subdomain"
     t.string   "resource_type"
     t.integer  "resource_id"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
+    t.boolean  "is_active",     default: false
   end
 
   create_table "admins", force: :cascade do |t|
@@ -58,6 +59,17 @@ ActiveRecord::Schema.define(version: 20151107224826) do
     t.datetime "updated_at",   null: false
   end
 
+  create_table "course_allocations", force: :cascade do |t|
+    t.integer  "course_id"
+    t.integer  "teacher_id"
+    t.integer  "batch_id"
+    t.string   "timings"
+    t.integer  "class_timing_id"
+    t.integer  "week_day_id"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+  end
+
   create_table "courses", force: :cascade do |t|
     t.string   "name"
     t.string   "code"
@@ -75,6 +87,15 @@ ActiveRecord::Schema.define(version: 20151107224826) do
     t.integer  "student_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "notifications", force: :cascade do |t|
+    t.string   "body"
+    t.string   "resource_type"
+    t.integer  "resource_id"
+    t.datetime "sent_at"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
   end
 
   create_table "parents", force: :cascade do |t|
@@ -156,5 +177,34 @@ ActiveRecord::Schema.define(version: 20151107224826) do
   add_index "students", ["confirmation_token"], name: "index_students_on_confirmation_token", unique: true
   add_index "students", ["email"], name: "index_students_on_email", unique: true
   add_index "students", ["reset_password_token"], name: "index_students_on_reset_password_token", unique: true
+
+  create_table "teachers", force: :cascade do |t|
+    t.string   "first_name"
+    t.string   "last_name"
+    t.string   "gender"
+    t.date     "date_of_birth"
+    t.date     "joining_date"
+    t.text     "qualification"
+    t.string   "past_experience"
+    t.string   "phone"
+    t.string   "skills"
+    t.boolean  "present"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+  end
+
+  create_table "timings", force: :cascade do |t|
+    t.time     "start_time"
+    t.time     "end_time"
+    t.string   "week_day_type"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+  end
+
+  create_table "week_days", force: :cascade do |t|
+    t.string   "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
 end

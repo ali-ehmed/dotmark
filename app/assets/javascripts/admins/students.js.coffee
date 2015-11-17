@@ -10,7 +10,7 @@ getStudents = ->
 		$form_data = $form.serialize()
 		$path = $(this).attr("action")
 		$method = $(this).attr("method")
-
+		$submit_btn = $form.find("input[type='submit']")
 		# $form_data.push
 		#   name: 'revision_date'
 		#   value: revision_date_val
@@ -19,10 +19,11 @@ getStudents = ->
 	    data: $form_data
 	    url: $path
 	    beforeSend: ->
-	    	$('ul.students_search_index').find("li.active a").append(" <i class=\"fa fa-spinner fa-spin\"></i>")
+	    	$submit_btn.replaceWith("<button id=\"searching_btn\" class=\"btn btn-danger\" disabled=true>Searching..<i class=\"fa fa-spinner fa-spin\"></i></button>")
+	    	$('ul.students_search_index').find("li.active a").append(" ")
 	    success: (data) ->
 	      console.log 'Status: Ok'
-	      $('ul.students_search_index').find("li.active a i").remove()
+	      $('#searching_btn').replaceWith($submit_btn)
 	      return
       error: (data) ->
       	swal("Oops", "Something went wrong")
@@ -36,13 +37,10 @@ $(document).on "page:change", ->
 	$('ul.students_search_index').find("li:first-child").addClass("active")
 	$('div.students_search_index').find("div:first-child").addClass("active")
 
-	# $('ul.students_search_index').find("li").each ->
-	# 	if !$(this).hasClass("active")
-	# 		div_id = $(this).find("a").data("target").split("#")[1]
-	# 		$("div##{div_id}").empty()
-
 	$('div.students_search_index').find("div.tab-pane").each ->
 		if $(this).hasClass("active")
 			batch_id = $(this).data("batch-id")
 			$("#batch_id_param").val(batch_id)
+		else
+			$(this).find("div").empty()
 			return

@@ -1,16 +1,16 @@
 # == Schema Information
 #
-# Table name: accounts
+# Table name: notifications
 #
 #  id            :integer          not null, primary key
-#  subdomain     :string
+#  body          :string
 #  resource_type :string
 #  resource_id   :integer
+#  sent_at       :datetime
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
-#  is_active     :boolean          default(FALSE)
 #
 
-class Account < ActiveRecord::Base
+class Notification < ActiveRecord::Base
 	belongs_to :resource, polymorphic: true
 end

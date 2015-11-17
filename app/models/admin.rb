@@ -16,6 +16,7 @@
 #  is_admin               :boolean          default(FALSE)
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
+#  username               :string
 #
 
 class Admin < ActiveRecord::Base
@@ -28,6 +29,8 @@ class Admin < ActiveRecord::Base
   has_one :account, as: :resource
   after_create :set_account
 
+  has_many :notifications, as: :resource
+  
   attr_accessor :login
 
   validates :username,

@@ -14,12 +14,12 @@
                 <i class="fa fa-graduation-cap fa-5x"></i>
               </div>
               <div class="col-xs-9 text-right">
-                  <div class="huge">26</div>
+                  <div class="huge"><%= Student.current_batches.count %></div>
                   <div>New Students!</div>
               </div>
           </div>
       </div>
-      <a href="#">
+      <a href="<%= students_path %>">
           <div class="panel-footer">
               <span class="pull-left">View Details</span>
               <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
@@ -58,12 +58,12 @@
                   <i class="fa fa-book fa-5x"></i>
               </div>
               <div class="col-xs-9 text-right">
-                  <div class="huge">124</div>
-                  <div>Subjects!</div>
+                  <div class="huge"><%= Course.select("id").count %></div>
+                  <div>Courses!</div>
               </div>
           </div>
       </div>
-      <a href="#">
+      <a href="<%= institutes_courses_path %>">
           <div class="panel-footer">
               <span class="pull-left">View Details</span>
               <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
@@ -80,12 +80,12 @@
                   <i class="fa fa-clone fa-5x"></i>
               </div>
               <div class="col-xs-9 text-right">
-                  <div class="huge">13</div>
+                  <div class="huge"><%= Classroom.select("id").count %></div>
                   <div>Classrooms!</div>
               </div>
           </div>
       </div>
-      <a href="#">
+      <a href="<%= institutes_classrooms_path %>">
           <div class="panel-footer">
               <span class="pull-left">View Details</span>
               <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>

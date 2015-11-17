@@ -19,4 +19,7 @@ class Course < ActiveRecord::Base
 	belongs_to :semester
 
 	validates_presence_of :semester, :name, :code
+
+	has_many :teachers
+	has_many :teachers, through: :course_allocations
 end

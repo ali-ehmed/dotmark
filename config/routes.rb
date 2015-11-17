@@ -26,16 +26,26 @@ Rails.application.routes.draw do
     root 'students/dashboard#index', as: :student_authenticated_root
   end
 
-  devise_for :parents
+  # devise_for :parents
 
   constraints :subdomain => "admin" do 
     devise_for :admins, controllers: { sessions: "admins/sessions" }
     devise_scope :admin do
       get "/login" => "admins/sessions#new", as: :admin_login
     end
+    
+    scope :module => 'admins' do
+      # Admin Dashboard
+      match "/settings" => "dashboard#settings", via: :get, as: :admins_settings
 
-    match "/students" => "admins/students#index", via: :get
-    match "/students/search" => "admins/students#search_students", via: :get
+      # Admin Students
+      resources :students, only: [:index] do
+        get "/students/search" => "students#search", on: :collection
+      end
+
+      # Admin Teachers
+      resources :teachers, only: [:index, :create]
+    end
 
     authenticated :admin do
       root 'admins/dashboard#index', as: :admin_authenticated_root
@@ -53,6 +63,7 @@ Rails.application.routes.draw do
 
     resources :classrooms
     resources :courses
+    resources :course_allocations, only: [:index, :create, :update]
   end
 
   get "/about_us" => "landings#about"

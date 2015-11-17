@@ -1,7 +1,0 @@
-// $("a#tab_student_<%= @batch.id %>").bind("ajax:beforeSend", function(evt, data, status, xhr){
-//  }).bind("ajax:success", function(evt, data, status, xhr){
- 	
-//  }).bind("ajax:error", function(evt, data, status, xhr){
-//  });
-
-$("#students_in_<%= @batch.id %>").hide().html("<%= escape_javascript(render 'students_list', students: @students, batch: @batch).html_safe %>").fadeIn(500);	

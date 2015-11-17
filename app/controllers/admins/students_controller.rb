@@ -14,7 +14,7 @@ module Admins
 			respond_with :js, :html
 		end
 
-		def search_students
+		def search
 			@sections = Section.all
 			@batches = Batch.all
 			if params[:batch_id_param]

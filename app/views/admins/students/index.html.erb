@@ -1,7 +1,7 @@
 <div class="page-header">
 	<h2>Students <small>Enrolled</small></h2>
 </div>
-<%= form_tag students_search_path(format: :js), method: :get, id: "search_students_form" do %>
+<%= form_tag students_search_students_path(format: :js), method: :get, id: "search_students_form" do %>
 	<%= hidden_field_tag :batch_id_param %>
 	<div class="row">
 		<div class="col-md-12">
@@ -16,7 +16,9 @@
 				</div>
 				<div class="col-md-3">
 					<label>Section:</label>
-					<%= select_tag :student_section, options_for_select(@sections.map{|section| [section.name, section.id]}), class: "form-control", prompt: "Select Section" %>
+					<div id="students_sections">
+						<%= students_sections_list(@sections) %>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -37,7 +39,7 @@
 	  	<% @batches.each_with_index do |batch, count| %>
 	  		<% count += 1 %>
 	    	<li role="presentation">
-	    		<%= link_to students_search_path(batch_id_param: batch.id, format: :js), remote: true, "data-target" => "##{batch.batch_name}_#{count}", "data-toggle" => "tab", onclick: "getBatchid(this, #{batch.id});", id: "tab_student_#{batch.id}" do %>
+	    		<%= link_to students_search_students_path(batch_id_param: batch.id, format: :js), remote: true, "data-target" => "##{batch.batch_name}_#{count}", "data-toggle" => "tab", onclick: "getBatchid(this, #{batch.id});", id: "tab_student_#{batch.id}" do %>
 	    			<%= "#{batch.batch_name} (#{batch.students.count})" %>
 	    		<% end %>
     		</li>

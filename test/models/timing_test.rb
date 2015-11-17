@@ -1,19 +1,18 @@
 # == Schema Information
 #
-# Table name: accounts
+# Table name: timings
 #
 #  id            :integer          not null, primary key
-#  subdomain     :string
-#  resource_type :string
-#  resource_id   :integer
+#  start_time    :time
+#  end_time      :time
+#  week_day_type :string
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
-#  is_active     :boolean          default(FALSE)
 #
 
 require 'test_helper'
 
-class AccountTest < ActiveSupport::TestCase
+class TimingTest < ActiveSupport::TestCase
   # test "the truth" do
   #   assert true
   # end

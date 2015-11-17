@@ -20,6 +20,9 @@ class Batch < ActiveRecord::Base
 	has_many :courses
 	has_many :students
 
+	# Allocated courses in a batch
+	has_many :course_allocations
+
 	accepts_nested_attributes_for :sections
 
 	def set_session_date

@@ -4,5 +4,9 @@ module Admins
 	
 		def dashboard
 		end
+
+		def settings
+			
+		end
 	end
 end
