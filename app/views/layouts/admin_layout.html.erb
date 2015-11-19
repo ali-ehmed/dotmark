@@ -8,7 +8,7 @@
     <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
     <%= csrf_meta_tags %>
 
-
+    <meta http-equiv="x-pjax-version" content="v123">
   </head>
   <body>
     <header>
@@ -23,6 +23,7 @@
         <% end %>
         <%= render 'layouts/shared/messages' %>
         <%= render 'layouts/admin_layout/institute_settings' %>
+        <%= render 'layouts/admin_layout/settings' %>
         <%= yield %>
       </div>
     </main>

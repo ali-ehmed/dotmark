@@ -1,7 +1,6 @@
 module Admins
 	class	TeachersController < ApplicationController
-		def index
-			
+		def index	
 		end
 	end
 end

@@ -16,7 +16,10 @@ class ApplicationController < ActionController::Base
   
   before_action :set_account, :require_account!, :make_action_mailer_use_request_host_and_protocol
   
-
+  def pjax_layout
+    'pjax'
+  end
+  
   def layout_by_resource
     if request.subdomain.blank?
       "application"

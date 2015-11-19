@@ -1,6 +1,7 @@
 module Admins
 	class StudentsController < ApplicationController
 		respond_to :js, :html
+		
 		def index
 			cookies[:students_index] = {
 			  value: '_set_student_index',
@@ -19,7 +20,6 @@ module Admins
 			@batches = Batch.all
 			if params[:batch_id_param]
 				@batch = Batch.find(params[:batch_id_param])
-
 				if params[:student_name].present?
 					@students = @batch.students.where("first_name || ' ' || last_name LIKE ?", "%#{params[:student_name]}%") 
 				elsif params[:student_name].present? and params[:roll_no].present?

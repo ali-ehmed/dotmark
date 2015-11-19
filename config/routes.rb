@@ -36,7 +36,10 @@ Rails.application.routes.draw do
     
     scope :module => 'admins' do
       # Admin Dashboard
-      match "/settings" => "dashboard#settings", via: :get, as: :admins_settings
+      match "/account" => "dashboard#admin_account", via: :get, as: :admin_account
+      match "/admin_rights" => "dashboard#admin_rights", via: :get, as: :admin_rights
+      match "/week_days" => "dashboard#week_days_and_timings", via: :get, as: :set_week_days
+
 
       # Admin Students
       resources :students, only: [:index] do

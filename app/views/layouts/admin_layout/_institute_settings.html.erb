@@ -1,11 +1,11 @@
 <% if params[:controller].split("/").first == "institutes" %>
   <div class="container-fluid">
     <div class="page-heading-admin-settings">
-      Institute Swttings
+      Institute Settings
     </div>
     <div class="row">
       <div class="col-md-3">
-        <div class="admin-settings-list-group">
+        <div class="settings-list-group">
           <%= link_to "Batches", institutes_batches_path, class: "list-group-item" %>
           <%= link_to "Sections", institutes_sections_path, class: "list-group-item" %>
           <%= link_to "Classrooms", institutes_classrooms_path, class: "list-group-item" %>
@@ -14,7 +14,7 @@
         </div>
       </div>
       <div class="col-md-9">
-        <%= yield :settings %>
+        <%= yield :institute_settings %>
       </div>
     </div>
   </div>

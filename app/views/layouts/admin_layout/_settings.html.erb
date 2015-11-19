@@ -1,0 +1,21 @@
+<% if params[:controller] == "admins/dashboard" and not(params[:action] == "index") %>
+  <div class="container-fluid">
+    <div class="page-heading-admin-settings">
+      Admin Settings
+    </div>
+    <div class="row">
+      <div class="col-md-3">
+        <div class="admin-settings settings-list-group">
+          <%= link_to "Admin Account", admin_account_path, class: "list-group-item" %>
+          <%= link_to "Admin Rights", admin_rights_path, class: "list-group-item" %>
+          <%= link_to "Week Days & Timings", set_week_days_path, class: "list-group-item" %>
+        </div>
+      </div>
+      <div class="col-md-9">
+        <div id="pjax-container">
+          <%= yield :admin_settings %>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>

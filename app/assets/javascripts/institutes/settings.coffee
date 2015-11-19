@@ -69,10 +69,15 @@ window.gettingSections = (elem, temp_param = false, new_admission_param = false)
     false
 
 
+
+$(document).pjax('.admin-settings a', '#pjax-container')
 $(document).on 'page:change', ->
-  get_curr_url = "/#{@location.pathname.split("/")[1]}/#{@location.pathname.split("/")[2]}"
-  $.each $('.admin-settings-list-group').find('a'), ->
-  	if get_curr_url == $(this).attr("href")
+	
+
+  get_curr_url_for_institutes = "/#{@location.pathname.split("/")[1]}/#{@location.pathname.split("/")[2]}"
+  get_curr_url_for_settings = "#{@location.pathname}"
+  $.each $('.settings-list-group').find('a'), ->
+  	if get_curr_url_for_institutes == $(this).attr("href") or get_curr_url_for_settings == $(this).attr("href")
   		$(this).addClass 'active-list'
   		false
 
@@ -80,4 +85,18 @@ $(document).on 'page:change', ->
   
   jQuery('.best_in_place').unbind().on 'ajax:error', ->
     $('.purr').prepend '<span class=\'glyphicon glyphicon-exclamation-sign\'></span> '
+
+	# $(document).on "click", ".admin-settings a", (e) ->
+	# $.pjax
+ #    url: ".admin-settings a",
+ #    container: '#pjax-container',
+ #    timeout: 1000000
+
+	
+
+	
+
+
+	
+
 
