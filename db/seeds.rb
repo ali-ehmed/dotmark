@@ -99,3 +99,5 @@ Timing.find_or_create_by!(start_time: "11:40", end_time: "13:30", week_day_type:
 Timing.find_or_create_by!(start_time: "14:30", end_time: "15:00", week_day_type: "FriDay")
 Timing.find_or_create_by!(start_time: "15:00", end_time: "16:00", week_day_type: "FriDay")
 Timing.find_or_create_by!(start_time: "16:00", end_time: "16:50", week_day_type: "FriDay")
+
+puts "CREATING COURSES"

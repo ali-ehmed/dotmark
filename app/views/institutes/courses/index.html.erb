@@ -7,9 +7,17 @@
 	</h2>
 	<%= render "form" %>
 	<hr />
+	<div class="row">
+		<div class="col-md-4">
+			<div class="semester_courses">
+				<%= semesters_select_tag(@semesters) %>
+			</div>		
+		</div>
+	</div>
+	<br />
 	<div class="scrollable">
 		<div class="courses">
-		  <%= render "listing_courses" %>
+		  <%= render "listing_courses", courses: @semester.courses %>
 		</div>
 	</div>
 <% end %>

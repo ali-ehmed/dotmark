@@ -79,7 +79,9 @@ Rails.application.routes.draw do
     get "/get_sections" => "base#get_sections", as: :get_sections
 
     resources :classrooms
-    resources :courses
+    resources :courses do 
+      get "get_course/:semester_name" => "courses#get_course_by_section", on: :collection
+    end
     resources :course_allocations, only: [:index, :create, :update]
   end
 

@@ -1,15 +1,25 @@
 module Institutes
 	class CoursesController < BaseController
+		# respond_to :js, only: [:get_course_by_section]
+
 		def index
-			@courses = Course.all
+			@semesters = Semester.all
+			@semester = @semesters.first_semester
 			@course = Course.new
+		end
+
+		def get_course_by_section
+			@semester = Semester.find_by_name("#{params[:semester_name]}")
+			respond_to do |format|
+  			format.js
+			end
 		end
 
 		def create
 			course = Course.new(course_params)
-	  	@courses = Course.all
 	  	if course.save
 	  		respond_to do |format|
+	  			@semester = Semester.find_by_name("#{course.semester.name}")
 	  			format.js
 				end
 			else
