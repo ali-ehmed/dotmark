@@ -8,7 +8,7 @@ class Subdomain
 end
 
 Rails.application.routes.draw do
-  
+
   constraints(Subdomain) do
     devise_for :students, controllers: { registrations: "students/registrations", sessions: "students/sessions", confirmations: "students/confirmations" }
     devise_scope :student do
@@ -24,6 +24,18 @@ Rails.application.routes.draw do
 
   authenticated :student do
     root 'students/dashboard#index', as: :student_authenticated_root
+  end
+
+  constraints(Subdomain) do 
+    devise_for :teachers, controllers: { registrations: "teachers/registrations", sessions: "teachers/sessions" }
+    devise_scope :teacher do
+      get "teachers/login" => "teachers/sessions#new", as: :teachers_login
+      get "teachers/new" => "teachers/registrations#new", as: :new_teacher
+    end
+  end
+
+  authenticated :teacher do
+    root 'teachers/dashboard#index', as: :teacher_authenticated_root
   end
 
   # devise_for :parents
@@ -43,11 +55,13 @@ Rails.application.routes.draw do
 
       # Admin Students
       resources :students, only: [:index] do
-        get "/students/search" => "students#search", on: :collection
+        get "/students/search" => "students#search", on: :collection, as: :search
       end
 
       # Admin Teachers
-      resources :teachers, only: [:index, :create]
+      resources :teachers, only: [:index]do
+        get "/teachers/search" => "teachers#search", on: :collection, as: :search
+      end
     end
 
     authenticated :admin do

@@ -79,11 +79,7 @@ module Students
 		private
 
 		def admissions_params
-			params.require(:student).permit(
-				:email, :password, :password_confirmation, :username,
-				:first_name, :last_name, :date_of_birth, :roll_number, :address, :phone, 
-				:section_id, :batch_id, :semester_id, :gender
-				)
+			devise_parameter_sanitizer.sanitize(:student)
 		end
 
 		def get_new_admission_sections

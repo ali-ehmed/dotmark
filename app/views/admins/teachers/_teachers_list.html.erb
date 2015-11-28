@@ -1,0 +1,37 @@
+<% if @teachers.present? %>
+	<div class="table-responsive">
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th>Employee #</th>
+					<th>Name</th>
+					<th>Birth Date</th>
+					<th>Joining Date</th>
+					<th>Present</th>
+					<th>Phone</th>
+					<th>Gender</th>
+				</tr>
+			</thead>
+			<tbody>
+				<% @teachers.each do |teacher| %>
+					<tr>
+						<td><%= teacher.employee_number %></td>
+						<td><%= teacher.full_name %></td>
+						<td><%= l teacher.date_of_birth, format: :short_date if teacher.date_of_birth %></td>
+						<td><%= l teacher.joining_date, format: :short_date if teacher.joining_date %></td>
+						<td><%= teacher.is_present? %></td>
+						<td><%= teacher.phone %></td>
+						<td><%= teacher.gender %></td>
+					</tr>
+				<% end %>
+			</tbody>
+		</table>
+	</div>
+<% else %>
+	<br />
+	<div class="alert alert-info">
+		<blockquote>
+			No Teachers availble. Register <%= link_to "New", new_teacher_path %>
+		</blockquote>
+	</div>
+<% end %>

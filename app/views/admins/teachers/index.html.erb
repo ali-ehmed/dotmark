@@ -1,3 +1,41 @@
 <div class="page-header">
-	<h2>Teachers <small>Hired</small></h2>
+	<h2>
+		Teachers
+		<%= link_to "Add New", new_teacher_path, class: "btn btn-success pull-right" %>
+	</h2>
+</div>
+<%= form_tag search_teachers_path, method: :get, id: "search_teachers_form" do %>
+	<div class="row">
+		<div class="col-md-12">
+			<div class="row">
+				<div class="col-md-3">
+					<label>Employee No:</label>
+					<%= text_field_tag :employee_no, params[:employee_no], class: "form-control", placeholder: "Enter Employee Number" %>
+				</div>
+				<div class="col-md-3">
+					<label>Name:</label>
+					<%= text_field_tag :teacher_name, params[:teacher_name], class: "form-control", placeholder: "Enter Name" %>
+				</div>
+				<div class="col-md-3">
+					<label>Course:</label>
+					<div id="students_sections">
+						<%= select_tag :teacher_courses, options_for_select(Course.all.map{|m| [m.name, m.id]}), class: "form-control", prompt: "--Select Course--" %>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<br />
+	<div class="row">
+		<div class="col-md-6">
+			<%= submit_tag "Search", class: "btn btn-danger" %>
+			<%= link_to "Clear", teachers_path, class: "btn btn-default" %>
+		</div>
+	</div>
+<% end %>
+<br />
+<div class="row">
+	<div class="col-md-12 col-sm-12 col-xs-12">
+		<%= render "teachers_list" %>
+	</div>
 </div>

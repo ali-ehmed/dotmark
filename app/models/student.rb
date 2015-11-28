@@ -42,6 +42,8 @@ class Student < ActiveRecord::Base
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable, :confirmable
 
+  extend BuildAccount
+
   belongs_to :section
   belongs_to :semester
   belongs_to :batch
@@ -63,7 +65,7 @@ class Student < ActiveRecord::Base
       :case_sensitive => false
     }, if: :check_admission_session
   
-  after_create :creating_joining_date, :set_account, :creating_name_if_blank, :send_welcome_email
+  after_create :creating_joining_date, :build_account, :creating_name_if_blank, :send_welcome_email
   before_validation :generate_password
   after_initialize :default_values
 
@@ -77,6 +79,26 @@ class Student < ActiveRecord::Base
 
     def enroll_new(params = nil)
       new(params)
+    end
+
+    def search(params)
+      if params[:batch_id_param]
+        @batch = Batch.find(params[:batch_id_param])
+        if params[:student_name].present?
+          @students = @batch.students.where("first_name || ' ' || last_name LIKE ?", "%#{params[:student_name]}%") 
+        elsif params[:student_name].present? and params[:roll_no].present?
+          @students = @batch.students.where("first_name || ' ' || last_name LIKE ? and roll_number = ?", "%#{params[:student_name]}%", params[:roll_no]) 
+        elsif params[:student_name].present? and params[:roll_no].present? and params[:student_section].present?
+          @students = @batch.students.where("first_name || ' ' || last_name LIKE ? and roll_number = ? and section_id = ?", "%#{params[:student_name]}%", params[:roll_no], params[:student_section])
+        elsif params[:roll_no].present?
+          @students = @batch.students.where("roll_number = ?", params[:roll_no])
+        elsif params[:student_section].present?
+          @students = @batch.students.where("section_id = ?", params[:student_section])
+        end
+        @students ||= @batch.students
+      end
+
+      return @students, @batch
     end
 	end
 
@@ -98,12 +120,6 @@ class Student < ActiveRecord::Base
 
   def send_welcome_email
     ApplicationMailer.welcome_email(self).deliver!
-  end
-
-  def set_account
-    @account = build_account 
-    @account.subdomain = username
-    @account.save
   end
 
   def generate_random_string
@@ -139,7 +155,6 @@ class Student < ActiveRecord::Base
       "No"
     end
   end
-
 
   private
 

@@ -24,7 +24,7 @@ class window.Institute
 	            html: true
 	          console.log 'Couldn\'t save'
 	        else
-	          swal "#{entity_name}", "created", "success"
+	          swal "#{entity_name}", "Created", "success"
 	          $elem.closest(".modal").modal 'hide'
 	          $form.find(':input').val ''
 	      error: (response) ->
@@ -70,10 +70,8 @@ window.gettingSections = (elem, temp_param = false, new_admission_param = false)
 
 
 
-$(document).pjax('.admin-settings a', '#pjax-container')
-$(document).on 'page:change', ->
-	
 
+$(document).on 'page:change', ->
   get_curr_url_for_institutes = "/#{@location.pathname.split("/")[1]}/#{@location.pathname.split("/")[2]}"
   get_curr_url_for_settings = "#{@location.pathname}"
   $.each $('.settings-list-group').find('a'), ->
@@ -85,12 +83,6 @@ $(document).on 'page:change', ->
   
   jQuery('.best_in_place').unbind().on 'ajax:error', ->
     $('.purr').prepend '<span class=\'glyphicon glyphicon-exclamation-sign\'></span> '
-
-	# $(document).on "click", ".admin-settings a", (e) ->
-	# $.pjax
- #    url: ".admin-settings a",
- #    container: '#pjax-container',
- #    timeout: 1000000
 
 	
 

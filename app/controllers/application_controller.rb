@@ -15,7 +15,8 @@ class ApplicationController < ActionController::Base
   add_breadcrumb "Dashboard"
   
   before_action :set_account, :require_account!, :make_action_mailer_use_request_host_and_protocol
-  
+  before_action :parameters_sanitizer, if: :devise_controller?
+
   def pjax_layout
     'pjax'
   end
@@ -99,5 +100,19 @@ class ApplicationController < ActionController::Base
   def make_action_mailer_use_request_host_and_protocol
     ActionMailer::Base.default_url_options[:protocol] = request.protocol
     ActionMailer::Base.default_url_options[:host] = request.host_with_port
+  end
+
+  protected
+
+  def parameters_sanitizer
+    if resource_class == Teacher
+      devise_parameter_sanitizer.for(:teacher) { |u| u.permit(:email,:first_name, :last_name, :gender, :date_of_birth,
+                                                              :joining_date, :qualification, :past_experience,
+                                                              :phone, :skills) }
+    elsif resource_class == Student
+      devise_parameter_sanitizer.for(:student) {|u| u.permit(:email, :password, :password_confirmation, :username,
+                                                            :first_name, :last_name, :date_of_birth, :roll_number, :address, :phone, 
+                                                            :section_id, :batch_id, :semester_id, :gender) }
+    end
   end
 end

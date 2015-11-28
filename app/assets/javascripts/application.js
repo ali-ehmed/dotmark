@@ -35,7 +35,6 @@
 //= require bootstrap-sprockets
 //= require jasny-bootstrap.min
 //= require sweet-alert
-//= require jquery.pjax
 
 
 //= require_tree .
