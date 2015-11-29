@@ -22,7 +22,7 @@
               <div class="row">
                 <div class="col-md-6">
                   <label>Color of Course <em>(Optional)</em>:</label>
-                  <%= f.input :color, label: false, placeholder: "Pick Color", input_html: { data: { minicolors: {theme: :bootstrap, position: :right}}}  %>
+                  <%= f.input :color, label: false, placeholder: "Pick Color", input_html: { id: "new_course_color" }  %>
                 </div>
                 <div class="col-md-6">
                   <%= f.association :semester, collection: Semester.all, prompt: "--Choose Semester--" %>

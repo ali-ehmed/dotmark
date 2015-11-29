@@ -1,0 +1,22 @@
+<% if teachers.present? %>
+	<table class="table table-striped">
+		<thead>
+			<tr>
+				<th>Emp #</th>
+				<th>Name</th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+			<% teachers.each do |teacher| %>
+				<tr>
+					<td><%= teacher.employee_number %></td>
+					<td><%= teacher.full_name %></td>
+					<td></td>
+				</tr>
+			<% end %>
+		</tbody>
+	</table>
+<% else %>
+	<blockquote><p>Select Teacher</p></blockquote>
+<% end %>

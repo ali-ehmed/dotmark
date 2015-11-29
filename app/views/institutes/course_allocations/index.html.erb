@@ -3,4 +3,30 @@
 	  Allocate Courses to Teachers
 	</h2>
 	<hr />
+	<div class="row">
+		<div class="col-md-6">
+			<div class="panel panel-default">
+				<div class="panel-heading">Select Courses and Teachers</div>
+				<div class="panel-body">
+					<%= select_tag :teacher_for_courses, options_for_select(Teacher.all.map{|m| [m.full_name, m.id]}), class: "form-control teacher_allocation", prompt: "--Select Teacher--", onchange: "getRecordAllocation(this);", data: { name: "teacher" } %>
+					<br /> <br />
+					<div class="teacher_for_courses">
+						<%= render "teachers", teachers: nil %>
+					</div>
+					<hr />
+					<%= select_tag :semester_for_courses, options_for_select(Semester.all.map{|m| [m.name, m.name]}), class: "form-control course_allocation", prompt: "--Select Semester--", onchange: "getRecordAllocation(this);", data: { name: "semester" } %>
+					<br /> <br />
+					<div class="semester_for_courses">
+						<%= render "courses", courses: nil %>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-6">
+			<div class="panel panel-default">
+				<div class="panel-heading">Allocated Teachers to Courses</div>
+				<div class="panel-body"></div>
+			</div>
+		</div>
+	</div>
 <% end %>

@@ -1,0 +1,22 @@
+<% if courses.present? %>
+	<table class="table table-striped">
+		<thead>
+			<tr>
+				<th>Name</th>
+				<th>Code</th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+			<% courses.each do |courses| %>
+				<tr>
+					<td><%= courses.name %></td>
+					<td><%= courses.code %></td>
+					<td></td>
+				</tr>
+			<% end %>
+		</tbody>
+	</table>						
+<% else %>
+	<blockquote><p>Please Select Semester</p></blockquote>
+<% end %>

@@ -1,9 +1,7 @@
 class LandingsController < ApplicationController
-	def home
-		
+	def home	
 	end
 
-	def about
-		
+	def about		
 	end
 end

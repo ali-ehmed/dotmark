@@ -82,8 +82,9 @@ class Student < ActiveRecord::Base
     end
 
     def search(params)
-      if params[:batch_id_param]
+      if params[:batch_id_param].present?
         @batch = Batch.find(params[:batch_id_param])
+        @students = nil
         if params[:student_name].present?
           @students = @batch.students.where("first_name || ' ' || last_name LIKE ?", "%#{params[:student_name]}%") 
         elsif params[:student_name].present? and params[:roll_no].present?
@@ -96,6 +97,7 @@ class Student < ActiveRecord::Base
           @students = @batch.students.where("section_id = ?", params[:student_section])
         end
         @students ||= @batch.students
+        logger.debug @students.count
       end
 
       return @students, @batch

@@ -1,4 +1,4 @@
-<% if params[:controller] == "admins/dashboard" and not(params[:action] == "index") %>
+<% if params[:controller] == "admins/settings" and not(params[:action] == "index") %>
   <div class="container-fluid">
     <div class="page-heading-admin-settings">
       Admin Settings
@@ -6,9 +6,8 @@
     <div class="row">
       <div class="col-md-3">
         <div class="admin-settings settings-list-group">
-          <%= link_to "Admin Account", admin_account_path, class: "list-group-item" %>
-          <%= link_to "Admin Rights", admin_rights_path, class: "list-group-item" %>
-          <%= link_to "Week Days & Timings", set_week_days_path, class: "list-group-item" %>
+          <%= link_to "Admin Account", admin_account_settings_path, class: "list-group-item" %>
+          <%= link_to "Week Days & Timings", set_week_days_settings_path, class: "list-group-item" %>
         </div>
       </div>
       <div class="col-md-9">

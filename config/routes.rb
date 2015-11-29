@@ -48,24 +48,26 @@ Rails.application.routes.draw do
     
     scope :module => 'admins' do
       # Admin Dashboard
-      match "/account" => "dashboard#admin_account", via: :get, as: :admin_account
-      match "/admin_rights" => "dashboard#admin_rights", via: :get, as: :admin_rights
-      match "/week_days" => "dashboard#week_days_and_timings", via: :get, as: :set_week_days
-
+      resources :settings, only: [:update] do 
+        collection do
+          get "/account" => "settings#admin_account", as: :admin_account
+          get "/week_days" => "settings#week_days_and_timings", as: :set_week_days
+        end
+      end
 
       # Admin Students
       resources :students, only: [:index] do
-        get "/students/search" => "students#search", on: :collection, as: :search
+        get "/search" => "students#search", on: :collection, as: :search
       end
 
       # Admin Teachers
       resources :teachers, only: [:index]do
-        get "/teachers/search" => "teachers#search", on: :collection, as: :search
+        get "/search" => "teachers#search", on: :collection, as: :search
       end
     end
 
     authenticated :admin do
-      root 'admins/dashboard#index', as: :admin_authenticated_root
+      root 'admins/settings#index', as: :admin_authenticated_root
     end
   end
 
@@ -82,7 +84,9 @@ Rails.application.routes.draw do
     resources :courses do 
       get "get_course/:semester_name" => "courses#get_course_by_section", on: :collection
     end
-    resources :course_allocations, only: [:index, :create, :update]
+    resources :course_allocations, only: [:index, :create, :update] do 
+      get "get_allocation_record" => "course_allocations#get_allocation_record", on: :collection
+    end
   end
 
   get "/about_us" => "landings#about"

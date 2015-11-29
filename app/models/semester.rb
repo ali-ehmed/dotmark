@@ -15,6 +15,7 @@ class Semester < ActiveRecord::Base
 	has_many :courses
 
 	class << self
+		# Get Semester by Name: -> "Semester.first_semester" etc
 		["first, 1", "second, 2", "third, 3", "fourth, 4", "fifth, 5", "sixth, 6", "seventh, 7", "eight, 8"].each do |action|
 			name = action.split(", ")
 			define_method("#{name.first}_semester") do

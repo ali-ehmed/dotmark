@@ -4,22 +4,15 @@ module Institutes
 
 		def index
 			@semesters = Semester.all
-			@semester = @semesters.first_semester
+			# @semester = @semesters.first_semester
 			@course = Course.new
-		end
-
-		def get_course_by_section
-			@semester = Semester.find_by_name("#{params[:semester_name]}")
-			respond_to do |format|
-  			format.js
-			end
 		end
 
 		def create
 			course = Course.new(course_params)
 	  	if course.save
 	  		respond_to do |format|
-	  			@semester = Semester.find_by_name("#{course.semester.name}")
+	  			@semesters = Semester.all
 	  			format.js
 				end
 			else

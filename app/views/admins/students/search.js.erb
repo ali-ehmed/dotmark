@@ -1,5 +1,5 @@
 $("a#tab_student_<%= @batch.id %>").bind("ajax:beforeSend", function(evt, data, status, xhr){
-	$("#students_in_<%= @batch.id %>").html("<br /><div class='alert alert-danger'><blockquote><i class='fa fa-spinner fa-spin fa-2x'></i> <span class='font-size:32px;'>Loading</span></blockquote></div>");
+	// $("#students_in_<%= @batch.id %>").html("<br /><div class='alert alert-danger'><blockquote><i class='fa fa-spinner fa-spin fa-2x'></i> <span class='font-size:32px;'>Loading</span></blockquote></div>");
 }).bind("ajax:success", function(evt, data, status, xhr){
 	$("#students_sections").html("<%= escape_javascript(students_sections_list(@batch.sections)).html_safe %>")
 
@@ -9,7 +9,7 @@ $("a#tab_student_<%= @batch.id %>").bind("ajax:beforeSend", function(evt, data, 
 		    $(this).find("div").empty();
 		  }
 	  });
-	}, 100);
+	}, 500);
 }).bind("ajax:error", function(evt, data, status, xhr){
 	swal("Oops Something went wrong!")
 });

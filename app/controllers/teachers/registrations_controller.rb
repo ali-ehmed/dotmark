@@ -11,14 +11,12 @@ module Teachers
 			respond_to do |format|
 				if @teacher.save
 					format.html { redirect_to teachers_path, notice: "#{@teacher.full_name} has been registered to DotMark" }
-					# format.json @teacher
 				else
 					flash[:error] = "Please Review Errors:"
 					format.html { render :new }
 				end
 			end
 		end
-
 
 		private
 

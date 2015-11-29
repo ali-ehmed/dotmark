@@ -22,6 +22,7 @@
 //= require best_in_place.purr
 
 //= require jquery.minicolors
+//= require jquery.minicolors.simple_form
 
 //= require bootstrap-wizard
 

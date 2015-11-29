@@ -16,6 +16,6 @@ getCoursesBySections = ->
 
 $(document).on "page:change", ->
   setupCourse()
-  getCoursesBySections()
+  # getCoursesBySections()
 
-  $('.course_color').minicolors theme: 'bootstrap'
+  $('#new_course_color').minicolors theme: 'bootstrap'
