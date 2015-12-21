@@ -1,5 +1,6 @@
 module Institutes
 	class CoursesController < BaseController
+		add_breadcrumb "Courses"
 		# respond_to :js, only: [:get_course_by_section]
 
 		def index

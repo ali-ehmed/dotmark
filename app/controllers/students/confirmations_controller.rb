@@ -9,7 +9,7 @@ module Students
         # set_flash_message(:notice, :confirmed) if is_flashing_format?
         cookies[:confirm_notice] = {
           value: "Thank you for confirming your account. Your account has been confirmed on <strong>#{resource.confirmed_at.strftime('%d-%B-%Y')}</strong> at <strong>#{resource.confirmed_at.strftime('%H:%M:%S')}</strong>. You will recieve an email shortly with your credentials.",
-          expires: Time.now + 30.seconds,
+          expires: Time.now + 15.seconds,
           domain: request.domain
         }
 

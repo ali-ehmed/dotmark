@@ -20,10 +20,10 @@ Rails.application.routes.draw do
       get "/autocomplete_guardians_search" => "students/registrations#autocomplete_guardians_search"
       get "/get_parent/:parent_id" => "students/registrations#get_parent"
     end
-  end
 
-  authenticated :student do
-    root 'students/dashboard#index', as: :student_authenticated_root
+    authenticated :student do
+      root 'dashboard#index', as: :student_authenticated_root
+    end
   end
 
   constraints(Subdomain) do 
@@ -32,10 +32,10 @@ Rails.application.routes.draw do
       get "teachers/login" => "teachers/sessions#new", as: :teachers_login
       get "teachers/new" => "teachers/registrations#new", as: :new_teacher
     end
-  end
 
-  authenticated :teacher do
-    root 'teachers/dashboard#index', as: :teacher_authenticated_root
+    authenticated :teacher do
+      root 'dashboard#index', as: :teacher_authenticated_root
+    end
   end
 
   # devise_for :parents
@@ -47,10 +47,11 @@ Rails.application.routes.draw do
     end
     
     scope :module => 'admins' do
-      # Admin Dashboard
-      resources :settings, only: [:update] do 
+      # Admin Settings
+      resources :settings, only: [:index] do 
         collection do
           get "/account" => "settings#admin_account", as: :admin_account
+          put "/" => "settings#update", as: :update_account
           get "/week_days" => "settings#week_days_and_timings", as: :set_week_days
         end
       end
@@ -67,7 +68,7 @@ Rails.application.routes.draw do
     end
 
     authenticated :admin do
-      root 'admins/settings#index', as: :admin_authenticated_root
+      root 'dashboard#index', as: :admin_authenticated_root
     end
   end
 
@@ -89,7 +90,8 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :dashboard, only: [:index]
+
   get "/about_us" => "landings#about"
   root to: "landings#home"
-  
 end

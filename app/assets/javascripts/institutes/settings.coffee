@@ -75,7 +75,8 @@ $(document).on 'page:change', ->
   get_curr_url_for_institutes = "/#{@location.pathname.split("/")[1]}/#{@location.pathname.split("/")[2]}"
   get_curr_url_for_settings = "#{@location.pathname}"
   $.each $('.settings-list-group').find('a'), ->
-  	if get_curr_url_for_institutes == $(this).attr("href") or get_curr_url_for_settings == $(this).attr("href")
+  	$curr_elem_href = $(@).attr("href")
+  	if get_curr_url_for_institutes == $curr_elem_href or $curr_elem_href.indexOf(get_curr_url_for_settings) >= 0 or get_curr_url_for_settings == $curr_elem_href
   		$(this).addClass 'active-list'
   		false
 

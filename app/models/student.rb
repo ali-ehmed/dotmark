@@ -42,7 +42,7 @@ class Student < ActiveRecord::Base
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable, :confirmable
 
-  extend BuildAccount
+  include BuildAccount
 
   belongs_to :section
   belongs_to :semester
@@ -57,7 +57,7 @@ class Student < ActiveRecord::Base
 
   attr_accessor :admission_session, :login
 
-  validates_presence_of :section, :semester, :batch
+  validates_presence_of :section, :batch
   # validates_uniqueness_of :username, if: :check_admission_session
   validates :username,
     :presence => true,
@@ -65,7 +65,8 @@ class Student < ActiveRecord::Base
       :case_sensitive => false
     }, if: :check_admission_session
   
-  after_create :creating_joining_date, :build_account, :creating_name_if_blank, :send_welcome_email
+  after_create :set_account
+  after_create :creating_joining_date, :creating_name_if_blank, :send_welcome_email
   before_validation :generate_password
   after_initialize :default_values
 
@@ -163,6 +164,7 @@ class Student < ActiveRecord::Base
   def default_values
     self.passed_out ||= false
     self.roll_number ||= "#{self.batch.try(:batch_name)}-CS-#{self.class.last.present? ? (self.class.last.id.to_i + 1).to_s : '1'}"
+    self.semester = Semester.first_semester if self.semester_id.blank?
   end
 
   def generate_password

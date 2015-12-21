@@ -21,9 +21,16 @@
         </div>
         <div class="col-md-6">
           <%= f.association :semester, collection: Semester.all, prompt: "--Choose Semester--" %>
+        </div>
       </div>
     </p>
-    <a href="<%= institutes_courses_path %>" class="btn btn-default">Cancel</a>
-    <button class="btn btn-success" type="submit">Save</button>     
+    <p>
+      <div class="row">
+        <div class="col-md-6">
+          <a href="<%= institutes_courses_path %>" class="btn btn-default">Cancel</a>
+          <button class="btn btn-success" type="submit">Save</button>
+        </div>
+      </div>
+    </p>   
   <% end %>
 <% end %>

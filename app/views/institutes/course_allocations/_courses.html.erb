@@ -8,11 +8,11 @@
 			</tr>
 		</thead>
 		<tbody>
-			<% courses.each do |courses| %>
+			<% courses.each do |course| %>
 				<tr>
-					<td><%= courses.name %></td>
-					<td><%= courses.code %></td>
-					<td></td>
+					<td><%= course.name %></td>
+					<td><%= course.code %></td>
+					<td><%= check_box_tag "course_ids[]", course.id %></td>
 				</tr>
 			<% end %>
 		</tbody>

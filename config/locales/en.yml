@@ -24,6 +24,7 @@ en:
   time:
     formats:
       short_datetime: "%B %d, %Y"
+      timings: "%I:%M %P"
   date:
     formats:
       short_date: "%b %d, %Y"

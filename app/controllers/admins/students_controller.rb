@@ -3,12 +3,6 @@ module Admins
 		respond_to :js, :html
 		
 		def index
-			cookies[:students_index] = {
-			  value: '_set_student_index',
-			  expires: Time.now + 1.minute,
-			  domain: request.domain
-			}
-
 			@sections = Batch.first.sections
 			@batches = Batch.all
 

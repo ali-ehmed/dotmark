@@ -4,29 +4,85 @@
 	</h2>
 	<hr />
 	<div class="row">
-		<div class="col-md-6">
+		<div class="col-md-12">
 			<div class="panel panel-default">
 				<div class="panel-heading">Select Courses and Teachers</div>
 				<div class="panel-body">
-					<%= select_tag :teacher_for_courses, options_for_select(Teacher.all.map{|m| [m.full_name, m.id]}), class: "form-control teacher_allocation", prompt: "--Select Teacher--", onchange: "getRecordAllocation(this);", data: { name: "teacher" } %>
-					<br /> <br />
-					<div class="teacher_for_courses">
-						<%= render "teachers", teachers: nil %>
+					<div class="row">
+						<div class="col-md-6">
+							<%= select_tag :teacher_for_courses, options_for_select(Teacher.all.map{|m| [m.full_name, m.id]}), class: "form-control teacher_allocation", prompt: "--Select Teacher--", onchange: "getRecordAllocation(this);", data: { name: "teacher" } %>
+							<br /> <br />
+							<div class="teacher_for_courses">
+								<%= render "teachers", teachers: nil %>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<ul class="list-group">
+			        	<% @week_days.each do |day| %>
+								  <a class="list-group-item" href="#"><strong><%= day.name %></strong></a>
+							  <% end %>
+							</ul>
+						</div>
 					</div>
-					<hr />
-					<%= select_tag :semester_for_courses, options_for_select(Semester.all.map{|m| [m.name, m.name]}), class: "form-control course_allocation", prompt: "--Select Semester--", onchange: "getRecordAllocation(this);", data: { name: "semester" } %>
-					<br /> <br />
-					<div class="semester_for_courses">
-						<%= render "courses", courses: nil %>
+					<br />
+					<div class="row">
+						<div class="col-md-6">
+							<%= select_tag :semester_for_courses, options_for_select(Semester.all.map{|m| [m.name, m.name]}), class: "form-control course_allocation", prompt: "--Select Semester--", onchange: "getRecordAllocation(this);", data: { name: "semester" } %>
+							<br /> <br />
+							<div class="semester_for_courses">
+								<%= render "courses", courses: nil %>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<!-- Normal Days -->
+							<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+								<div class="panel panel-default">
+							    <div class="panel-heading" role="tab" id="headingOne">
+							      <h4 class="panel-title">
+							        <a role="button" data-toggle="collapse" data-parent="#accordion" href="#normaldaysCollaspe" aria-expanded="true" aria-controls="normaldaysCollaspe">
+							          <h3>Mon - Thurs Timings</h3>
+							        </a>
+							      </h4>
+							    </div>
+							    <div id="normaldaysCollaspe" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+							      <div class="panel-body">
+							      	<ul class="list-group">
+							      		<% @normal_timings.each do |time| %>
+												  <a href="#" class="list-group-item allocate_timings">
+												  	<strong><%= l time.start_time, format: :timings %></strong> - <strong><%= l time.end_time, format: :timings %></strong>
+												  </a>
+											  <% end %>
+							      	</ul>
+							      </div>
+							    </div>
+							  </div>
+							  <!-- Fridays -->
+							  <div class="panel panel-default">
+							    <div class="panel-heading" role="tab" id="headingOne">
+							      <h4 class="panel-title">
+							        <a role="button" data-toggle="collapse" data-parent="#accordion" href="#fidaysCollaspe" aria-expanded="true" aria-controls="fidaysCollaspe">
+							          <h3>Friday Timings</h3>
+							        </a>
+							      </h4>
+							    </div>
+							    <div id="fidaysCollaspe" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+							      <div class="panel-body">
+							        <ul class="list-group">
+						      		<% @friday_timings.each do |time| %>
+											  <a href="#" class="list-group-item allocate_timings">
+											  	<strong><%= l time.start_time, format: :timings %></strong> - <strong><%= l time.end_time, format: :timings %></strong>
+											  </a>
+										  <% end %>
+							      </div>
+							    </div>
+							  </div>
+							  <!-- End -->
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-		<div class="col-md-6">
-			<div class="panel panel-default">
-				<div class="panel-heading">Allocated Teachers to Courses</div>
-				<div class="panel-body"></div>
-			</div>
-		</div>
 	</div>
+	<%= button_tag "Allocate", class: "btn btn-primary", id: "allocate_btn" %>
 <% end %>

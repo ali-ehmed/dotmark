@@ -20,15 +20,29 @@ class ApplicationController < ActionController::Base
   def pjax_layout
     'pjax'
   end
+
+  class Layout
+    def self.admin_dashboard
+      "admins/dashboard"
+    end
+
+    def self.student_dashboard
+      "students/dashboard"
+    end
+  end
   
   def layout_by_resource
     if request.subdomain.blank?
       "application"
     else
-      if @account.resource_type == :admin.to_s.capitalize
-        "admin_layout"
-      elsif @account.resource_type == :student.to_s.capitalize
-        "student_layout"
+      if @account.present?
+        if @account.resource_type == :admin.to_s.capitalize
+          "admin_layout"
+        elsif @account.resource_type == :student.to_s.capitalize
+          "student_layout"
+        end
+      else
+        "page_not_found"
       end
     end
   end
@@ -46,38 +60,66 @@ class ApplicationController < ActionController::Base
   # end
   
   def require_account!
-    if resource_signed_in?
-      cookies[:signed_in_resource_domain] = {
-        :value => if current_admin then current_admin.account.subdomain elsif current_student then current_student.account.subdomain end,
-        :domain => request.domain,
-        :expires => Time.now + 20.seconds
-      }
-    end
+    # if resource_signed_in?
+    #   cookies[:signed_in_resource_domain] = {
+    #     :value => if current_admin then current_admin.account.subdomain elsif current_student then current_student.account.subdomain end,
+    #     :domain => request.domain,
+    #     :expires => Time.now + 20.seconds
+    #   }
+    # end
 
     if request.subdomain.present?
-      if @account.blank?
-        cookies[:confirm_notice] = {
-          value: "This area is restricted for <strong>Unauthorized Users</strong>",
-          expires: Time.now + 10.seconds,
-          domain: request.domain
-        }
-        if cookies[:signed_in_resource_domain].present? and cookies[:signed_in_resource_domain] == "admin"
-          redirect_to admin_authenticated_root_url(subdomain: cookies[:signed_in_resource_domain])
-        elsif cookies[:signed_in_resource_domain].present? and cookies[:signed_in_resource_domain] == Student.find_by_username(cookies[:signed_in_resource_domain]).username
-          redirect_to student_authenticated_root_url(subdomain: cookies[:signed_in_resource_domain])
-        else
-          redirect_to root_url(subdomain: nil)
-        end
-      else
+      unless @account.blank?
+        # cookies[:confirm_notice] = {
+        #   value: "This area is restricted for <strong>Unauthorized Users</strong>",
+        #   expires: Time.now + 10.seconds,
+        #   domain: request.domain
+        # }
+        # if cookies[:signed_in_resource_domain].present? and cookies[:signed_in_resource_domain] == "admin"
+        #   redirect_to admin_authenticated_root_url(subdomain: cookies[:signed_in_resource_domain])
+        # elsif cookies[:signed_in_resource_domain].present? and cookies[:signed_in_resource_domain] == Student.find_by_username(cookies[:signed_in_resource_domain]).username
+        #   redirect_to student_authenticated_root_url(subdomain: cookies[:signed_in_resource_domain])
+        # else
+          # redirect_to root_url(subdomain: nil)
+        # end
+      # else
         case @account.resource_type
         when :student.to_s.capitalize
           unless current_controller?("students/sessions")
-            redirect_to students_login_url(subdomain: @account.subdomain) if !current_student
+            student_authentication
           end
         when :admin.to_s.capitalize
           unless current_controller?("admins/sessions")
-            redirect_to admin_login_path(subdomain: @account.subdomain) if !current_admin
+            admin_authentication
           end
+        end
+      end
+    end
+  end
+
+
+  %w(Admin Student Teacher).each do |k|
+    define_method "#{k.underscore}_resource" do
+      @account.resource_type == k.constantize.to_s
+    end
+
+    define_method "#{k.underscore}_authentication" do
+      if !send("#{k.underscore}_signed_in?")
+        cookies[:login_path] = {
+          value: k.underscore,
+          expires: Time.now + 3.seconds,
+          domain: request.domain
+        }
+
+        login_path = cookies[:login_path]
+        if login_path and current_controller?("landings")
+          cookies[:login_path] = nil
+
+          students_domain = k.underscore.pluralize if k.constantize == Student
+          resource_name = students_domain || k.underscore 
+          redirect_to send("#{resource_name}_login_path", subdomain: @account.subdomain)
+        else
+          send("authenticate_#{k.underscore}!")
         end
       end
     end

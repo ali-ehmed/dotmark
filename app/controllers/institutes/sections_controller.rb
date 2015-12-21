@@ -1,5 +1,6 @@
 module Institutes
 	class SectionsController < BaseController
+		add_breadcrumb "Sections"
 		def index
 			@batches = Batch.all
 			@sections = []

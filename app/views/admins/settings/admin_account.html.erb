@@ -5,7 +5,7 @@
 		</blockquote>
 		<br />
 		<%= validation_errors_notifications(@admin) %>
-		<%= simple_form_for @admin, url: setting_path(@admin), method: :put do |f| %>
+		<%= simple_form_for @admin, url: update_account_settings_path, method: :put do |f| %>
 			<div class="form-group">
 				<%= f.input :email %>
 			</div>

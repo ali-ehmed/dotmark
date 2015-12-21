@@ -1,5 +1,7 @@
 module Institutes
 	class BatchesController < BaseController
+		add_breadcrumb "Batches"
+
 		def index
 			@batches = Batch.all
 		end

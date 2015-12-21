@@ -12,7 +12,7 @@ module Teachers
 				if @teacher.save
 					format.html { redirect_to teachers_path, notice: "#{@teacher.full_name} has been registered to DotMark" }
 				else
-					flash[:error] = "Please Review Errors:"
+					flash.now[:error] = "Please Review Errors:"
 					format.html { render :new }
 				end
 			end

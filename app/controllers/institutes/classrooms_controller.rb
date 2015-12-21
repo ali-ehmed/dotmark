@@ -1,5 +1,7 @@
 module Institutes
 	class ClassroomsController < BaseController
+		add_breadcrumb "Classrooms"
+
 		def index
 			@classrooms = Classroom.all
 			@classroom = Classroom.new

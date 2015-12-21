@@ -46,14 +46,7 @@ module Students
 
 		def cancel_admission
 			session[:admission] = nil
-
-			if cookies[:students_index].present?
-				redirect_to students_path
-			else
-				redirect_to authenticated_root_path
-				cookies[:students_index] = nil
-			end
-
+			redirect_to admin_authenticated_root_path
 			flash[:notice] = "Admission Cancelled"
 		end
 
