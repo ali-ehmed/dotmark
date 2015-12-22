@@ -5,11 +5,13 @@ module Institutes
 			@week_days = WeekDay.all
 			@normal_timings = Timing.non_fridays
 			@friday_timings = Timing.fridays
+			@teachers = Teacher.all
+			@semesters = Semester.all
 		end
 
 		def get_allocation_record
 			if params[:semester_name].present?
-				@courses = Semester.find_by_name("#{params[:semester_name]}").try(:courses)
+				@semester = Semester.find_by_name("#{params[:semester_name]}")
 			end
 
 			if params[:teacher_id].present?

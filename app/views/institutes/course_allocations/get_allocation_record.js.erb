@@ -1,5 +1,5 @@
 <% if params[:semester_name].present? %>
-	$(".semester_for_courses").hide().html("<%= escape_javascript(render 'courses', courses: @courses).html_safe %>").fadeIn(500)
+	$(".semester_for_courses").hide().html("<%= escape_javascript(render 'courses', semester: @semester).html_safe %>").fadeIn(500)
 <% end %>
 <% if params[:teacher_id].present? %>
 	$(".teacher_for_courses").hide().html("<%= escape_javascript(render 'teachers', teachers: @teachers).html_safe %>").fadeIn(500)

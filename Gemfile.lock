@@ -145,6 +145,7 @@ GEM
     premailer-rails (1.8.2)
       actionmailer (>= 3, < 5)
       premailer (~> 1.7, >= 1.7.9)
+    puma (2.15.3)
     quiet_assets (1.1.0)
       railties (>= 3.1, < 5.0)
     rack (1.6.4)
@@ -240,6 +241,7 @@ DEPENDENCIES
   letter_opener
   momentjs-rails (>= 2.9.0)
   premailer-rails
+  puma
   quiet_assets
   rails (= 4.2.4)
   rails_layout

@@ -46,6 +46,16 @@
 .parent_search_validator, .parent_search_validator:focus { border-color: rgb(239, 84, 84); }
 
 // Allocations 
-.allocate_timings {
-  text-align: center;
+.allocations {
+  .allocate_timings {
+    text-align: center;
+  }
+
+  .listing_for_allocations {
+    max-height: 300px;
+    overflow: auto;
+  }
+  .no-record {
+    padding:15px;
+  }
 }

@@ -11,3 +11,7 @@
 .well .list-group {
     margin-bottom: 0px;
 }
+.list-active { 
+	background-color: #6EA5D4;
+  border-color: #4583B9;
+}
