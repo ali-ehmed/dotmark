@@ -1,10 +1,10 @@
 <% Batch.current_batches.each do |batch| %>
 	<blockquote>
-		<small><strong><%= batch[:name] %></strong></small>
+		<small><strong><%= batch.name %></strong></small>
 	</blockquote>
 	
 	<br />
-	<% @allocations = Batch.allocations(batch[:id]) %>
+	<% @allocations = batch.course_allocations %>
 	<% if @allocations.present? %>
 		<table class="table table-striped">
 			<thead>

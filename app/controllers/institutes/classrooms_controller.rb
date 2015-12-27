@@ -24,20 +24,16 @@ module Institutes
 			end
 		end
 
-		def edit
-			@classroom = Classroom.find(params[:id])
-		end
-
 		def update
 			@classroom = Classroom.find(params[:id])
-	  	if @classroom.update_attributes(classroom_params)
-	  		respond_to do |format|
-	  			format.html { redirect_to institutes_classrooms_path, notice: "Classroom Updated" }
-				end
-			else
-				format.html { render :edit }
-				flash[:error] = @classroom.full_messages.to_sentence
-			end
+			respond_to do |format|
+				if @classroom.update(classroom_params)
+	        # format.json { respond_with_bip(@course) }
+	        format.json { render :json => { status: :created, color: @classroom.color } }
+	      else
+	        format.json { respond_with_bip(@classroom) }
+	      end
+	    end
 		end
 
 		def destroy

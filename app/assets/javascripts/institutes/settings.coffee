@@ -70,6 +70,27 @@ window.gettingSections = (elem, new_admission_param = false) ->
         swal 'oops', 'Something went wrong'
     false
 
+window.saveColor = (event) ->
+  event.preventDefault()
+  $form = $(event.target)
+  $id = $form.data("object-id")
+  return swal "Empty Color", "", "error" if $form.find("input.color_picker").val() == ""
+  $.ajax
+    type: 'PUT'
+    url: $form.attr("action")
+    data: $form.serialize()
+    dataType: "json"
+    success: (response) ->
+      console.log response
+      $("span#object_color_span_#{$id}").css "background-color", response.color
+      $("span#object_color_span_#{$id}").find('a').hide()
+      # $("li#section_color_#{$id} span").first().css "background-color", response.color
+      # $("li#section_color_#{$id} span").first().empty()
+      $("#edit-color_#{$id}").modal 'hide'
+    error: (response) ->
+      swal 'oops', 'Something went wrong'
+  false
+
 $(document).on 'page:change', ->
   get_curr_url_for_institutes = "/#{@location.pathname.split("/")[1]}/#{@location.pathname.split("/")[2]}"
   get_curr_url_for_settings = "#{@location.pathname}"
@@ -78,6 +99,7 @@ $(document).on 'page:change', ->
   	if get_curr_url_for_institutes == $curr_elem_href or $curr_elem_href.indexOf(get_curr_url_for_settings) >= 0 or get_curr_url_for_settings == $curr_elem_href
   		$(this).addClass 'active-list'
   		false
+  $('.color_picker').minicolors theme: 'bootstrap'
 
 	
 

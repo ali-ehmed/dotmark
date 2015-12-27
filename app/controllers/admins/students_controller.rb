@@ -4,7 +4,8 @@ module Admins
 		
 		def index
 			@sections = Batch.first.sections
-			@batches = Batch.all.order("name desc").limit(5).reverse
+
+			@batches = Batch.current_batches
 
 			respond_with :js, :html
 		end

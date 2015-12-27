@@ -83,11 +83,10 @@ Rails.application.routes.draw do
     resources :batches, except: [:show, :edit, :new] do
       put "/add_sections" => "batches#add_sections", as: :add_sections
     end
-    resources :sections, only: [:index, :update, :destroy]
 
     get "/get_sections" => "base#get_sections", as: :get_sections
 
-    resources :classrooms
+    resources :classrooms, except: [:edit]
     resources :courses do 
       get "get_course/:semester_name" => "courses#get_course_by_section", on: :collection
     end

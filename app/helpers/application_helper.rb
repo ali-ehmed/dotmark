@@ -1,6 +1,12 @@
 module ApplicationHelper
-	def get_color color
-		content_tag :span, :style => "padding: 5px 22px 0px 0px;background-color: #{color};border-radius: 18px;" do
+	def get_color object, event = false
+    show_modal = if event == true then "$('#edit-color_#{object.id}').modal('show')" else "" end
+		content_tag :span, id: "object_color_span_#{object.id}", onclick: show_modal, :style => "padding: 5px 22px 0px 0px;background-color: #{object.color};border-radius: 18px;" do
+      if object.color.blank?
+        content_tag :a, :href => "#" do
+          "-"
+        end
+      end
 		end
 	end
 

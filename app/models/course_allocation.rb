@@ -24,6 +24,7 @@ class CourseAllocation < ActiveRecord::Base
 
 	validates :course_id, :teacher_id, :section_id, :batch_id, presence: true, on: :create
 
+	Sections_Validity = "Please select Sections"
 	def self.build_allocation(&block)
 		CourseAllocation.transaction do 
 			yield

@@ -27,6 +27,7 @@ class Batch < ActiveRecord::Base
 	extend ApplicationHelper
 
 	scope :allocations, -> (batch_id) { find(batch_id).course_allocations }
+	scope :current_batches, -> { Batch.where("id in (?)", self.current_year_batches.map{|m| m[:id]}) }
 
 	def set_session_date
 		unless start_date.blank? || end_date.blank?
@@ -38,7 +39,7 @@ class Batch < ActiveRecord::Base
 		name.split("-").first
 	end
 
-	def self.current_batches
+	def self.current_year_batches
 		current_batch_year = Batch.where("name like ?", "%#{Date.today.year.to_s}%")
 		current_semester = Semester.current_semesters.first[:name].to_i
 

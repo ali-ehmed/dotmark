@@ -2,7 +2,7 @@
 	<% @semesters.each do |semester| %>
 		<div class="col-md-4">
 			<div class="panel panel-default">
-				<div class="panel-heading"><%= semester.name %></div>
+				<div class="panel-heading"><strong><%= semester.name %></strong></div>
 				<div class="panel-body">
 					<% if semester.courses.blank? %>
 						<div class="courses_scrollable">
@@ -18,20 +18,27 @@
 										<th>Name</th>
 										<th>Code</th>
 										<th>Color</th>
-										<th colspan="2"></th>
+										<th>Type</th>
+										<th></th>
 									</tr>
 								</thead>
 								<tbody>
 									<% semester.courses.each do |course| %>
 										<tr>
-											<td><%= course.name %></td>
-											<td><%= course.code %></td>
-											<td><%= get_color(course.color) %></td>
 											<td>
-								        <%= link_to edit_institutes_course_path(course) do %>
-								        	<i class="glyphicon glyphicon-pencil"></i>
-								        <% end %>
-								      </td>
+												<a href="#"><%= best_in_place course, :name, :as => :input, :inner_class => "form-control input-sm", placeholder: "---", :path => institutes_course_path(course.id) %></a>
+											</td>
+											<td>
+												<a href="#"><%= best_in_place course, :code, :as => :input, :inner_class => "form-control input-sm", placeholder: "---", :path => institutes_course_path(course.id) %></a>
+											</td>
+											<td>
+												<%= get_color(course, true) %>
+												<%= render "institutes/color_form", object: course, url: institutes_course_path(course) %>
+											</td>
+											
+											<td>
+												<a href="#"><%= best_in_place course, :course_type, :as => :input, :inner_class => "form-control input-sm", placeholder: "---", :path => institutes_course_path(course.id) %></a>
+											</td>
 								      <td>
 								        <%= link_to "javascript:void(0)", "data-url" => institutes_course_path(course), method: "delete", :onClick => "confirmation('Remove this course?', this);"  do %>
 								        	<i class="glyphicon glyphicon-trash"></i>

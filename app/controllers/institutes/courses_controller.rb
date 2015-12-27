@@ -27,14 +27,14 @@ module Institutes
 
 		def update
 			@course = Course.find(params[:id])
-	  	if @course.update_attributes(course_params)
-	  		respond_to do |format|
-	  			format.html { redirect_to institutes_courses_path, notice: "Course Updated" }
-				end
-			else
-				format.html { render :edit }
-				flash[:error] = @course.full_messages.to_sentence
-			end
+			respond_to do |format|
+				if @course.update(course_params)
+	        # format.json { respond_with_bip(@course) }
+	        format.json { render :json => { status: :created, color: @course.color } }
+	      else
+	        format.json { respond_with_bip(@course) }
+	      end
+	    end
 		end
 
 		def destroy
@@ -44,7 +44,7 @@ module Institutes
 		end
 
 		def course_params
-			params.require(:course).permit(:name, :code, :color, :semester_id)
+			params.require(:course).permit(:name, :code, :color, :semester_id, :course_type)
 		end
 	end
 end

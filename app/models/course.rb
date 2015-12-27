@@ -12,6 +12,7 @@
 #  updated_at   :datetime         not null
 #  credit_hours :string
 #  lab          :boolean
+#  course_type  :string
 #
 
 class Course < ActiveRecord::Base
@@ -22,4 +23,10 @@ class Course < ActiveRecord::Base
 
 	has_many :teachers
 	has_many :teachers, through: :course_allocations
+
+	after_initialize :default_values
+
+	def default_values
+		course_type = "Theory" if course_type.blank?
+	end
 end

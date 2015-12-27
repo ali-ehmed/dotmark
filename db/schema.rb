@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151226124403) do
+ActiveRecord::Schema.define(version: 20151227120829) do
 
   create_table "accounts", force: :cascade do |t|
     t.string   "subdomain"
@@ -81,6 +81,7 @@ ActiveRecord::Schema.define(version: 20151226124403) do
     t.datetime "updated_at",   null: false
     t.string   "credit_hours"
     t.boolean  "lab"
+    t.string   "course_type"
   end
 
   create_table "guardian_relations", force: :cascade do |t|

@@ -9,7 +9,7 @@ module Institutes
 		end
 
 		def get_courses_by_batch
-			@batch = Batch.current_batches.select{|key, hash| key[:id] == params[:batch_id].to_i }
+			@batch = Batch.current_year_batches.select{|key, hash| key[:id] == params[:batch_id].to_i }
 			@semester = Semester.find_by_name "#{@batch.first[:semester]}"
 			respond_to do |format|
   			format.js
@@ -29,7 +29,7 @@ module Institutes
 			@msg = Array.new
 
 			CourseAllocation.build_allocation do 
-				render :json => { status: :error, msg: "Please select Sections"  } and return if @sections.blank?
+				render :json => { status: :error, msg: CourseAllocation::Sections_Validity  } and return if @sections.blank?
 				for section in @sections do
 					allocation = CourseAllocation.new
 					allocation.teacher_id = attributes[:teacher_id]
