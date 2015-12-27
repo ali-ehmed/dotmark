@@ -18,6 +18,17 @@ module Institutes
 			end
 		end
 
+		def update
+			@batch = Batch.find(params[:id])
+			respond_to do |format|
+				if @batch.update(batch_params)
+	        format.json { respond_with_bip(@batch) }
+	      else
+	        format.json { respond_with_bip(@batch) }
+	      end
+	    end
+		end
+
 		def add_sections
 			@batch = Batch.find(params[:batch_id])
 			no_of_sections = params[:no_of_sections]
@@ -33,6 +44,12 @@ module Institutes
 			end
 			
 			render json: { status: :ok, sections: @batch.sections.count }, status: :created
+		end
+
+		private
+
+		def batch_params
+			params.require(:batch).permit(:name, :start_date, :end_date)
 		end
 	end
 end

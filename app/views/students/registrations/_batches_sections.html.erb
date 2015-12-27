@@ -1,12 +1,16 @@
 <ul class="list-inline">
 	<% @admission_sections.each do |section| %>
 		<li>
-			<% if defined?(new_admission) and new_admission %>
-				<%= radio_button_tag "student[section_id]", section.id, new_admission.section_id.to_s.include?(section.id.to_s) ? true : false, required: true %>
-			<% else %>
-				<%= radio_button_tag "section", section.id, false, required: true %>
-			<% end %>
-  		<%= section.name %>
+			<div class="radio" style="margin-top:1px;">
+				<% if defined?(new_admission) and new_admission %>
+					<!-- After Initialization -->
+					<%= radio_button_tag "student[section_id]", section.id, new_admission.section_id.to_s.include?(section.id.to_s) ? true : false, required: true %>
+				<% else %>
+					<!-- On Initialization -->
+					<%= radio_button_tag "section", section.id, false, required: true %>
+				<% end %>
+				<label for="student_section_id_<%= section.id %>"><%= section.name %></label>
+			</div>
 		</li>
 	<% end %>
 </ul>

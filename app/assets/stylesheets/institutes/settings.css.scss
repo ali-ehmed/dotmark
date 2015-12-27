@@ -30,6 +30,15 @@
   padding-bottom: 7px;
 }
 
+.panel-app {
+  border: 0px;
+  .panel-body {
+    border-left: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+  }
+}
+
 @mixin scrollable-height($height) {
   height: $height;
 }
@@ -57,5 +66,8 @@
   }
   .no-record {
     padding:15px;
+  }
+  .select2 {
+    width: 100% !important;
   }
 }

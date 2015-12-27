@@ -1,14 +1,18 @@
-<% if params[:temp] == "false" %>
-	$(".batches_sections").hide().html("<%= escape_javascript(render 'institutes/sections/listing_sections').html_safe %>").fadeIn(500);
+// Sections Page
+$(".sections").hide().html("<%= escape_javascript(render 'institutes/sections/listing_sections').html_safe %>").fadeIn(500);
+// Course Allocation
+$(".allocation_sections").hide().html("<%= escape_javascript(render 'institutes/course_allocations/listing_sections').html_safe %>").fadeIn(300);
 
-	$('.section_color_picker').minicolors({
-	  theme: 'bootstrap'
-	});
+$('.section_color_picker').minicolors({
+  theme: 'bootstrap'
+});
+
+// List Items Checkbox
+check_box_list();
+
+// Students Admission
+<% if params[:new_admission] == "false" %>
+	$(".admission_sections").hide().html("<%= escape_javascript(render 'students/registrations/batches_sections').html_safe %>").fadeIn(500);
 <% else %>
-	// Students Admission Form Data
-	<% if params[:new_admission] == "false" %>
-		$(".batch_sections .form-group").hide().html("<%= escape_javascript(render 'students/registrations/batches_sections').html_safe %>").fadeIn(500);
-	<% else %>
-		$(".batch_sections .form-group").hide().html("<%= escape_javascript(render 'students/registrations/batches_sections', new_admission: @new_admission).html_safe %>").fadeIn(500);
-	<% end %>
+	$(".admission_sections").hide().html("<%= escape_javascript(render 'students/registrations/batches_sections', new_admission: @new_admission).html_safe %>").fadeIn(500);
 <% end %>

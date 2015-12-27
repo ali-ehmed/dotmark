@@ -11,7 +11,7 @@ module Students
 
 	  	
 	  	@admission = Student.build_admission(admission_params_hash)
-	  	@admission.admission_session = false
+	  	@admission.check_valididty = false
 
 	  	@batch_name = Batch.find(@admission.batch_id).name.split("-").first if params[:batch].present?
 
@@ -31,7 +31,7 @@ module Students
 
 		def create
 			@new_admission = Student.enroll_new(admissions_params)
-			@new_admission.admission_session = true
+			@new_admission.check_valididty = false
 			respond_to do |format|
 				if @new_admission.save
 					format.html { redirect_to students_path, notice: "#{@new_admission.full_name} has been enrolled successfully." }
@@ -46,7 +46,7 @@ module Students
 
 		def cancel_admission
 			session[:admission] = nil
-			redirect_to admin_authenticated_root_path
+			redirect_to students_path
 			flash[:notice] = "Admission Cancelled"
 		end
 

@@ -1,81 +1,36 @@
 <% content_for :admin_settings do %>
-	<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-	  <div class="panel panel-default">
-	    <div class="panel-heading" role="tab" id="headingOne">
-	      <h4 class="panel-title">
-	        <a role="button" data-toggle="collapse" data-parent="#accordion" href="#daysCollaspe" aria-expanded="true" aria-controls="daysCollaspe">
-	          <h2>Week Days</h2>
-	        </a>
-	      </h4>
-	    </div>
-	    <div id="daysCollaspe" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
-	      <div class="panel-body">
-	        <ul class="list-group">
-	        	<% @week_days.each do |day| %>
+	<blockquote>
+		<h3>Week Days & Timings</h3>
+	</blockquote>
+	<br	/>
+	<div class="panel panel-default">
+    <div class="panel-body">
+    	<div class="row">
+    		<div class="col-md-4">
+    			<strong>Week Days:-</strong>
+    			<ul class="list-group">
+		      	<% @week_days.each do |day| %>
 						  <li class="list-group-item"><strong><%= day.name %></strong></li>
 					  <% end %>
 					</ul>
-	      </div>
-	    </div>
-	  </div>
-	  <div class="panel panel-default">
-	    <div class="panel-heading" role="tab" id="headingTwo">
-	      <h4 class="panel-title">
-	        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#timingsCollaspe" aria-expanded="false" aria-controls="timingsCollaspe">
-	          <h2>Timings</h2>
-	        </a>
-	      </h4>
-	    </div>
-	    <div id="timingsCollaspe" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
-	      <div class="panel-body">
-	      	<h3>Monday - Thurday Timings</h3>
-	      	<div class="row">
-	      		<div class="col-md-6">
-	      			<strong>Start Time:</strong>
-	      			<ul class="list-group">
-			        	<% @normal_timings.each do |time| %>
-								  <a href="#" class="list-group-item">
-								  	<strong><%= l time.start_time, format: :timings %></strong>
-								  </a>
-							  <% end %>
-							</ul>
-	      		</div>
-	      		<div class="col-md-6">
-	      			<strong>End Time:</strong>
-	      			<ul class="list-group">
-			        	<% @normal_timings.each do |time| %>
-								  <a href="#" class="list-group-item">
-								  	<strong><%= l time.end_time, format: :timings %></strong>
-								  </a>
-							  <% end %>
-							</ul>
-	      		</div>
-	      	</div>
-	      	<h3>Friday Timings</h3>
-	      	<div class="row">
-	      		<div class="col-md-6">
-	      			<strong>Start Time:</strong>
-	      			<ul class="list-group">
-			        	<% @friday_timings.each do |time| %>
-								  <a href="#" class="list-group-item">
-								  	<strong><%= l time.start_time, format: :timings %></strong>
-								  </a>
-							  <% end %>
-							</ul>
-	      		</div>
-	      		<div class="col-md-6">
-	      			<strong>End Time:</strong>
-	      			<ul class="list-group">
-			        	<% @normal_timings.each do |time| %>
-								  <a href="#" class="list-group-item">
-								  	<strong><%= l time.end_time, format: :timings %></strong>
-								  </a>
-							  <% end %>
-							</ul>
-	      		</div>
-	      	</div>
-	      </div>
-	    </div>
-	  </div>
-	</div>
+    		</div>
+    		<div class="col-md-4">
+    			<strong>Mon - Thurs Timings:-</strong>
+    			<ul class="list-group">
+		      	<% @normal_timings.each do |time| %>
+						  <li class="list-group-item"><strong><%= l time.start_time, format: :timings %> - <%= l time.end_time, format: :timings %></strong></li>
+					  <% end %>
+					</ul>
+    		</div>
+    		<div class="col-md-4">
+    			<strong>Friday Timings:-</strong>
+    			<ul class="list-group">
+		      	<% @friday_timings.each do |time| %>
+						  <li class="list-group-item"><strong><%= l time.start_time, format: :timings %> - <%= l time.end_time, format: :timings %></strong></li>
+					  <% end %>
+					</ul>
+    		</div>
+    	</div>
+    </div>
+  </div>
 <% end %>

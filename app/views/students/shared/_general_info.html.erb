@@ -79,15 +79,15 @@
       	<div class="form-group">
 	        <div class="form-inputs">
 	          <%= f.label :batch, "Batch:" %>
-	          <%= f.association :batch, as: :select, label: false, include_blank: "--Choose Batch--", :input_html => { onchange: "gettingSections(this, 'true', 'true');" } %>
+	          <%= f.association :batch, as: :select, label: false, include_blank: "--Choose Batch--", :input_html => { onchange: "gettingSections(this, 'true');" } %>
 	        </div>
         </div>
         <div class="form-group">
 	        <div class="form-inputs">
 	          <%= f.label :section, "Section:" %>
 	          <br/>
-	          <div class="batch_sections">
-					  	<div class="form-group">
+				  	<div class="form-group">
+              <div class="admission_sections">
 					  		<%= render "batches_sections", new_admission: @new_admission %>
 					  	</div>
 					  </div>

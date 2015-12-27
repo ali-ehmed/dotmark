@@ -55,21 +55,20 @@ window.cancelForm = (elem) ->
   $form = $(elem).closest('form')
   $form.find(':input').val ''
 
-window.gettingSections = (elem, temp_param = false, new_admission_param = false) ->
+window.gettingSections = (elem, new_admission_param = false) ->
     $this = $(elem)
     $url = "/institutes/get_sections"
     $.ajax
       type: 'Get'
       url: $url
-      data: {batch_id: $this.val(), temp: temp_param, new_admission: new_admission_param}
+      data: {batch_id: $this.val(), new_admission: new_admission_param}
+      beforeSend: ->
+      	$(".loader").html("<i style=\"text-align:center;\" class=\"fa fa-spinner fa-spin fa-3x\"></i>")
       success: (response) ->
         console.log "OK"
       error: (response) ->
         swal 'oops', 'Something went wrong'
     false
-
-
-
 
 $(document).on 'page:change', ->
   get_curr_url_for_institutes = "/#{@location.pathname.split("/")[1]}/#{@location.pathname.split("/")[2]}"
@@ -79,11 +78,6 @@ $(document).on 'page:change', ->
   	if get_curr_url_for_institutes == $curr_elem_href or $curr_elem_href.indexOf(get_curr_url_for_settings) >= 0 or get_curr_url_for_settings == $curr_elem_href
   		$(this).addClass 'active-list'
   		false
-
-  jQuery('.best_in_place').best_in_place()
-  
-  jQuery('.best_in_place').unbind().on 'ajax:error', ->
-    $('.purr').prepend '<span class=\'glyphicon glyphicon-exclamation-sign\'></span> '
 
 	
 

@@ -13,13 +13,8 @@
 //= require jquery
 //= require jquery_ujs
 
-
 //= require dataTables/jquery.dataTables
 //= require dataTables/bootstrap/3/jquery.dataTables.bootstrap
-
-//= require best_in_place
-//= require best_in_place.jquery-ui
-//= require best_in_place.purr
 
 //= require jquery.minicolors
 //= require jquery.minicolors.simple_form
@@ -28,8 +23,10 @@
 
 //= require typeahead
 
-//= require bootstrap-datepicker
-//= require bootstrap-datepicker.min
+//= require moment
+//= require bootstrap-datetimepicker
+
+//= require jquery-ui/datepicker
 
 //= require admin-theme
 //= require turbolinks
@@ -37,6 +34,10 @@
 //= require jasny-bootstrap.min
 //= require sweet-alert
 
+//= require jquery.purr
+//= require best_in_place
+//= require best_in_place.jquery-ui
+//= require best_in_place.purr
 
 //= require_tree .
 

@@ -1,0 +1,36 @@
+<% Batch.current_batches.each do |batch| %>
+	<blockquote>
+		<small><strong><%= batch[:name] %></strong></small>
+	</blockquote>
+	
+	<br />
+	<% @allocations = Batch.allocations(batch[:id]) %>
+	<% if @allocations.present? %>
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th>Teacher</th>
+					<th>Course</th>
+					<th>Section</th>
+					<th>Timing</th>
+					<th>Day</th>
+				</tr>
+			</thead>
+			<tbody>
+				<% @allocations.each do |allocated| %>
+					<tr>
+						<td><%= allocated.teacher.full_name %></td>
+						<td><%= allocated.course.name %></td>
+						<td><%= allocated.section.name %></td>
+						<td><a href="#">Under Approval</a></td>
+						<td><a href="#">Under Approval</a></td>
+					</tr>
+				<% end %>
+			</tbody>
+		</table>
+	<% else %>
+		<div class="well">
+			<strong>No Allocations</strong>
+		</div>
+	<% end %>	
+<% end %>

@@ -20,8 +20,9 @@
                 <%= f.input :password, required: false, class: "form-control", placeholder: "Password" %>
               </div>
               <div class="checkbox">
+                 <%= f.check_box :remember_me, {:class => "styled"} if devise_mapping.rememberable? %>
                   <label>
-                    <%= f.input :remember_me, as: :boolean if devise_mapping.rememberable? %>
+                    Remember Me
                   </label>
               </div>
               <%= f.button :button, 'Log in', :class => 'btn btn-lg btn-success btn-block', data: { disable_with: "<i class='fa fa-spinner fa-spin'></i> Signing In...!"} %>

@@ -1,0 +1,40 @@
+<%= form_tag allocate_institutes_course_allocations_path, method: "post" do %>
+	<div class="row">
+		<div class="col-md-6">
+      <blockquote>
+        <strong>Teachers</strong>
+      </blockquote>
+      <br />
+			<%= select_tag :teacher_id, options_for_select(Teacher.all.map{|m| [m.full_name, m.id]}), class: "form-control teacher_allocation", prompt: "--Select Teacher--" %>
+		</div>
+		<div class="col-md-6">
+      <blockquote>
+        <strong>Batch</strong>
+      </blockquote>
+      <br >
+      <%= batches_select_tag(@batches, "gettingSections(this); getCoursesAllocation(this);") %>
+		</div>
+	</div>
+  <hr />
+	<div class="row">
+		<div class="col-md-6">
+      <blockquote>
+        <strong id="allocation_semester_name">Courses</strong>
+      </blockquote>
+      <br />
+      <div class="well semester_for_courses listing_for_allocations">
+        <strong>Please Select Batch</strong>
+      </div>
+		</div>
+		<div class="col-md-6">
+      <blockquote>
+        <strong>Sections</strong>
+      </blockquote>
+      <br />
+      <div class="allocation_sections loader" style="text-align:center;">
+        <%= render 'institutes/course_allocations/listing_sections' %>
+      </div>
+		</div>
+	</div>
+  <%= submit_tag "Allocate Teacher", class: "btn btn-success pull-right btn-lg", id: "allocate_btn" %>
+<% end %>

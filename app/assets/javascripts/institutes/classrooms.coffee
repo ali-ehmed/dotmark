@@ -9,4 +9,4 @@ $(document).on "page:change", ->
     responsive: true
     "dom": '<"pull-left"f><"pull-right"l>tip'
 
-  $('.classroom_color').minicolors theme: 'bootstrap'
+  # $('.classroom_color').minicolors theme: 'bootstrap'

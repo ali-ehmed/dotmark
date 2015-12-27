@@ -12,6 +12,10 @@ module Admins
 			@friday_timings = Timing.fridays
 		end
 
+		def current_batches
+			@current_batches = Batch.current_batches
+		end
+
 		def update
 			@admin = current_admin
 			if @admin.update_attributes(admin_params)

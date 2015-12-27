@@ -11,6 +11,7 @@
 #  week_day_id     :integer
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
+#  section_id      :integer
 #
 
 require 'test_helper'

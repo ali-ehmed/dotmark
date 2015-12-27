@@ -9,8 +9,13 @@ end
 
 Rails.application.routes.draw do
 
+  match "/:username/profile" => "profile#index", via: :get, as: :profile
+  match "/:username/update_account" => "profile#account_update", via: :put, as: :update_account
+  match "/:username/update_profile" => "profile#update", via: :put, as: :profile_account
+
   constraints(Subdomain) do
-    devise_for :students, controllers: { registrations: "students/registrations", sessions: "students/sessions", confirmations: "students/confirmations" }
+
+    devise_for :students, :skip => [:passwords], controllers: { registrations: "students/registrations", sessions: "students/sessions", confirmations: "students/confirmations" }
     devise_scope :student do
       get "students/login" => "students/sessions#new", as: :students_login
       get "students/login_after_confirmation" => "students/sessions#login_after_confirmation", as: :students_login_after_confirmation
@@ -27,7 +32,7 @@ Rails.application.routes.draw do
   end
 
   constraints(Subdomain) do 
-    devise_for :teachers, controllers: { registrations: "teachers/registrations", sessions: "teachers/sessions" }
+    devise_for :teachers, :skip => [:passwords], controllers: { registrations: "teachers/registrations", sessions: "teachers/sessions" }
     devise_scope :teacher do
       get "teachers/login" => "teachers/sessions#new", as: :teachers_login
       get "teachers/new" => "teachers/registrations#new", as: :new_teacher
@@ -41,7 +46,7 @@ Rails.application.routes.draw do
   # devise_for :parents
 
   constraints :subdomain => "admin" do 
-    devise_for :admins, controllers: { sessions: "admins/sessions" }
+    devise_for :admins, :skip => [:passwords, :registrations, :confirmations], controllers: { sessions: "admins/sessions" }
     devise_scope :admin do
       get "/login" => "admins/sessions#new", as: :admin_login
     end
@@ -53,6 +58,7 @@ Rails.application.routes.draw do
           get "/account" => "settings#admin_account", as: :admin_account
           put "/" => "settings#update", as: :update_account
           get "/week_days" => "settings#week_days_and_timings", as: :set_week_days
+          get "/current_batches" => "settings#current_batches", as: :current_batches
         end
       end
 
@@ -74,7 +80,7 @@ Rails.application.routes.draw do
 
 
   namespace :institutes do
-    resources :batches, only: [:index, :create, :destroy] do
+    resources :batches, except: [:show, :edit, :new] do
       put "/add_sections" => "batches#add_sections", as: :add_sections
     end
     resources :sections, only: [:index, :update, :destroy]
@@ -86,7 +92,8 @@ Rails.application.routes.draw do
       get "get_course/:semester_name" => "courses#get_course_by_section", on: :collection
     end
     resources :course_allocations, only: [:index, :create, :update] do 
-      get "get_allocation_record" => "course_allocations#get_allocation_record", on: :collection
+      get "courses" => "course_allocations#get_courses_by_batch", on: :collection
+      post "allocate", on: :collection
     end
   end
 

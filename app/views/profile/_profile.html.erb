@@ -1,0 +1,21 @@
+<h2><small>Profile Settings</small></h2>
+
+<%= simple_form_for(@resource, url: profile_account_path(@resource.username), html: { method: :put }) do |f| %>
+  <%= f.error_notification if @account_error %>
+
+  <div class="form-inputs">
+    <%= f.input :email, required: true %>
+    <%= f.input :username, autocomplete: "off" %>
+  	<div class="row">
+  		<div class="col-md-6">
+  			<%= f.input :first_name %>
+  		</div>
+  		<div class="col-md-6">
+  			<%= f.input :last_name %>
+  		</div>
+  	</div>
+  </div>
+  <div class="form-actions">
+    <%= f.button :submit, "Save" %>
+  </div>
+<% end %>

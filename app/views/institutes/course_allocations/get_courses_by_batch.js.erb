@@ -1,0 +1,6 @@
+var legend = "<small id=\"legend\"></small>"
+if(!$("#legend").length) {
+	$("#allocation_semester_name").append(legend)
+}
+$("#legend").html("<%= @semester.name %>")
+$(".semester_for_courses").hide().html("<%= escape_javascript(render 'courses', semester: @semester) %>").fadeIn(500)

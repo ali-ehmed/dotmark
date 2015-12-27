@@ -1,67 +1,4 @@
-$(document).on("page:change", function(){
-  // table
-  $('table.table-checked-list-box tbody tr').each(function() {
-    var $widget = $(this),
-    $checkbox = $('<input type="checkbox" class="hidden" />'),
-    settings = {
-      on: {
-          icon: 'glyphicon glyphicon-check'
-      },
-      off: {
-          icon: 'glyphicon glyphicon-unchecked'
-      }
-    },
-    $cell = $widget.find("td:last-child");
-
-    if($widget.closest('tbody').data("type") == "courses") {
-      $checkbox.attr("name", "course_ids[]")
-    } else {
-      $checkbox.attr("name", "teacher_ids[]")
-    }
-
-    $cell.css('cursor', 'pointer');
-    $cell.append($checkbox);
-
-    $cell.on('click', function () {
-      $checkbox.prop('checked', !$checkbox.is(':checked'));
-      $checkbox.triggerHandler('change');
-      updateDisplay();
-    });
-    
-    
-    $checkbox.on('change', function () {
-      updateDisplay();
-    });
-
-    function updateDisplay() {
-      var isChecked = $checkbox.is(':checked');
-
-      // Set the button's state
-      $widget.data('state', (isChecked) ? "on" : "off");
-
-      // Set the button's icon
-      $widget.find('.state-icon')
-          .removeClass()
-          .addClass('state-icon ' + settings[$widget.data('state')].icon);
-    }
-
-    function init() {
-        
-      if ($widget.data('checked') == true) {
-          $checkbox.prop('checked', !$checkbox.is(':checked'));
-      }
-      
-      updateDisplay();
-
-      // Inject the icon if applicable
-      if ($widget.find('.state-icon').length == 0) {
-          $widget.find("td:last-child").prepend('<span class="state-icon ' + settings[$widget.data('state')].icon + '"></span>');
-      }
-    }
-    init();
-  });
-  
-  // List
+window.check_box_list = function(){
   $('.list-group.checked-list-box .list-group-item').each(function () {    
     // Settings
     var $widget = $(this),
@@ -76,7 +13,16 @@ $(document).on("page:change", function(){
           icon: 'glyphicon glyphicon-unchecked'
       }
     };
-        
+
+    switch ($widget.closest("ul").data("type")) {
+      case 'week_days':
+        $checkbox.attr("name", "weekday_ids["+ $widget.data("week-day-id") +"]");
+      case 'timings':
+        $checkbox.attr("name", "timing_ids["+ $widget.data("timing-id") +"]");
+      case 'sections':
+        $checkbox.attr("name", "section_ids["+ $widget.data("section-id") +"]");
+    }
+
     $widget.css('cursor', 'pointer')
     $widget.append($checkbox);
 
@@ -127,7 +73,10 @@ $(document).on("page:change", function(){
     }
     init();
   });
-  
+}
+ready = function() {
+  // List
+  check_box_list();
   $('#get-checked-data').on('click', function(event) {
     event.preventDefault(); 
     var checkedItems = {}, counter = 0;
@@ -137,4 +86,7 @@ $(document).on("page:change", function(){
     });
     $('#display-json').html(JSON.stringify(checkedItems, null, '\t'));
   });
-});
+}
+
+$(document).ready(ready);
+$(document).on('page:load', ready);

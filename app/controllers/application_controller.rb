@@ -60,29 +60,8 @@ class ApplicationController < ActionController::Base
   # end
   
   def require_account!
-    # if resource_signed_in?
-    #   cookies[:signed_in_resource_domain] = {
-    #     :value => if current_admin then current_admin.account.subdomain elsif current_student then current_student.account.subdomain end,
-    #     :domain => request.domain,
-    #     :expires => Time.now + 20.seconds
-    #   }
-    # end
-
     if request.subdomain.present?
       unless @account.blank?
-        # cookies[:confirm_notice] = {
-        #   value: "This area is restricted for <strong>Unauthorized Users</strong>",
-        #   expires: Time.now + 10.seconds,
-        #   domain: request.domain
-        # }
-        # if cookies[:signed_in_resource_domain].present? and cookies[:signed_in_resource_domain] == "admin"
-        #   redirect_to admin_authenticated_root_url(subdomain: cookies[:signed_in_resource_domain])
-        # elsif cookies[:signed_in_resource_domain].present? and cookies[:signed_in_resource_domain] == Student.find_by_username(cookies[:signed_in_resource_domain]).username
-        #   redirect_to student_authenticated_root_url(subdomain: cookies[:signed_in_resource_domain])
-        # else
-          # redirect_to root_url(subdomain: nil)
-        # end
-      # else
         case @account.resource_type
         when :student.to_s.capitalize
           unless current_controller?("students/sessions")
@@ -96,7 +75,6 @@ class ApplicationController < ActionController::Base
       end
     end
   end
-
 
   %w(Admin Student Teacher).each do |k|
     define_method "#{k.underscore}_resource" do
@@ -125,6 +103,14 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def authenticated_root subdomain
+    if admin_resource
+      admin_authenticated_root_path(subdomain: subdomain)
+    elsif student_resource
+      student_authenticated_root_path(subdomain: subdomain)
+    end
+  end
+
   def current_controller?(names)
     if params[:controller] == names
       true
@@ -136,6 +122,16 @@ class ApplicationController < ActionController::Base
       true
     end
   end
+
+  # Profile params
+  def update_account_parameters_sanitizer(resource)
+    case @account.resource_type
+    when "Student"
+      params.require(resource).permit(:email, :username, :username,
+                                                            :first_name, :last_name, :date_of_birth, :roll_number, :address, :phone, 
+                                                            :section_id, :batch_id, :semester_id, :gender)
+    end 
+  end
   
   private
 
@@ -146,6 +142,7 @@ class ApplicationController < ActionController::Base
 
   protected
 
+  # Devise account create params
   def parameters_sanitizer
     if resource_class == Teacher
       devise_parameter_sanitizer.for(:teacher) { |u| u.permit(:email,:first_name, :last_name, :gender, :date_of_birth,

@@ -13,7 +13,7 @@ module Students
           domain: request.domain
         }
 
-        StudentMailer.account_access(resource).deliver!
+        StudentMailer.account_access(resource).deliver_now!
         respond_with_navigational(resource){ redirect_to root_url(subdomain: nil) }
       else
         respond_with_navigational(resource.errors, status: :unprocessable_entity){ render :new }

@@ -1,3 +1,19 @@
+# == Schema Information
+#
+# Table name: course_allocations
+#
+#  id              :integer          not null, primary key
+#  course_id       :integer
+#  teacher_id      :integer
+#  batch_id        :integer
+#  timings         :string
+#  class_timing_id :integer
+#  week_day_id     :integer
+#  created_at      :datetime         not null
+#  updated_at      :datetime         not null
+#  section_id      :integer
+#
+
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:

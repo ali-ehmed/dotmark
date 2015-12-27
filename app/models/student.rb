@@ -50,24 +50,23 @@ class Student < ActiveRecord::Base
   has_one :parent
   has_one :parent, through: :guardian_relation
 
-  has_one :account, as: :resource
+  has_one :account, as: :resource, dependent: :destroy
   has_many :notifications, as: :resource
 
   scope :current_batches, -> { joins(:batch).where("batches.name like ?", "#{Time.now.year - 5}%") }
 
-  attr_accessor :admission_session, :login
+  attr_accessor :check_valididty, :login
 
   validates_presence_of :section, :batch
-  # validates_uniqueness_of :username, if: :check_admission_session
+  validates_presence_of :first_name, :last_name, if: :validity?
   validates :username,
     :presence => true,
     :uniqueness => {
       :case_sensitive => false
-    }, if: :check_admission_session
+    }, if: :validity?
   
-  after_create :set_account
+  after_create :set_account, :generate_password
   after_create :creating_joining_date, :creating_name_if_blank, :send_welcome_email
-  before_validation :generate_password
   after_initialize :default_values
 
   class << self
@@ -106,15 +105,15 @@ class Student < ActiveRecord::Base
 	end
 
 	def email_required?
-		true if admission_session == true
+		true if check_valididty == true
   end
 
   def password_required?
-    !persisted? || !password.nil? || !password_confirmation.nil? if admission_session == true
+    !persisted? || !password.nil? || !password_confirmation.nil? if check_valididty == true
   end
 
-  def check_admission_session
-    admission_session == true
+  def validity?
+    check_valididty == true
   end
 
   def full_name
@@ -122,7 +121,7 @@ class Student < ActiveRecord::Base
   end
 
   def send_welcome_email
-    ApplicationMailer.welcome_email(self).deliver!
+    ApplicationMailer.welcome_email(self).deliver_now!
   end
 
   def generate_random_string
@@ -138,7 +137,7 @@ class Student < ActiveRecord::Base
   def confirm!
     super
     if first_confirmation?
-      StudentMailer.account_access(self).deliver!
+      StudentMailer.account_access(self).deliver_now!
     end
   end
 

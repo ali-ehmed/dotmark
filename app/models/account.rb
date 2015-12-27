@@ -12,5 +12,5 @@
 #
 
 class Account < ActiveRecord::Base
-	belongs_to :resource, polymorphic: true
+	belongs_to :resource, polymorphic: true, dependent: :delete
 end

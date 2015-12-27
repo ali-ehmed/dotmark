@@ -1,5 +1,8 @@
 <div class="page-header">
-	<h2>Students <small>Enrolled</small></h2>
+	<h2>
+		Students <small>Enrolled</small>
+    <a href="#" class="pull-right btn btn-info" data-target="#admission_modal" data-toggle="modal"><i class="fa fa-graduation-cap"></i> New Student</a>
+	</h2>
 </div>
 <%= form_tag search_students_path(format: :js), method: :get, id: "search_students_form" do %>
 	<%= hidden_field_tag :batch_id_param %>

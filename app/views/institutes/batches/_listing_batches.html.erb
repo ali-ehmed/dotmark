@@ -18,13 +18,13 @@
 		        <%= count %>
 		      </td>
 		      <td>
-		        <%= batch.name %>
+		        <a href="#"><%= best_in_place batch, :name, :as => :input, :inner_class => "form-control", placeholder: "---", :path => institutes_batch_path(batch.id) %></a>
 		      </td>
 		      <td>
-		        <%= batch.start_date %>
+		        <a href="#"><%= best_in_place batch, :start_date, :type => :date, :inner_class => "form-control", placeholder: "---", :path => institutes_batch_path(batch.id) %></a>
 		      </td>
 		      <td>
-		        <%= batch.end_date %>
+		        <a href="#"><%= best_in_place batch, :end_date, :type => :date, :inner_class => "form-control", placeholder: "---", :path => institutes_batch_path(batch.id) %></a>
 		      </td>
 		      <td id="batch_sections_<%= batch.id %>">
 		        <% if batch.sections.blank? %>
