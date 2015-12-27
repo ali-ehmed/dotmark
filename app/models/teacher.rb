@@ -42,7 +42,7 @@ class Teacher < ActiveRecord::Base
 
 	include BuildAccount
 
-	attr_accessor :teacher_password
+	attr_accessor :teacher_password, :full_name
 
 	before_create :set_employee_number, :default_values
 	after_create :set_account
@@ -54,6 +54,20 @@ class Teacher < ActiveRecord::Base
 
 	def full_name
 		"#{first_name} #{last_name}"
+	end
+
+	def full_name=(value)
+		full_name = value.split(" ")
+		if full_name.length == 2 and full_name.first == full_name.last
+			set_last_name = ""
+		elsif full_name.length > 2
+			full_name.shift
+			set_last_name = full_name.join(" ")
+		else
+			set_last_name = full_name.last
+		end
+		self.first_name = value.split(" ").first
+		self.last_name = set_last_name
 	end
 
 	def self.search(params)

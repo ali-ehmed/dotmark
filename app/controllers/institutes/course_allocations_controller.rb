@@ -2,10 +2,7 @@ module Institutes
 	class CourseAllocationsController < BaseController
 		add_breadcrumb "Allocate Courses"
 		def index
-			@week_days = WeekDay.all
-			@batches = Batch.current_batches
-			@teachers = Teacher.all
-			@semesters = Semester.all
+			@batches = Batch.current_year_batches
 		end
 
 		def get_courses_by_batch
@@ -13,6 +10,25 @@ module Institutes
 			@semester = Semester.find_by_name "#{@batch.first[:semester]}"
 			respond_to do |format|
   			format.js
+			end
+		end
+
+		def get_allocations
+			@batch = Batch.find(params[:batch_id])
+			@allocations = @batch.course_allocations
+			attributes = Array.new
+			@allocations.each do |allocation|
+				attributes << {
+					teacher: allocation.teacher.full_name,
+					course: allocation.course.name,
+					section: allocation.section.name,
+					timings: allocation.class_timing.blank? ? content_tag(:a, "Under Approval", href: "#") : allocation.class_timing.timings,
+					week_day: allocation.week_day.blank? ? content_tag(:a, "Under Approval", href: "#") : allocation.week_day.name
+				}
+			end
+
+			respond_to do |format|
+	  		format.json { render json: { data: attributes } }
 			end
 		end
 
@@ -46,7 +62,12 @@ module Institutes
 						@msg << Section.find(section).name
 					end
 				end
-				render :json => { status: :created, batch: @batch, teacher_name: @teacher_name, course: @course, sections: @msg  }
+				render :json => { status: :created, 
+													batch: @batch, 
+													teacher_name: @teacher_name,
+													batch_id: attributes[:batch_id], 
+													course: @course, 
+													sections: @msg  }
 			end
 		end
 	end

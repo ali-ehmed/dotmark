@@ -2,35 +2,41 @@
 	<blockquote>
 		<small><strong><%= batch.name %></strong></small>
 	</blockquote>
-	
 	<br />
-	<% @allocations = batch.course_allocations %>
-	<% if @allocations.present? %>
-		<table class="table table-striped">
-			<thead>
-				<tr>
-					<th>Teacher</th>
-					<th>Course</th>
-					<th>Section</th>
-					<th>Timing</th>
-					<th>Day</th>
-				</tr>
-			</thead>
-			<tbody>
-				<% @allocations.each do |allocated| %>
-					<tr>
-						<td><%= allocated.teacher.full_name %></td>
-						<td><%= allocated.course.name %></td>
-						<td><%= allocated.section.name %></td>
-						<td><a href="#">Under Approval</a></td>
-						<td><a href="#">Under Approval</a></td>
-					</tr>
-				<% end %>
-			</tbody>
-		</table>
-	<% else %>
-		<div class="well">
-			<strong>No Allocations</strong>
-		</div>
-	<% end %>	
+	<table class="table table-striped allocations_table allocations_table_for_<%= batch.id %> display responsive" data-source="<%= get_allocations_institutes_course_allocations_path(batch, format: :json) %>" width="100%">
+		<thead>
+	    <tr>
+	      <th>Teacher</th>
+				<th>Course</th>
+				<th>Section</th>
+				<th>Timing</th>
+				<th>Day</th>
+	    </tr>
+	  </thead>
+	</table>
+	<script type="text/javascript">
+		$(document).on("page:change", function(){
+			// Destroying Old Data Table and reinitializing
+			$("table.allocations_table_for_<%= batch.id %>").DataTable().clear().destroy();
+			$("table.allocations_table_for_<%= batch.id %>").DataTable({
+			  responsive: true,
+			  bSort: true,
+			  bFilter: true,
+			  ajax: $("table.allocations_table_for_<%= batch.id %>").data("source"),
+			  "columns": [
+			    {
+			      "data": "teacher"
+			    }, {
+			      "data": "course"
+			    }, {
+			      "data": "section"
+			    }, {
+			      "data": "timings"
+			    }, {
+			      "data": "week_day"
+			    }
+			  ]
+			});
+		});
+	</script>
 <% end %>

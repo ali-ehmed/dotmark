@@ -1,6 +1,9 @@
-var legend = "<small id=\"legend\"></small>"
-if(!$("#legend").length) {
+var legend = "<small class=\"legend\"></small>"
+if(!$("#allocation_semester_name").find(".legend").length) {
 	$("#allocation_semester_name").append(legend)
 }
-$("#legend").html("<%= @semester.name %>")
+if(!$("#allocation_batch_name").find(".legend").length) {
+	$("#allocation_batch_name").append(legend)
+}
+$(".legend").html("<%= @semester.name %> (<%= @batch.first[:name] %>)")
 $(".semester_for_courses").hide().html("<%= escape_javascript(render 'courses', semester: @semester) %>").fadeIn(500)

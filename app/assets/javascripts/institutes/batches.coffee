@@ -34,9 +34,11 @@ ready = ->
     format: 'YYYY-MMM-DD'
     maxDate: false
 
-
   $(".batches_table").DataTable
     responsive: true
+    bSort: true
+    bFilter: true
+    destroy: true
     "dom": '<"pull-left"f><"pull-right"l>tip'
 
 $(document).ready ready

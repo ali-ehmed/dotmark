@@ -33,8 +33,9 @@ allocateTeachers = ->
 	          text: "<strong>#{response.teacher_name}</strong> is allocated for #{pluralize(response.sections, 'Section')} #{$.map response.sections, (n) -> n} for <strong>#{response.course}</strong>"
 	          type: 'success'
 	          html: true
-       error: (response) ->
-			  swal 'oops', 'Something went wrong'
+          $("table.allocations_table_for_#{response.batch_id}").DataTable().ajax.url("/institutes/course_allocations/#{response.batch_id}/get_allocations.json").load()
+	    error: (response) ->
+				swal 'oops', 'Something went wrong'
 
 $(document).on "page:change", ->
 	allocateTeachers()

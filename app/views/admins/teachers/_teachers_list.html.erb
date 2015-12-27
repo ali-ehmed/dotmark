@@ -16,7 +16,10 @@
 				<% @teachers.each do |teacher| %>
 					<tr>
 						<td><%= teacher.employee_number %></td>
-						<td><%= teacher.full_name %></td>
+						<td>
+							<%#= teacher.full_name %>
+							<a href="#"><%= best_in_place teacher, :full_name, :as => :input, :inner_class => "form-control input-sm", placeholder: "---", :path => teacher_path(teacher.id) %></a>
+						</td>
 						<td><%= l teacher.date_of_birth, format: :short_date if teacher.date_of_birth %></td>
 						<td><%= l teacher.joining_date, format: :short_date if teacher.joining_date %></td>
 						<td><%= teacher.is_present? %></td>

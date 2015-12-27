@@ -68,7 +68,7 @@ Rails.application.routes.draw do
       end
 
       # Admin Teachers
-      resources :teachers, only: [:index]do
+      resources :teachers, only: [:index, :update]do
         get "/search" => "teachers#search", on: :collection, as: :search
       end
     end
@@ -93,6 +93,7 @@ Rails.application.routes.draw do
     resources :course_allocations, only: [:index, :create, :update] do 
       get "courses" => "course_allocations#get_courses_by_batch", on: :collection
       post "allocate", on: :collection
+      get ":batch_id/get_allocations" => "course_allocations#get_allocations", on: :collection, as: :get_allocations
     end
   end
 
