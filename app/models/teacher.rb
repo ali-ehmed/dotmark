@@ -58,7 +58,7 @@ class Teacher < ActiveRecord::Base
 
 	def full_name=(value)
 		full_name = value.split(" ")
-		if full_name.length == 2 and full_name.first == full_name.last
+		if full_name.length == 1
 			set_last_name = ""
 		elsif full_name.length > 2
 			full_name.shift

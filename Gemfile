@@ -1,7 +1,8 @@
 source 'https://rubygems.org'
 ruby '2.1.5'
 gem 'rails', '4.2.4'
-gem 'sqlite3'
+# gem 'sqlite3'
+gem 'pg'
 gem 'sass-rails', '~> 5.0'
 gem 'uglifier', '>= 1.3.0'
 gem 'coffee-rails', '~> 4.1.0'
@@ -14,19 +15,23 @@ gem 'devise'
 gem "breadcrumbs_on_rails"
 gem 'annotate'
 # DatePicker
-gem 'momentjs-rails', '>= 2.9.0'
-gem 'bootstrap3-datetimepicker-rails', '~> 4.17.37'
+	gem 'momentjs-rails', '>= 2.9.0'
+	gem 'bootstrap3-datetimepicker-rails', '~> 4.17.37'
 # End
 gem 'jquery-ui-rails'
 gem 'jquery-turbolinks'
 gem 'best_in_place', '~> 3.0.1'
 
 gem 'jquery-minicolors-rails'
+# Data tables
+	gem 'jquery-datatables-rails', github: "rweng/jquery-datatables-rails", branch: "master"
+	gem 'ajax-datatables-rails', git: 'git://github.com/antillas21/ajax-datatables-rails.git', branch: 'legacy'
+# End
 
-gem 'jquery-datatables-rails', github: "rweng/jquery-datatables-rails", branch: "master"
-gem 'ajax-datatables-rails', git: 'git://github.com/antillas21/ajax-datatables-rails.git', branch: 'legacy'
-
-gem 'puma'
+# Webservers
+# gem 'puma'
+	gem "passenger"
+#End
 
 gem 'premailer-rails'
 group :development, :test do

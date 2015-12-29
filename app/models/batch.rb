@@ -22,12 +22,15 @@ class Batch < ActiveRecord::Base
 
 	# Allocated courses in a batch
 	has_many :course_allocations
+	validates_uniqueness_of :name
 
 	accepts_nested_attributes_for :sections
 	extend ApplicationHelper
 
 	scope :allocations, -> (batch_id) { find(batch_id).course_allocations }
-	scope :current_batches, -> { Batch.where("id in (?)", self.current_year_batches.map{|m| m[:id]}) }
+	scope :current_batches, -> do 
+		Batch.where("id in (?)", self.batches_running_currently.map{|m| m[:id]}) if self.batches_running_currently.count > 1
+	end
 
 	def set_session_date
 		unless start_date.blank? || end_date.blank?
@@ -39,12 +42,12 @@ class Batch < ActiveRecord::Base
 		name.split("-").first
 	end
 
-	def self.current_year_batches
+	def self.batches_running_currently
 		current_batch_year = Batch.where("name like ?", "%#{Date.today.year.to_s}%")
 		current_semester = Semester.current_semesters.first[:name].to_i
 
 		@batches = Array.new
-		return @running_batches << "Please create '#{Date.today.year}' batch." if current_batch_year.blank?
+		return @batches << "Please create '#{Date.today.year}' batch." if current_batch_year.blank?
 
 		attributes = {}
 		for current_year in current_batch_year
@@ -76,6 +79,5 @@ class Batch < ActiveRecord::Base
 
 		logger.debug "#{@batches}"
 		return @running_batches = @batches
-		
 	end
 end

@@ -13,6 +13,9 @@
 
 ActiveRecord::Schema.define(version: 20151227120829) do
 
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "accounts", force: :cascade do |t|
     t.string   "subdomain"
     t.string   "resource_type"
@@ -39,8 +42,8 @@ ActiveRecord::Schema.define(version: 20151227120829) do
     t.string   "username"
   end
 
-  add_index "admins", ["email"], name: "index_admins_on_email", unique: true
-  add_index "admins", ["reset_password_token"], name: "index_admins_on_reset_password_token", unique: true
+  add_index "admins", ["email"], name: "index_admins_on_email", unique: true, using: :btree
+  add_index "admins", ["reset_password_token"], name: "index_admins_on_reset_password_token", unique: true, using: :btree
 
   create_table "batches", force: :cascade do |t|
     t.string   "name"
@@ -122,8 +125,8 @@ ActiveRecord::Schema.define(version: 20151227120829) do
     t.string   "gender"
   end
 
-  add_index "parents", ["email"], name: "index_parents_on_email", unique: true
-  add_index "parents", ["reset_password_token"], name: "index_parents_on_reset_password_token", unique: true
+  add_index "parents", ["email"], name: "index_parents_on_email", unique: true, using: :btree
+  add_index "parents", ["reset_password_token"], name: "index_parents_on_reset_password_token", unique: true, using: :btree
 
   create_table "sections", force: :cascade do |t|
     t.string   "name"
@@ -176,9 +179,9 @@ ActiveRecord::Schema.define(version: 20151227120829) do
     t.text     "temp_password"
   end
 
-  add_index "students", ["confirmation_token"], name: "index_students_on_confirmation_token", unique: true
-  add_index "students", ["email"], name: "index_students_on_email", unique: true
-  add_index "students", ["reset_password_token"], name: "index_students_on_reset_password_token", unique: true
+  add_index "students", ["confirmation_token"], name: "index_students_on_confirmation_token", unique: true, using: :btree
+  add_index "students", ["email"], name: "index_students_on_email", unique: true, using: :btree
+  add_index "students", ["reset_password_token"], name: "index_students_on_reset_password_token", unique: true, using: :btree
 
   create_table "teachers", force: :cascade do |t|
     t.string   "first_name"
@@ -207,8 +210,8 @@ ActiveRecord::Schema.define(version: 20151227120829) do
     t.string   "username"
   end
 
-  add_index "teachers", ["email"], name: "index_teachers_on_email", unique: true
-  add_index "teachers", ["reset_password_token"], name: "index_teachers_on_reset_password_token", unique: true
+  add_index "teachers", ["email"], name: "index_teachers_on_email", unique: true, using: :btree
+  add_index "teachers", ["reset_password_token"], name: "index_teachers_on_reset_password_token", unique: true, using: :btree
 
   create_table "timings", force: :cascade do |t|
     t.time     "start_time"

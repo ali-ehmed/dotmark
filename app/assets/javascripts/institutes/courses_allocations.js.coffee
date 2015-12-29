@@ -14,28 +14,28 @@ window.getCoursesAllocation = (elem) ->
 allocateTeachers = ->
 	$("#allocate_btn").on "click", (e) ->
 		e.preventDefault()
-		$form = $(this).closest("form")
-		$.ajax
-			type: $form.attr("method")
-			url: $form.attr("action")
-			data: $form.serialize()
-			dataType: "json"
-			success: (response) ->
-        if response.status == "error"
-          swal
-	          title: 'Couldn\'t Allocate'
-	          text: response.msg
-	          type: 'error'
-	          html: true
-        else
-          swal
-	          title: 'Allocation Complete'
-	          text: "<strong>#{response.teacher_name}</strong> is allocated for #{pluralize(response.sections, 'Section')} #{$.map response.sections, (n) -> n} for <strong>#{response.course}</strong>"
-	          type: 'success'
-	          html: true
-          $("table.allocations_table_for_#{response.batch_id}").DataTable().ajax.url("/institutes/course_allocations/#{response.batch_id}/get_allocations.json").load()
-	    error: (response) ->
-				swal 'oops', 'Something went wrong'
+		# $form = $(this).closest("form")
+		# $.ajax
+		# 	type: $form.attr("method")
+		# 	url: $form.attr("action")
+		# 	data: $form.serialize()
+		# 	dataType: "json"
+		# 	success: (response) ->
+  #       if response.status == "error"
+  #         swal
+	 #          title: 'Couldn\'t Allocate'
+	 #          text: response.msg
+	 #          type: 'error'
+	 #          html: true
+  #       else
+  #         swal
+	 #          title: 'Allocation Complete'
+	 #          text: "<strong>#{response.teacher_name}</strong> is allocated for #{pluralize(response.sections, 'Section')} #{$.map response.sections, (n) -> n} for <strong>#{response.course}</strong>"
+	 #          type: 'success'
+	 #          html: true
+  #         $("table.allocations_table_for_#{response.batch_id}").DataTable().ajax.url("/institutes/course_allocations/#{response.batch_id}/get_allocations.json").load()
+	 #    error: (response) ->
+		# 		swal 'oops', 'Something went wrong'
 
 $(document).on "page:change", ->
 	allocateTeachers()

@@ -10,21 +10,17 @@ admin = Admins::AdminService.new.call
 puts 'CREATED ADMIN USER: ' << admin.email
 
 puts 'CREATING BATCHES'
-Batch.find_or_create_by!(:name => "2010-2013") do |batch|
-	batch.start_date = "2010-01-01"
-	batch.end_date = "2013-12-25"
-end
-Batch.find_or_create_by!(:name => "2011-2014") do |batch|
-	batch.start_date = "2011-01-01"
-	batch.end_date = "2014-12-25"
-end
-Batch.find_or_create_by!(:name => "2012-2015") do |batch|
-	batch.start_date = "2012-01-01"
-	batch.end_date = "2015-12-25"
-end
-Batch.find_or_create_by!(:name => "2013-2016") do |batch|
-	batch.start_date = "2013-01-01"
-	batch.end_date = "2016-12-25"
+current_year = Date.today.year
+last_five_years = current_year - 5
+
+(last_five_years..current_year).each do |batch|
+	first_year = batch
+	final_year = first_year + 3
+	Batch.find_or_create_by!(:name => "#{first_year.to_s}-#{final_year.to_s}") do |batch|
+		batch.start_date = "#{first_year.to_s}-01-01"
+		batch.end_date = "#{final_year.to_s}-12-25"
+	end
+	first_year = 0
 end
 
 puts 'CREATING CLASSROOMS'

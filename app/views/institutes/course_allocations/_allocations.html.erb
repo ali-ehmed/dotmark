@@ -17,7 +17,7 @@
 	<script type="text/javascript">
 		$(document).on("page:change", function(){
 			// Destroying Old Data Table and reinitializing
-			$("table.allocations_table_for_<%= batch.id %>").DataTable().clear().destroy();
+			// $("table.allocations_table_for_<%= batch.id %>").DataTable().clear().destroy();
 			$("table.allocations_table_for_<%= batch.id %>").DataTable({
 			  responsive: true,
 			  bSort: true,

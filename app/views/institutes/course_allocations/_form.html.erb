@@ -12,15 +12,7 @@
         <strong>Batch</strong>
       </blockquote>
       <br >
-      <%#= batches_select_tag(@batches, "gettingSections(this); getCoursesAllocation(this);") %>
-      <% grouped_options = 
-        @batches.map do |batch|
-          ["#{batch[:name]}",
-            [["#{batch[:semester]}","#{batch[:id]}"]]
-          ]
-        end
-       %>
-      <%= select_tag :batch_id, grouped_options_for_select(grouped_options), class: "form-control input-sm", prompt: "--Choose Batch--", onchange: "gettingSections(this); getCoursesAllocation(this);" %>
+      <%= select_tag :batch_id, grouped_options_for_select(grouped_batches_options(@batches)), class: "form-control input-sm", prompt: "--Choose Batch--", onchange: "gettingSections(this); getCoursesAllocation(this);" %>
 		</div>
 	</div>
   <hr />
@@ -30,7 +22,7 @@
         <strong id="allocation_semester_name">Courses</strong>
       </blockquote>
       <br />
-      <div class="well semester_for_courses listing_for_allocations">
+      <div class="well semester_for_courses listing_for_allocations loader" style="text-align:center;">
         <strong>Please Select Batch</strong>
       </div>
 		</div>

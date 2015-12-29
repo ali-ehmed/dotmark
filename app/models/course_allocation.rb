@@ -30,6 +30,4 @@ class CourseAllocation < ActiveRecord::Base
 			yield
 		end
 	end
-
-	
 end

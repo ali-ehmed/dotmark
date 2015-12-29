@@ -56,4 +56,18 @@ module ApplicationHelper
       "TENTH"
     end
   end
+
+  def grouped_batches_options batches
+    batches.map do |batch|
+      grouped_options = if batches.count > 1
+                          ["#{batch[:name]}",
+                            [["#{batch[:semester]}","#{batch[:id]}"]]
+                          ]
+                        else
+                          ["#{batch}",
+                            []
+                          ]
+                        end
+    end
+  end
 end

@@ -2,11 +2,11 @@ module Institutes
 	class CourseAllocationsController < BaseController
 		add_breadcrumb "Allocate Courses"
 		def index
-			@batches = Batch.current_year_batches
+			@batches = Batch.batches_running_currently
 		end
 
 		def get_courses_by_batch
-			@batch = Batch.current_year_batches.select{|key, hash| key[:id] == params[:batch_id].to_i }
+			@batch = Batch.batches_running_currently.select{|key, hash| key[:id] == params[:batch_id].to_i }
 			@semester = Semester.find_by_name "#{@batch.first[:semester]}"
 			respond_to do |format|
   			format.js
