@@ -55,18 +55,18 @@ class Student < ActiveRecord::Base
 
   scope :current_batches, -> { joins(:batch).where("batches.name like ?", "#{Time.now.year - 5}%") }
 
-  attr_accessor :check_valididty, :login
+  attr_accessor :password_validity, :email_validity, :login
 
   validates_presence_of :section, :batch
-  validates_presence_of :first_name, :last_name, if: :validity?
+  validates_presence_of :first_name, :last_name, if: :email_validity?
   validates :username,
     :presence => true,
     :uniqueness => {
       :case_sensitive => false
-    }, if: :validity?
+    }, if: :email_validity?
   
   after_create :set_account, :generate_password
-  after_create :creating_joining_date, :creating_name_if_blank, :send_welcome_email
+  after_create :creating_joining_date, :send_welcome_email
   after_initialize :default_values
 
   class << self
@@ -104,16 +104,12 @@ class Student < ActiveRecord::Base
     end
 	end
 
-	def email_required?
-		true if check_valididty == true
+  def email_validity?
+    email_validity == true
   end
 
-  def password_required?
-    !persisted? || !password.nil? || !password_confirmation.nil? if check_valididty == true
-  end
-
-  def validity?
-    check_valididty == true
+  def password_validity?
+    password_validity == true
   end
 
   def full_name
@@ -160,10 +156,21 @@ class Student < ActiveRecord::Base
 
   private
 
+  # Set Validities of devise
+  def email_required?
+    true if self.email_validity?
+  end
+
+  def password_required?
+    !persisted? || !password.nil? || !password_confirmation.nil? if self.password_validity?
+  end
+
   def default_values
     self.passed_out ||= false
     self.roll_number ||= "#{self.batch.try(:batch_name)}-CS-#{self.class.last.present? ? (self.class.last.id.to_i + 1).to_s : '1'}"
     self.semester = Semester.first_semester if self.semester_id.blank?
+
+    disable_authentication_fields
   end
 
   def generate_password
@@ -188,10 +195,9 @@ class Student < ActiveRecord::Base
     self.save!
   end
 
-  def creating_name_if_blank
-    if first_name.blank? and last_name.blank?
-      self.first_name = "dotmark.student-#{id}" 
-      self.save!
-    end
+  # Used when initializing
+  def disable_authentication_fields
+    self.email_validity == false
+    self.password_validity == false
   end
 end

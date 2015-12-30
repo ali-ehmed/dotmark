@@ -47,7 +47,7 @@ $admissions =
     $("#search_guardian").on "click", (e) ->
       e.preventDefault()
       $elem = $(this)
-      $path = "/get_parent/#{$elem.data("parent-id")}"
+      $path = "/admissions/get_parent/#{$elem.data("parent-id")}"
       
       search_query = $("#query")
       parent_validator = $('#parent_search_validator')
@@ -87,7 +87,7 @@ $admissions =
     $('input#query').typeahead 
       source: (query, process) ->
         $.ajax
-          url: '/autocomplete_guardians_search'
+          url: '/autocomplete_guardians_admissions_path'
           data: query
           dataType: "json"
           beforeSend: ->

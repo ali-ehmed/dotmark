@@ -10,12 +10,12 @@ class ApplicationController < ActionController::Base
   layout :layout_by_resource
 
   # include DefaultUrlOptions
-  helper_method :set_account
+  helper_method :set_account, :current_resource
 
   add_breadcrumb "Dashboard"
   
   before_action :set_account, :require_account!, :make_action_mailer_use_request_host_and_protocol
-  before_action :parameters_sanitizer, if: :devise_controller?
+  before_action :configure_permitted_parameters, if: :devise_controller?
 
   def pjax_layout
     'pjax'
@@ -132,6 +132,10 @@ class ApplicationController < ActionController::Base
                                                             :section_id, :batch_id, :semester_id, :gender)
     end 
   end
+
+  def current_resource
+    current_admin || current_student || current_teacher || current_parent
+  end
   
   private
 
@@ -143,9 +147,9 @@ class ApplicationController < ActionController::Base
   protected
 
   # Devise account create params
-  def parameters_sanitizer
+  def configure_permitted_parameters
     if resource_class == Teacher
-      devise_parameter_sanitizer.for(:teacher) { |u| u.permit(:email,:first_name, :last_name, :gender, :date_of_birth,
+      devise_parameter_sanitizer.for(:sign_up) { |u| u.permit(:email,:first_name, :last_name, :gender, :date_of_birth,
                                                               :joining_date, :qualification, :past_experience,
                                                               :phone, :skills) }
     elsif resource_class == Student
@@ -154,4 +158,5 @@ class ApplicationController < ActionController::Base
                                                             :section_id, :batch_id, :semester_id, :gender) }
     end
   end
+
 end
