@@ -64,8 +64,11 @@ class Student < ActiveRecord::Base
     :uniqueness => {
       :case_sensitive => false
     }, if: :email_validity?
-  
-  after_create :set_account, :generate_password
+
+  validate :validates_subdomain, on: :create, if: :email_validity?
+    
+  before_create :set_account
+  after_create :generate_password
   after_create :creating_joining_date, :send_welcome_email
   after_initialize :default_values
 
@@ -133,7 +136,7 @@ class Student < ActiveRecord::Base
   def confirm!
     super
     if first_confirmation?
-      StudentMailer.account_access(self).deliver_now!
+      AccountMailer.account_access(self).deliver_now!
     end
   end
 

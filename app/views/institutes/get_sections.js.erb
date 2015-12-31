@@ -10,7 +10,7 @@ check_box_list();
 
 // Students Admission
 <% if params[:new_admission] == "false" %>
-	$(".admission_sections").hide().html("<%= escape_javascript(render 'admins/admissions/batches_sections', sections: @admission_sections).html_safe %>").fadeIn(500);
+	$(".admission_sections").hide().html("<%= escape_javascript(render 'administrations/admissions/batches_sections', sections: @admission_sections).html_safe %>").fadeIn(500);
 <% else %>
-	$(".admission_sections").hide().html("<%= escape_javascript(render 'admins/admissions/batches_sections', sections: @admission_sections, new_admission: @new_admission).html_safe %>").fadeIn(500);
+	$(".admission_sections").hide().html("<%= escape_javascript(render 'administrations/admissions/batches_sections', sections: @admission_sections, new_admission: @new_admission).html_safe %>").fadeIn(500);
 <% end %>

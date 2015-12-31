@@ -32,7 +32,7 @@ class ProfileController < ApplicationController
 	end
 
 	def expired_confirmations
-		@confirmation_resource = @resource.class.new
+		# @confirmation_resource = @resource.class.new
 	end
 
 	private

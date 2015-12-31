@@ -1,0 +1,12 @@
+<ul class="nav navbar-nav navbar-top-links navbar-right">
+  <li>
+    <%= link_to profile_path(@account.subdomain) do %>
+      <i class="fa fa-user fa-fw"></i> Settings
+    <% end %>
+  </li>
+  <li>
+    <%= link_to destroy_student_session_path, method: "delete" do %>
+      <i class="fa fa-sign-out fa-fw"></i> Logout
+    <% end %>
+  </li>
+</ul>

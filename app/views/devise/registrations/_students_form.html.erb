@@ -12,8 +12,8 @@
   </div>
 </div>
 <br />
-<%#= validation_errors_notifications(@new_admission) %>
-<%#= simple_form_for @new_admission, url: student_registration_path, method: :post, html: { :multipart => true }, :html => { :novalidate => false } do |form_builder| %>
+<%#= validation_errors_notifications(resource) %>
+<%= devise_error_messages! %>
 
 <div class="row setup-content" id="step-1">
   <%= render  "#{@shared}/general_info", :f => f %>

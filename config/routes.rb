@@ -1,38 +1,19 @@
-class Subdomain
-  def self.matches?(request)
-    if request.subdomain.present? && request.subdomain != 'www'
-      account = Account.find_by subdomain: request.subdomain
-      return true if account # -> if account is not found, return false (IE no route)
-    end
-  end
-end
-
 Rails.application.routes.draw do
-
   match "/:username/profile" => "profile#index", via: :get, as: :profile
   match "/:username/update_account" => "profile#account_update", via: :put, as: :update_account
   match "/:username/update_profile" => "profile#update", via: :put, as: :profile_account
   get "/confirmation_expired" => "profile#expired_confirmations"
 
-  # constraints(Subdomain) do
-
-  #   devise_for :students, :skip => [:passwords], controllers: { registrations: "students/registrations", sessions: "students/sessions" }
-  #   devise_scope :student do
-      
-  #   end
-
-  #   authenticated :student do
-  #     root 'dashboard#index', as: :student_authenticated_root
-  #   end
-  # end
-
   constraints(Subdomain) do
     %w(student teacher).each do |resource|
       resource_name = resource.pluralize
-      devise_for resource_name.to_sym, :skip => [:passwords, :sessions], controllers: { registrations: "resource/registrations", confirmations: "resource/confirmations", sessions: "resource/sessions" }
+      devise_for resource_name.to_sym, :skip => [:passwords], controllers: { registrations: "resource/registrations", confirmations: "resource/confirmations", sessions: "resource/sessions" }
       devise_scope resource.to_sym do
-        get "#{resource_name}/new" => "resource/registrations#new", as: "new_#{resource}".to_sym
-        delete "#{resource}/logout" => "resource/sessions#destroy", as: "destroy_#{resource}_session".to_sym
+        if resource == "student"
+          get "#{resource_name}/admissions/:batch_name" => "resource/registrations#new", as: "new_#{resource}".to_sym
+        else
+          get "#{resource_name}/new" => "resource/registrations#new", as: "new_#{resource}".to_sym
+        end
         get "#{resource_name}/login" => "resource/sessions#new", as: "#{resource_name}_login".to_sym
         get "#{resource_name}/login_after_confirmation" => "resource/sessions#login_after_confirmation", as: "#{resource_name}_login_after_confirmation".to_sym
       end
@@ -44,16 +25,12 @@ Rails.application.routes.draw do
   end
 
   constraints :subdomain => "admin" do 
-    # devise_for :admins, :skip => [:passwords, :registrations, :confirmations], controllers: { sessions: "admins/sessions" }
+    devise_for :admins, :skip => [:passwords, :registrations, :confirmations], controllers: { sessions: "resource/sessions" }
     devise_scope :admin do
-      get "/login" => "resource/sessions#new", as: :admin_login
-      delete "admins/logout" => "resource/sessions#destroy", as: :destroy_admin_session
+      get "/login" => "resource/sessions#new", as: :admins_login
     end
-
-    # for student redirection after setup complete
-    # get ":batch_name" => "resource/registrations#new", as: :new_admissions
     
-    scope :module => 'admins' do
+    scope :module => 'administrations' do
       # Admin Settings
       resources :settings, only: [:index] do 
         collection do

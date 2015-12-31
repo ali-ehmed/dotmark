@@ -1,4 +1,4 @@
-module Admins
+module Administrations
 	class StudentsController < ApplicationController
 		respond_to :js, :html
 		

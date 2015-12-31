@@ -3,6 +3,19 @@ module Resource
     def new
       self.resource = resource_class.new
     end
+
+    def create
+      self.resource = resource_class.send_confirmation_instructions(resource_params)
+      yield resource if block_given?
+
+      if successfully_sent?(resource)
+        respond_with({}, location: after_resending_confirmation_instructions_path_for(resource_name))
+      else
+        # respond_with(resource)
+        render "devise/confirmations/new", :confirmation_token => params["confirmation_token"]
+      end
+    end
+    
     # GET /resource/confirmation?confirmation_token=abcdef
     def show
       self.resource = resource_class.confirm_by_token(params[:confirmation_token])
@@ -15,13 +28,12 @@ module Resource
           domain: request.domain
         }
 
-        StudentMailer.account_access(resource).deliver_now!
+        AccountMailer.account_access(resource).deliver_now!
         respond_with_navigational(resource){ redirect_to root_url(subdomain: nil) }
       else
-        @confirmation_errors = resource.errors
-        @new_confirmation_url = send("#{resource.class.to_s.underscore}_confirmation_path", resource_name)
-        respond_with_navigational(@confirmation_errors, status: :unprocessable_entity) do
-          redirect_to confirmation_expired_url(subdomain: resource.account.subdomain, :confirmation_token => params["confirmation_token"])
+        confirmation_resource = resource.class.to_s.underscore
+        respond_with_navigational(resource.errors, status: :unprocessable_entity) do
+          render "devise/confirmations/new", :confirmation_token => params["confirmation_token"]
         end
       end
     end

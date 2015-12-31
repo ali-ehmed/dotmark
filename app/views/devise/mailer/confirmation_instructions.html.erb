@@ -7,7 +7,7 @@
 	  <p>To access our website, just follow the following link to get credentials.</p>
 	</blockquote>
 	<div class="alert alert-success">
-		<% confirmation_url = send("#{@resource.class.to_s.underscore}_confirmation_url", confirmation_token: @token) %>
+		<% confirmation_url = send("#{@resource.class.to_s.underscore}_confirmation_url", confirmation_token: @token, subdomain: @resource.account.subdomain) %>
 		<p><%= link_to 'Yes, Confirm my account', confirmation_url, class: "btn btn-danger btn-lg", target: "_blank" %></p>
 	</div>
 	

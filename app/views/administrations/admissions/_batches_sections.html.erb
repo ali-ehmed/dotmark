@@ -1,0 +1,25 @@
+<% if sections.present? %>
+	<label>*Sections</label>
+	<ul class="list-inline">
+		
+		<% sections.each do |section| %>
+			<li>
+				<div class="radio" style="margin-top:1px;">
+					<% if defined?(new_admission) and new_admission %>
+						<!-- After Initialization -->
+						<%= radio_button_tag "student[section_id]", section.id, new_admission.section_id.to_s.include?(section.id.to_s) ? true : false, required: true %>
+					<% else %>
+						<!-- On Initialization -->
+						<%= radio_button_tag "section", section.id, false, required: true %>
+					<% end %>
+					<label for="student_section_id_<%= section.id %>"><%= section.name %></label>
+				</div>
+			</li>
+		<% end %>
+	</ul>
+<% else %>
+	<div class="alert alert-warning alert-empty">
+		<strong>No Sections</strong>
+	</div>
+<% end %>
+  

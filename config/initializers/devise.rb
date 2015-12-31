@@ -15,13 +15,17 @@ Devise.setup do |config|
   config.mailer_sender = 'donotreply@dotmark.com'
 
   # Configure the class responsible to send e-mails.
-  config.mailer = 'StudentMailer'
+  config.mailer = 'AccountMailer'
 
   # ==> ORM configuration
   # Load and configure the ORM. Supports :active_record (default) and
   # :mongoid (bson_ext recommended) by default. Other ORMs may be
   # available as additional gems.
   require 'devise/orm/active_record'
+
+  # Rails.application.config.to_prepare do
+  #   Devise::ConfirmationsController.layout "my_layout"
+  # end
 
   # ==> Configuration for any authentication mechanism
   # Configure which keys are used when authenticating a user. The default is

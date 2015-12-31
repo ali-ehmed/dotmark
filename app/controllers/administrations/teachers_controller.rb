@@ -1,4 +1,4 @@
-module Admins
+module Administrations
 	class	TeachersController < ApplicationController
 		def index
 			@teachers = Teacher.present

@@ -3,7 +3,7 @@ module Resource
 		def new
 			build_resource({})
 			if resource.class == Student
-				@shared = "admins/admissions"
+				@shared = "administrations/admissions"
 				self.resource = Student.enroll_new(session[:admission])
 			end
 			respond_with self.resource
@@ -12,12 +12,13 @@ module Resource
 		def create
 			build_resource({})
 			if self.resource.class == Student
-				@shared = "admins/admissions"
+				@shared = "administrations/admissions"
 				self.resource = Student.enroll_new(admissions_params)
 				self.resource.email_validity = true
 			else
 				build_resource(sign_up_params)
 			end
+			# resource.skip_confirmation!
 	    resource.save
 	    yield resource if block_given?
 	    if resource.persisted?

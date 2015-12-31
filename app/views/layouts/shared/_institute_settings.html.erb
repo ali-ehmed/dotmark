@@ -1,4 +1,4 @@
-<% if params[:controller].split("/").first == "institutes" %>
+<% if params[:controller].split("/").first == "institutes" and current_resource_name.to_s == "admin" %>
   <div class="container-fluid">
     <div class="page-heading-admin-settings">
       Institute Settings

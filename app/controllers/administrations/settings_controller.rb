@@ -1,4 +1,4 @@
-module Admins
+module Administrations
 	class	SettingsController < ApplicationController
 		before_action :authenticate_admin!
 		
@@ -13,7 +13,7 @@ module Admins
 		end
 
 		def current_batches
-			@current_batches = Batch.current_batches
+			@current_batches = Batch.batches_running_currently
 		end
 
 		def update

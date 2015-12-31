@@ -1,4 +1,6 @@
-<ol class="breadcrumb">
-	<i class="glyphicon glyphicon-dashboard"></i>
-	<%= render_breadcrumbs :tag => :li, :separator => "" %>
-</ol>
+<% if resource_signed_in? %>
+	<ol class="breadcrumb">
+		<i class="glyphicon glyphicon-dashboard"></i>
+		<%= render_breadcrumbs :tag => :li, :separator => "" %>
+	</ol>
+<% end %>

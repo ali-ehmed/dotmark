@@ -159,6 +159,10 @@ body {
     }
   }
 }
+// Custom alert
+.alert-empty {
+  padding: 7px 16px;
+}
 @media (min-width: 768px) {
   .admin-navbar {
     .navbar-brand {

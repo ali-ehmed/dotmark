@@ -20,19 +20,17 @@ class Resource::SessionsController < Devise::SessionsController
     redirect_to send("#{resource.class.to_s.underscore.pluralize}_login_url", subdomain: resource.account.subdomain)
   end
 
-  # We cannot use @account helper variable becuase, this actions will be handled after email confimation
-  # So request.protocol or request.host cannot be found, therefore we used "resouce_param"
-
   def login_after_confirmation
-    resource_param = params[:resource]
-    case resource_param.class
-    when Student
-      @resource = Student.find_by_username resource_param.username
-    when Teacher
-      @resource = Teacher.find_by_username resource_param.username
+    username = params[:resource]
+
+    if student_resource
+      @resource = Student.find_by_username username
+    elsif teacher_resource
+      @resource = Teacher.find_by_username username
     end
+
     sign_in(@resource.account.resource_type.downcase!, @resource)
-    redirect_to send("#{resource_param.class.to_s.underscore.pluralize}_authenticated_root_path", subdomain: @resource.account.subdomain)
+    redirect_to send("#{@resource.class.to_s.underscore}_authenticated_root_path", subdomain: @resource.account.subdomain)
     flash[:notice] = "Signed in successfully"
   end
 end

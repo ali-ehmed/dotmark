@@ -10,12 +10,14 @@ class ApplicationController < ActionController::Base
   layout :layout_by_resource
 
   # include DefaultUrlOptions
-  helper_method :set_account, :current_resource
+  helper_method :set_account, :current_resource, :current_resource_name
 
   add_breadcrumb "Dashboard"
   
   before_action :set_account, :require_account!, :make_action_mailer_use_request_host_and_protocol
   before_action :configure_permitted_parameters, if: :devise_controller?
+
+  devise_group :user, contains: [:student, :teacher, :admin]
 
   def pjax_layout
     'pjax'
@@ -36,19 +38,19 @@ class ApplicationController < ActionController::Base
       "application"
     else
       if @account.present?
-        if @account.resource_type == :admin.to_s.capitalize
-          "admin_layout"
-        elsif @account.resource_type == :student.to_s.capitalize
-          "student_layout"
-        end
+        "resource"
       else
         "page_not_found"
       end
     end
   end
 
+  def current_resource_name
+    @account.resource_type.underscore
+  end
+
   def resource_signed_in?
-  	if current_admin or current_student then return true end
+  	send("#{current_resource_name}_signed_in?")
   end
 
   def set_account
@@ -92,7 +94,6 @@ class ApplicationController < ActionController::Base
         login_path = cookies[:login_path]
         if login_path and current_controller?("landings")
           cookies[:login_path] = nil
-
           students_domain = k.underscore.pluralize if k.constantize == Student
           resource_name = students_domain || k.underscore 
           redirect_to send("#{resource_name}_login_path", subdomain: @account.subdomain)

@@ -70,4 +70,12 @@ module ApplicationHelper
                         end
     end
   end
+
+  def head_title
+    if current_resource_name.to_s == "admin"
+      "Admin Panel"
+    else
+      @account.resource.username
+    end
+  end
 end
