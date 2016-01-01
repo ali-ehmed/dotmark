@@ -1,6 +1,6 @@
 <h2><small>Profile Settings</small></h2>
 
-<%= simple_form_for(@resource, url: profile_account_path(@resource.username), html: { method: :put }) do |f| %>
+<%= simple_form_for(@resource, url: profile_account_path(params[:username]), html: { method: :put }) do |f| %>
   <%= f.error_notification if @account_error %>
 
   <div class="form-inputs">

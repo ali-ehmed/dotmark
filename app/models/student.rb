@@ -58,7 +58,7 @@ class Student < ActiveRecord::Base
   attr_accessor :password_validity, :email_validity, :login
 
   validates_presence_of :section, :batch
-  validates_presence_of :first_name, :last_name, if: :email_validity?
+  validates_presence_of :first_name, :last_name, :username, :email, if: :email_validity?
   validates :username,
     :presence => true,
     :uniqueness => {

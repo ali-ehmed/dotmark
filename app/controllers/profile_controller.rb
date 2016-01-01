@@ -4,6 +4,7 @@ class ProfileController < ApplicationController
 	def profile
 	end
 
+	# Account
 	def account_update
 		respond_to do |format|
 			if @resource.update_with_password(resource_account_params)
@@ -11,21 +12,25 @@ class ProfileController < ApplicationController
 				format.html { redirect_to authenticated_root(@account.subdomain), notice: "Account successfully updated." }
 			else
 				@profile_error = true
-				format.html { render :index }
+				params[:tab] = "account"
+				format.html { render action: :index }
 				format.json { render :json => @resource.errors.full_messages }
 			end
 		end
 	end
 
+	# Settings
 	def update
 		@resource.password_validity = true
+		@resource.email_validity = true
 		respond_to do |format|
 			if @resource.update_attributes(resource_params)
 				sign_in @resource, :bypass => true
 				format.html { redirect_to authenticated_root(@account.subdomain), notice: "Profile successfully updated." }
 			else
 				@account_error = true
-				format.html { render :index }
+				params[:tab] = "profile"
+				format.html { render action: :index }
 				format.json { render :json => @resource.errors.full_messages }
 			end
 		end
