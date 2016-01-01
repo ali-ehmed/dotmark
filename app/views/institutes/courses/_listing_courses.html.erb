@@ -37,7 +37,7 @@
 											</td>
 											
 											<td>
-												<a href="#"><%= best_in_place course, :course_type, :as => :input, :inner_class => "form-control input-sm", placeholder: "---", :path => institutes_course_path(course.id) %></a>
+												<a href="#"><%= best_in_place course, :course_type, :as => :select, :collection => [[false, 'Theroy'], [true, 'Lab']], :inner_class => "form-control input-sm", placeholder: "---", :path => institutes_course_path(course.id) %></a>
 											</td>
 								      <td>
 								        <%= link_to "javascript:void(0)", "data-url" => institutes_course_path(course), method: "delete", :onClick => "confirmation('Remove this course?', this);"  do %>

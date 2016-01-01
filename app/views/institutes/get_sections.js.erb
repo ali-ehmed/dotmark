@@ -1,12 +1,6 @@
-// Course Allocation
-$(".allocation_sections").hide().html("<%= escape_javascript(render 'institutes/course_allocations/listing_sections').html_safe %>").fadeIn(300);
-
 $('.section_color_picker').minicolors({
   theme: 'bootstrap'
 });
-
-// List Items Checkbox
-check_box_list();
 
 // Students Admission
 <% if params[:new_admission] == "false" %>

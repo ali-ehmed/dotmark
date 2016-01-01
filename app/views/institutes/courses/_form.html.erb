@@ -22,7 +22,7 @@
               <div class="row">
                 <div class="col-md-6">
                   <label>Theory/Lab:</label>
-                  <%= f.input :course_type, collection: ["Theroy", "Lab"], type: :select, prompt: "--Select--", label: false %>
+                  <%= f.input :course_type, collection: [["Theroy", false], ["Lab", true]], type: :select, prompt: "--Select--", label: false %>
                 </div>
                 <div class="col-md-6">
                   <%= f.association :semester, collection: Semester.all, prompt: "--Choose Semester--" %>

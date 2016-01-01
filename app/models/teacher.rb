@@ -34,8 +34,7 @@ class Teacher < ActiveRecord::Base
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
-	has_many :courses
-	has_many :courses, through: :course_allocations
+	has_many :course_allocations
 	has_one :account, as: :resource
 
 	scope :present, -> { where("is_present = ?", true) }
@@ -54,6 +53,10 @@ class Teacher < ActiveRecord::Base
 
 	def full_name
 		"#{first_name} #{last_name}"
+	end
+
+	def has_courses(batch_id, course_id)
+		course_allocations.where("batch_id = ? and course_id = ?", batch_id, course_id)
 	end
 
 	def full_name=(value)

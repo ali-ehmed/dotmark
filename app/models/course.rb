@@ -12,7 +12,6 @@
 #  updated_at   :datetime         not null
 #  credit_hours :string
 #  lab          :boolean
-#  course_type  :string
 #
 
 class Course < ActiveRecord::Base
@@ -26,7 +25,23 @@ class Course < ActiveRecord::Base
 
 	after_initialize :default_values
 
+	def course_type
+		read_attribute(:lab)
+	end
+
+	def type_name
+		if read_attribute(:lab) == true
+			"Lab"
+		else
+			"Theory"
+		end
+	end
+
+	def course_type=(value)
+		write_attribute(:lab, value)
+	end
+
 	def default_values
-		course_type = "Theory" if course_type.blank?
+		self.lab ||= false
 	end
 end

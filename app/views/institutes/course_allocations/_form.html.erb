@@ -5,14 +5,16 @@
         <strong>Teachers</strong>
       </blockquote>
       <br />
-			<%= select_tag :teacher_id, options_for_select(Teacher.all.map{|m| [m.full_name, m.id]}), class: "form-control teacher_allocation", prompt: "--Select Teacher--" %>
+			<%= select_tag :teacher_id, options_for_select(Teacher.all.map{|m| [m.full_name, m.id]}), class: "form-control teacher_allocation teacher_ID", prompt: "--Select Teacher--", onchange: "getCoursesAndSections();" %>
 		</div>
 		<div class="col-md-6">
       <blockquote>
         <strong>Batch</strong>
       </blockquote>
       <br >
-      <%= select_tag :batch_id, grouped_options_for_select(grouped_batches_options(@batches)), class: "form-control input-sm", prompt: "--Choose Batch--", onchange: "gettingSections(this); getCoursesAllocation(this);" %>
+      <%= select_tag :batch_id, grouped_options_for_select(grouped_batches_options(@batches)), class: "form-control input-sm batch_ID", id: "courses_and_sections", prompt: "--Choose Batch--", onchange: "getCoursesAndSections();" %>
+
+      <!-- gettingSections(this); getCoursesAllocation(this); -->
 		</div>
 	</div>
   <hr />
@@ -22,7 +24,7 @@
         <strong id="allocation_semester_name">Courses</strong>
       </blockquote>
       <br />
-      <div class="well semester_for_courses listing_for_allocations loader" style="text-align:center;">
+      <div class="well allocation_courses listing_for_allocations loader" style="text-align:center;">
         <strong>Please Select Batch</strong>
       </div>
 		</div>
@@ -31,8 +33,8 @@
         <strong id="allocation_batch_name">Sections</strong>
       </blockquote>
       <br />
-      <div class="allocation_sections loader" style="text-align:center;">
-        <%= render 'institutes/course_allocations/listing_sections' %>
+      <div class="well allocation_sections loader" style="text-align:center;">
+        <strong>Please Select Batch</strong>
       </div>
 		</div>
 	</div>

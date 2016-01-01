@@ -51,7 +51,7 @@ class Batch < ActiveRecord::Base
 
 	def self.batches_running_currently
 		current_batch_year = Batch.where("name like ?", "%#{Date.today.year.to_s}%")
-		current_semester = Semester.current_semesters.first[:name].to_i
+		current_semester = Semester.current_semesters.last[:name].to_i
 
 		@batches = Array.new
 
@@ -66,7 +66,9 @@ class Batch < ActiveRecord::Base
 				current_batch = current_year.batch_name.to_i
 				prev_batches_year = current_year.batch_name.to_i - 3
 
-				(prev_batches_year..current_batch).each do |prev_batch_year|
+				range = current_batch..prev_batches_year
+
+				(range.first).downto(range.last).each do |prev_batch_year|
 					prev_batches = Batch.where("name like ?", "%#{(prev_batch_year).to_s}%")
 
 					for prev_batch in prev_batches
@@ -81,7 +83,7 @@ class Batch < ActiveRecord::Base
 								semester: semester.name
 							}
 							@batches.push(attributes)
-							current_semester += 2 #use to get current semster from semester array
+							current_semester -= 2 #use to get current semster from semester array
 						end
 					end
 				end

@@ -77,10 +77,13 @@ Rails.application.routes.draw do
     resources :courses do 
       get "get_course/:semester_name" => "courses#get_course_by_section", on: :collection
     end
-    resources :course_allocations, only: [:index, :create, :update] do 
-      get "courses" => "course_allocations#get_courses_by_batch", on: :collection
-      post "allocate", on: :collection
-      get ":batch_id/get_allocations" => "course_allocations#get_allocations", on: :collection, as: :get_allocations
+    resources :course_allocations, only: [:index, :create, :update] do
+      collection do
+        post "allocate"
+        get ":batch_id/get_allocations" => "course_allocations#get_allocations", as: :get_allocations
+        delete ":batch_id/remove_allocations" => "course_allocations#remove_allocations", as: :remove_allocations
+        get ":batch_id/courses_and_sections"=> "course_allocations#courses_and_sections", as: :courses_and_sections
+      end
     end
   end
 
