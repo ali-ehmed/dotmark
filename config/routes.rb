@@ -1,21 +1,20 @@
 Rails.application.routes.draw do
-  match "/:username/profile" => "profile#index", via: :get, as: :profile
-  match "/:username/update_account" => "profile#account_update", via: :put, as: :update_account
-  match "/:username/update_profile" => "profile#update", via: :put, as: :profile_account
-  get "/confirmation_expired" => "profile#expired_confirmations"
-
   constraints(Subdomain) do
+    match "/:username/profile" => "profile#index", via: :get, as: :profile
+    match "/:username/update_account" => "profile#account_update", via: :put, as: :update_account
+    match "/:username/update_profile" => "profile#update", via: :put, as: :profile_account
+
     %w(student teacher).each do |resource|
       resource_name = resource.pluralize
-      devise_for resource_name.to_sym, :skip => [:passwords], controllers: { registrations: "resource/registrations", confirmations: "resource/confirmations", sessions: "resource/sessions" }
+      devise_for resource_name.to_sym, :skip => [:passwords], controllers: { registrations: "resources/registrations", confirmations: "resources/confirmations", sessions: "resources/sessions" }
       devise_scope resource.to_sym do
         if resource == "student"
-          get "#{resource_name}/admissions/:batch_name" => "resource/registrations#new", as: "new_#{resource}".to_sym
+          get "#{resource_name}/admissions/:batch_name" => "resources/registrations#new", as: "new_#{resource}".to_sym
         else
-          get "#{resource_name}/new" => "resource/registrations#new", as: "new_#{resource}".to_sym
+          get "#{resource_name}/new" => "resources/registrations#new", as: "new_#{resource}".to_sym
         end
-        get "#{resource_name}/login" => "resource/sessions#new", as: "#{resource_name}_login".to_sym
-        get "#{resource_name}/login_after_confirmation" => "resource/sessions#login_after_confirmation", as: "#{resource_name}_login_after_confirmation".to_sym
+        get "#{resource_name}/login" => "resources/sessions#new", as: "#{resource_name}_login".to_sym
+        get "#{resource_name}/login_after_confirmation" => "resources/sessions#login_after_confirmation", as: "#{resource_name}_login_after_confirmation".to_sym
       end
 
       authenticated resource.to_sym do
@@ -25,9 +24,9 @@ Rails.application.routes.draw do
   end
 
   constraints :subdomain => "admin" do 
-    devise_for :admins, :skip => [:passwords, :registrations, :confirmations], controllers: { sessions: "resource/sessions" }
+    devise_for :admins, :skip => [:passwords, :registrations, :confirmations], controllers: { sessions: "resources/sessions" }
     devise_scope :admin do
-      get "/login" => "resource/sessions#new", as: :admins_login
+      get "/login" => "resources/sessions#new", as: :admins_login
     end
     
     scope :module => 'administrations' do

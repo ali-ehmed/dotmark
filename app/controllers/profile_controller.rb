@@ -18,7 +18,7 @@ class ProfileController < ApplicationController
 	end
 
 	def update
-		@resource.check_valididty = true
+		@resource.password_validity = true
 		respond_to do |format|
 			if @resource.update_attributes(resource_params)
 				sign_in @resource, :bypass => true
@@ -31,14 +31,15 @@ class ProfileController < ApplicationController
 		end
 	end
 
-	def expired_confirmations
-		# @confirmation_resource = @resource.class.new
-	end
-
 	private
 
 	def set_resource
-		@resource = @account.resource
+		@resource = current_resource
+		unless current_resource.username == params[:username]
+			redirect_to authenticated_root(@account.subdomain), flash: { alert: "This area is restricted" }
+		end
+
+		@resource
 	end
 
 	def resource_account_params

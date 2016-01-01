@@ -1,4 +1,4 @@
-class Resource::SessionsController < Devise::SessionsController
+class Resources::SessionsController < Devise::SessionsController
   # GET /resource/sign_in
   # before_action :require_account!, :except => [:new]
   # skip_before_action :require_account!

@@ -28,8 +28,15 @@ class Batch < ActiveRecord::Base
 	extend ApplicationHelper
 
 	scope :allocations, -> (batch_id) { find(batch_id).course_allocations }
-	scope :current_batches, -> do 
-		Batch.where("id in (?)", self.batches_running_currently.map{|m| m[:id]}) if self.batches_running_currently.count > 1
+
+	def self.current_batches
+		if Batch.batches_running_currently.count > 1
+			Batch.where("id in (?)", self.batches_running_currently.map{|m| m[:id]}) 
+		else
+
+			Batch.build_current_batch
+			Batch.where("id in (?)", self.batches_running_currently.map{|m| m[:id]}) 
+		end
 	end
 
 	def set_session_date
@@ -47,8 +54,12 @@ class Batch < ActiveRecord::Base
 		current_semester = Semester.current_semesters.first[:name].to_i
 
 		@batches = Array.new
-		return @batches << "Please create '#{Date.today.year}' batch." if current_batch_year.blank?
 
+		unless current_batch_year.map(&:batch_name).include? Date.today.year.to_s
+			@batches << "Please create '#{Date.today.year}' batch."
+			return @batches
+		end
+		
 		attributes = {}
 		for current_year in current_batch_year
 			if current_year.batch_name.include?(Date.today.year.to_s)
@@ -78,6 +89,17 @@ class Batch < ActiveRecord::Base
 		end
 
 		logger.debug "#{@batches}"
-		return @running_batches = @batches
+		return @batches
+	end
+
+	def self.build_current_batch
+		first_year = Date.today.year
+		last_year = Date.today.year + 3
+		new_batch = "#{first_year}-#{last_year}"
+
+		find_or_create_by!(name: new_batch) do |batch|
+			batch.start_date = "#{first_year.to_s}-01-01"
+			batch.end_date = "#{last_year.to_s}-12-25"
+		end
 	end
 end

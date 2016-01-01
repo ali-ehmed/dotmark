@@ -1,4 +1,4 @@
-module Resource
+module Resources
   class ConfirmationsController < DeviseController
     def new
       self.resource = resource_class.new

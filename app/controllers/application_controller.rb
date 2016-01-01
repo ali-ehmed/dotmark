@@ -95,8 +95,8 @@ class ApplicationController < ActionController::Base
         if login_path and current_controller?("landings")
           cookies[:login_path] = nil
           students_domain = k.underscore.pluralize if k.constantize == Student
-          resource_name = students_domain || k.underscore 
-          redirect_to send("#{resource_name}_login_path", subdomain: @account.subdomain)
+          # resource_name = students_domain || k.underscore 
+          redirect_to send("#{k.underscore.pluralize}_login_path", subdomain: @account.subdomain)
         else
           send("authenticate_#{k.underscore}!")
         end
@@ -129,8 +129,8 @@ class ApplicationController < ActionController::Base
     case @account.resource_type
     when "Student"
       params.require(resource).permit(:email, :username, :username,
-                                                            :first_name, :last_name, :date_of_birth, :roll_number, :address, :phone, 
-                                                            :section_id, :batch_id, :semester_id, :gender)
+                                      :first_name, :last_name, :date_of_birth, :roll_number, :address, :phone, 
+                                      :section_id, :batch_id, :semester_id, :gender)
     end 
   end
 

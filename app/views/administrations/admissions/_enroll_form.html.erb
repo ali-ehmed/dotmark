@@ -8,7 +8,7 @@
       <div class="modal-body">
         <%= form_tag setup_admissions_path, method: :post do %>
         	<div class="form-group">
-				    <%= label_tag "*Batch" %>
+				    <label>*Batch</label>
 				    <%= select_tag :batch, options_for_select(Batch.current_batches.map{|m| [m.name, m.id]}), class: "form-control", prompt: "--Select Batch--", onchange: "gettingSections(this);" %>
 				  </div>
 			  	<div class="form-group">
