@@ -10,8 +10,18 @@ $("a#tab_student_<%= @batch.id %>").bind("ajax:beforeSend", function(evt, data, 
 		  }
 	  });
 	}, 500);
+
+	$("ul.students_search_index").find("li").each(function(){
+		if ($(this).hasClass("active")) {
+		  $(this).css("font-weight", "bold");
+		} else {
+		  $(this).css("font-weight", "normal");
+		}
+	})
+
+	$(".student_batch_name_count_<%= @batch.id %> a").html("<%= @batch.batch_name %> (<%= @batch.students.count %>)")
+	$("#students_in_<%= @batch.id %>").hide().html("<%= escape_javascript(render 'students_list', students: @students, batch: @batch).html_safe %>").fadeIn(500);	
+
 }).bind("ajax:error", function(evt, data, status, xhr){
 	swal("Oops Something went wrong!")
 });
-
-$("#students_in_<%= @batch.id %>").hide().html("<%= escape_javascript(render 'students_list', students: @students, batch: @batch).html_safe %>").fadeIn(500);	

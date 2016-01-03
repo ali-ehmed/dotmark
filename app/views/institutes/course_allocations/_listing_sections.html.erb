@@ -6,6 +6,6 @@
 	    <% end %>
 	  </ul>
   <% else %>
-  	<strong>Please Select Batch</strong>
+  	<strong><%= @batch.sections.blank? ? "No Sections Available" : "Please Select Batch" %></strong>
   <% end %>
 </div>

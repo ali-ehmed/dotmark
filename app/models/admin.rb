@@ -52,7 +52,7 @@ class Admin < ActiveRecord::Base
 	end
 
 	def set_account
-		Admins::AdminService.new.setting_admin_account
+		Administrations::AdminService.new.setting_admin_account
 	end
 
   def self.find_for_database_authentication(warden_conditions)

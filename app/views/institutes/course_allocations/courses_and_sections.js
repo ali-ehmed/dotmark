@@ -6,7 +6,7 @@
 	if(!$("#allocation_batch_name").find(".legend").length) {
 		$("#allocation_batch_name").append(legend)
 	}
-	$(".legend").html("<%= @courses.first[:semester] %> (<%= @courses.first[:batch] %>)")
+	$(".legend").html("<%= @semester.name %> (<%= @batch.name %>)")
 
 	$(".allocation_courses").hide().html("<%= escape_javascript(render 'courses') %>").fadeIn(500)
 

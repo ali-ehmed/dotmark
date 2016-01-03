@@ -7,15 +7,19 @@ module Institutes
 
 		def get_allocations
 			@batch = Batch.find(params[:batch_id])
-			@allocations = @batch.course_allocations
+
+			@teacher_allocations = @batch.grouped_teacher_allocation
+
 			attributes = Array.new
-			@allocations.each do |allocation|
+			@teacher_allocations.each do |allocation|
+				sections = allocation.teacher.sections_by_course(allocation.course_id).map{|m| m.section.try(:name) }
+
 				attributes << {
 					teacher: allocation.teacher.full_name,
-					course: allocation.course.name,
-					section: allocation.section.try(:name),
-					timings: allocation.class_timing.blank? ? content_tag(:a, "Under Approval", href: "#") : allocation.class_timing.timings,
-					week_day: allocation.week_day.blank? ? content_tag(:a, "Under Approval", href: "#") : allocation.week_day.name
+					course: "#{allocation.course.name} - (#{allocation.course.type_name})",
+					section: sections.count > 2 ? sections.join(", ") : sections.join(" & "),
+					timings: content_tag(:a, "Under Approval", href: "#"),
+					week_day: content_tag(:a, "Under Approval", href: "#")
 				}
 			end
 

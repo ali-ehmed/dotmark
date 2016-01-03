@@ -107,14 +107,6 @@
 </div>
 <!-- /.banner -->
 
-<script type="text/javascript">
-  $(function(){
-    <% if cookies[:confirm_notice].present? %>
-      $('#confirm_notice_modal').modal('show')
-    <% end %>
-  });
-</script>
-
 <div class="modal fade" id="confirm_notice_modal">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -131,10 +123,18 @@
           </div>
         </blockquote>
       </div>
-      <!-- <div class="modal-footer">
-        <p>Have a good day!</p>
-      </div> -->
     </div>
   </div>
 </div>
+
+<script type="text/javascript">
+  $(function(){
+    <% if cookies[:confirm_notice].present? %>
+      $('#confirm_notice_modal').modal('show')
+    <% end %>
+    $('#confirm_notice_modal').on('shown.bs.modal', function () {
+      <% cookies[:confirm_notice] = nil %>
+    });
+  });
+</script>
 

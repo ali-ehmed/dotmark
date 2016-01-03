@@ -11,6 +11,8 @@ window.getCoursesAndSections = () ->
 	    type: "Get"
 	    url: $url
 	    data: _params
+	    beforeSend: ->
+	    	$(".loader").html("<i style=\"text-align:center;\" class=\"fa fa-spinner fa-spin fa-3x\"></i>")
 	    error: (response) ->
 	      swal 'oops', 'Something went wrong'
 
@@ -27,25 +29,30 @@ allocateTeachers = ->
       dataType: 'json'
       success: (response) ->
         if response.status == 'error'
-          swal
-            title: 'Couldn\'t Allocate'
-            text: response.msg
-            type: 'error'
-            html: true
+          $.notify {
+            icon: 'glyphicon glyphicon-warning-sign'
+            title: '<strong>Couldn\'t Allocate: </strong>'
+            message: "#{response.msg}"
+          }, {
+            type: "danger",
+            allow_dismiss: true,
+            z_index: 10000
+          }
 
-          $('.allocation_errors').css("text-align", "center") # if this Class is added in success
-          wrapperAllocationCss($('.allocation_details_list')) # custom css if status is "Error"
+          # $('.allocation_errors').css("text-align", "center") # if this class was added in success
+          # wrapperAllocationCss($('.allocation_details_list')) # custom css if status is "Error"
         else
-          swal
-            title: 'Allocation Details'
-            text: '<ul class="allocation_details_list" style="margin-left: 125px;"> <li><strong>Teacher:</strong> ' + response.teacher_name + '</li> <li><strong>' + pluralize(response.sections, 'Section') + ': </strong>' + $.map(response.sections, (n) ->
+          $.notify {
+            icon: 'glyphicon glyphicon-ok'
+            title: '<strong>Allocation Details: </strong>'
+            message: '<ul><li><strong>Teacher:</strong> ' + response.teacher_name + '</li> <li><strong>' + pluralize(response.sections, 'Section') + ': </strong>' + $.map(response.sections, (n) ->
               n
-            ) + '</li> <li><strong>Course: </strong>' + response.course + '</li> </ul>'
-            type: 'success'
-            html: true
-          # Adds Extra Class and Serve
-          $('.allocation_details_list').closest("p").addClass("allocation_errors")
-          $('.allocation_errors').css("text-align", "left")
+            ) + '</li> <li><strong>Course: </strong>' + response.course + '</li></ul>'
+          }, {
+            type: "success",
+            allow_dismiss: true,
+            z_index: 10000
+          }
           $('table.allocations_table_for_' + response.batch_id).DataTable().ajax.url('/institutes/course_allocations/' + response.batch_id + '/get_allocations.json').load()
       error: (response) ->
         swal 'oops', 'Something went wrong'
@@ -61,7 +68,7 @@ window.removeAllocations = (elem) ->
 	  cancelButtonText: 'No'
 	  closeOnConfirm: false
 	  closeOnCancel: true
-	}, (isConfirm) ->
+	}, ->
 		$.ajax
 	    type: "Delete"
 	    url: $this.data("url")

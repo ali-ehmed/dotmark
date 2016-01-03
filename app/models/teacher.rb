@@ -35,6 +35,7 @@ class Teacher < ActiveRecord::Base
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
 	has_many :course_allocations
+	has_many :allocated_sections, class_name: "CourseAllocation", foreign_key: :teacher_id
 	has_one :account, as: :resource
 
 	scope :present, -> { where("is_present = ?", true) }
@@ -57,6 +58,10 @@ class Teacher < ActiveRecord::Base
 
 	def has_courses(batch_id, course_id)
 		course_allocations.where("batch_id = ? and course_id = ?", batch_id, course_id)
+	end
+
+	def sections_by_course(course_id)
+		allocated_sections.where(course_id: course_id)
 	end
 
 	def full_name=(value)

@@ -37,3 +37,8 @@ $(document).on 'page:change', ->
   	dateFormat: 'yy-mm-dd'
   	changeMonth: 'true'
   	changeYear: "true"
+
+  
+
+  
+

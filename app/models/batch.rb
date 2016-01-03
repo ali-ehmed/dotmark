@@ -33,10 +33,13 @@ class Batch < ActiveRecord::Base
 		if Batch.batches_running_currently.count > 1
 			Batch.where("id in (?)", self.batches_running_currently.map{|m| m[:id]}) 
 		else
-
 			Batch.build_current_batch
 			Batch.where("id in (?)", self.batches_running_currently.map{|m| m[:id]}) 
 		end
+	end
+
+	def grouped_teacher_allocation
+		course_allocations.select("teacher_id, course_id").group("teacher_id, course_id")
 	end
 
 	def set_session_date

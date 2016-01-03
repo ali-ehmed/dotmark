@@ -41,7 +41,7 @@
 	  <ul class="nav nav-tabs students_search_index" role="tablist">
 	  	<% @batches.each_with_index do |batch, count| %>
 	  		<% count += 1 %>
-	    	<li role="presentation">
+	    	<li role="presentation" class="student_batch_name_count_<%= batch.id %>">
 	    		<%= link_to search_students_path(batch_id_param: batch.id, format: :js), remote: true, "data-target" => "##{batch.batch_name}_#{count}", "data-toggle" => "tab", onclick: "getBatchid(this, #{batch.id});", id: "tab_student_#{batch.id}" do %>
 	    			<%= "#{batch.batch_name} (#{batch.students.count})" %>
 	    		<% end %>

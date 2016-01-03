@@ -22,12 +22,15 @@ $admissions =
         success: (response, xhr) ->
           console.log(response)
           if response.status == 'error'
-            swal
-              title: "Couldn't enroll admission"
-              text: response.errors
-              type: 'error'
-              html: true
-            false
+            $.notify {
+              icon: 'glyphicon glyphicon-warning-sign'
+              title: '<strong>Couldn\'t enroll admission: </strong>'
+              message: "<ul>#{response.errors}</ul>"
+            }, {
+              type: "danger",
+              allow_dismiss: true,
+              z_index: 10000
+            }
           else
             $form.find(":input").val('')
             window.location.href = response.redirect_url

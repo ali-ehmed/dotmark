@@ -14,6 +14,7 @@
 class Semester < ActiveRecord::Base
 	has_many :courses
 	validates_uniqueness_of :name
+	
 	def which_semester
 		name.to_i
 	end

@@ -104,6 +104,14 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def set_custom_flash_message(name, msg, expiry = (Time.now + 15.seconds))
+    cookies[name.to_sym] = {
+      value: msg.to_s,
+      expires: expiry,
+      domain: request.domain
+    }
+  end
+
   def authenticated_root subdomain
     if admin_resource
       admin_authenticated_root_path(subdomain: subdomain)

@@ -17,14 +17,22 @@ class window.Institute
 	      cache: false
 	      success: (response, data) ->
 	      	if response.status == 'error'
-	          swal
-	            title: 'Couldn\'t save'
-	            text: response.errors
-	            type: 'error'
-	            html: true
+	          $.notify {
+	            icon: 'glyphicon glyphicon-warning-sign'
+	            title: '<strong>Couldn\'t save: </strong>'
+	            message: "#{response.errors}"
+	          }, {
+	            type: "danger"
+	          }
 	          console.log 'Couldn\'t save'
 	        else
-	          swal "#{entity_name}", "Created", "success"
+	          $.notify {
+	            icon: 'glyphicon glyphicon-ok'
+	            title: '<strong>Created</strong>'
+	            message: "#{entity_name}"
+	          }, {
+	            type: "success"
+	          }
 	          $elem.closest(".modal").modal 'hide'
 	          $form.find(':input').val ''
 	      error: (response) ->
@@ -62,8 +70,6 @@ window.gettingSections = (elem, new_admission_param = false) ->
       type: 'Get'
       url: $url
       data: {batch_id: $this.val(), new_admission: new_admission_param}
-      beforeSend: ->
-      	$(".loader").html("<i style=\"text-align:center;\" class=\"fa fa-spinner fa-spin fa-3x\"></i>")
       success: (response) ->
         console.log "OK"
       error: (response) ->
