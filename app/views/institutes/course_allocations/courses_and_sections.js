@@ -1,16 +1,19 @@
 <% if params[:batch_id].present? %>
-	var legend = "<small class=\"legend\"></small>"
-	if(!$("#allocation_semester_name").find(".legend").length) {
-		$("#allocation_semester_name").append(legend)
-	}
-	if(!$("#allocation_batch_name").find(".legend").length) {
-		$("#allocation_batch_name").append(legend)
-	}
-	$(".legend").html("<%= @semester.name %> (<%= @batch.name %>)")
+	<% if params[:only_sections] == "true" %>
+		$(".allocation_sections").hide().html("<%= escape_javascript(render 'listing_sections') %>").fadeIn(300);
+	<% else %>
+		var legend = "<small class=\"legend\"></small>"
+		if(!$("#allocation_semester_name").find(".legend").length) {
+			$("#allocation_semester_name").append(legend)
+		}
+		if(!$("#allocation_batch_name").find(".legend").length) {
+			$("#allocation_batch_name").append(legend)
+		}
+		$(".legend").html("<%= @semester.name %> (<%= @batch.name %>)")
 
-	$(".allocation_courses").hide().html("<%= escape_javascript(render 'courses') %>").fadeIn(500)
-
-	$(".allocation_sections").hide().html("<%= escape_javascript(render 'listing_sections') %>").fadeIn(300);
+		$(".allocation_courses").hide().html("<%= escape_javascript(render 'courses') %>").fadeIn(500);
+		$(".allocation_sections").hide().html("<%= escape_javascript(render 'listing_sections') %>").fadeIn(300);
+	<% end %>
 
 	// List Items Checkbox
 	check_box_list();

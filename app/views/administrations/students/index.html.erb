@@ -4,7 +4,7 @@
     <a href="#" class="pull-right btn btn-info" data-target="#admission_modal" data-toggle="modal"><i class="fa fa-graduation-cap"></i> New Student</a>
 	</h2>
 </div>
-<%= form_tag search_students_path(format: :js), method: :get, id: "search_students_form" do %>
+<%= form_tag search_students_path(format: :js), remote: true, method: :get, id: "search_students_form" do %>
 	<%= hidden_field_tag :batch_id_param %>
 	<div class="row">
 		<div class="col-md-12">
@@ -56,7 +56,7 @@
 		    <div role="tabpanel" class="tab-pane fade in" data-batch-id="<%= batch['id'] %>" id="<%= batch['name'] %>_<%= count %>">
 		    	<div id="students_in_<%= batch['id'] %>">
 		    		<% if batch['id'] == @batches.first['id'] %>
-		    			<%= render "students_list", batch: batch %>
+		    			<%= render "students_list", students: Student.where(batch_id: batch["id"]), batch_name: batch['name'] %>
 	    			<% end %>
 	    		</div>
 		    </div>

@@ -100,7 +100,6 @@ class Batch < ActiveRecord::Base
 		logger.debug "#{@batches}"
  
 		$redis.set("current_batches", @batches.to_json)
-		$redis.expire("current_batches", 15.minutes.to_i)
 		return @batches
 	end
 

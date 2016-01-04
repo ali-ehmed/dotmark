@@ -30,7 +30,7 @@
 		        <% if batch.sections.blank? %>
 		        	<strong>No Sections</strong>
 		        <% else %>
-							<%= batch.sections.count %>
+							<%= batch.sections.select("id").count %>
 						<% end %>
 		      </td>
 		      <td>

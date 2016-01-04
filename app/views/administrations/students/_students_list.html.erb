@@ -1,4 +1,3 @@
-<% students = Student.where(batch_id: batch["id"]) %>
 <% if students.present? %>
 	<div class="table-responsive">
 		<table class="table table-striped">
@@ -32,7 +31,7 @@
 	<br />
 	<div class="alert alert-info">
 		<blockquote>
-			No Students availble in <strong><%= batch["name"] %></strong>
+			No Students availble in <strong><%= batch_name %></strong>
 		</blockquote>
 	</div>
 <% end %>

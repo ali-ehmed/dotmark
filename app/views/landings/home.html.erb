@@ -131,10 +131,12 @@
   $(function(){
     <% if cookies[:confirm_notice].present? %>
       $('#confirm_notice_modal').modal('show')
+
+      $('#confirm_notice_modal').on('shown.bs.modal', function () {
+        <% cookies[:confirm_notice] = "" %>
+      });
     <% end %>
-    $('#confirm_notice_modal').on('shown.bs.modal', function () {
-      <% cookies[:confirm_notice] = nil %>
-    });
   });
 </script>
+
 

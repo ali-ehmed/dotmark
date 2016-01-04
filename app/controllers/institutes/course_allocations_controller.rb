@@ -2,7 +2,7 @@ module Institutes
 	class CourseAllocationsController < BaseController
 		add_breadcrumb "Allocate Courses"
 		def index
-			@batches = Batch.batches_running_currently
+			@batches = Batch.current_batches
 		end
 
 		def get_allocations
@@ -35,14 +35,21 @@ module Institutes
 
 			@batch = Batch.find(params[:batch_id])
 
+			# search teacher's allocation by batch 
 			if @teacher and @batch
 				teacher_allocations = @teacher.course_allocations.where(batch_id: @batch.id)
 				logger.debug "Techer Allocations -> #{teacher_allocations.count}"
 			end
 
-			current_batch = Batch.batches_running_currently.select {|key, hash| key[:id] == @batch.id }
+			# search teacher's allocation by course
+			@course = Course.find(params[:course_id]) if params[:course_id].present?
+			if @course
+				teacher_allocations = teacher_allocations.where(course_id: @course.id)
+			end
 
-			@semester = Semester.find_by_name "#{current_batch.first[:semester]}"
+			current_batch = Batch.current_batches.select {|key, hash| key['id'] == @batch.id }
+
+			@semester = Semester.find_by_name "#{current_batch.first['semester']}"
 
 			@courses = Array.new
 			course_attributes = Hash.new
@@ -73,11 +80,15 @@ module Institutes
 			end
 
 			if teacher_allocations.present?
-				for teacher_allocation in teacher_allocations
-					@courses.each do |course|
-						course[:has_course] = true if teacher_allocation.course_id == course[:id]
-					end
+				@courses.each do |course|
+					course[:has_course] = true if teacher_allocations.first.course_id == course[:id]
+				end
 
+				unless @course
+					teacher_allocations = teacher_allocations.where(course_id: teacher_allocations.first.course_id)
+				end
+				
+				for teacher_allocation in teacher_allocations
 					@sections.each do |section|
 						section[:has_section] = true if teacher_allocation.section_id == section[:id]
 					end
@@ -86,6 +97,7 @@ module Institutes
 
 			logger.debug "Sections: -> #{@sections.inspect}"
 			logger.debug "Courses -> #{@courses.inspect}"
+			
 			respond_to do |format|
 				format.js {}
 			end
@@ -146,7 +158,7 @@ module Institutes
 						render :json => { status: :error, msg: @msg  } and return
 					else
 						@teacher_name = allocation.teacher.full_name
-						@course = allocation.course.name
+						@course = "#{allocation.course.name} - #{allocation.course.type_name}"
 						@batch = allocation.batch.name
 						@msg << Section.find(section).name
 					end

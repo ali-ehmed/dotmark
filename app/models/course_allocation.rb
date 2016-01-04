@@ -64,7 +64,7 @@ class CourseAllocation < ActiveRecord::Base
 			end
 
 			if teacher.has_courses(self.batch_id, self.course_id).count == 3
-				errors.add(:base, "'#{content_tag(:strong, teacher.full_name)}' cannot be assigned <br /> to more than 3 sections for #{content_tag(:strong, self.batch.batch_name)}".html_safe)
+				errors.add(:base, "'#{content_tag(:strong, teacher.full_name)}' cannot be assigned to more than 3 sections for #{content_tag(:strong, self.batch.batch_name)}".html_safe)
 			end
 		end
 	end

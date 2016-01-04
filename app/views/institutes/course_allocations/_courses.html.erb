@@ -17,7 +17,7 @@
 					<td><%= course[:course_type] %></td>
 					<td>
 						<div class="radio" style="margin-top:1px;">
-							<input type="radio" name="course_id" value="<%= course[:id] %>" <%= has_courses(course) %> id="course_<%= course[:id] %>_radio" />
+							<input type="radio" onchange="getSectionsByCourse(this);" name="course_id" value="<%= course[:id] %>" <%= has_courses(course) %> id="course_<%= course[:id] %>_radio" />
 							<label for="course_<%= course[:id] %>_radio"></label>
 						</div>
 					</td>

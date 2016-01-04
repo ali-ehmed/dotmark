@@ -20,6 +20,7 @@ module Resources
 				build_resource(sign_up_params)
 			end
 			# resource.skip_confirmation!
+			$redis.expire("current_batches", 1.second.to_i) # this is used to reload the queries
 	    resource.save
 	    yield resource if block_given?
 	    if resource.persisted?

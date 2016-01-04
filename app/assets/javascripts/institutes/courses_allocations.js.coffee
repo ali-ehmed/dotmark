@@ -1,12 +1,16 @@
-window.getCoursesAndSections = () ->
+parameters = ->
 	$teacher_id = $(".teacher_ID").val()
 	$batch_id = $(".batch_ID").val()
-	unless $batch_id == ""
-		_params = {
-			teacher_id: $teacher_id,
-			batch_id: $batch_id
-		}
-		$url = "/institutes/course_allocations/#{$batch_id}/courses_and_sections.js"
+	_params = {
+		teacher_id: $teacher_id,
+		batch_id: $batch_id
+	}
+
+	_params
+window.getAllCoursesAndSections = () ->
+	_params = parameters()
+	unless _params['batch_id'] == ""
+		$url = "/institutes/course_allocations/#{_params['batch_id']}/courses_and_sections.js"
 		$.ajax
 	    type: "Get"
 	    url: $url
@@ -16,6 +20,19 @@ window.getCoursesAndSections = () ->
 	    error: (response) ->
 	      swal 'oops', 'Something went wrong'
 
+window.getSectionsByCourse = (elem) ->
+	_params = parameters()
+	_params["only_sections"] = true
+	_params["course_id"] = elem.value
+	$url = "/institutes/course_allocations/#{_params['batch_id']}/courses_and_sections.js"
+	$.ajax
+    type: "Get"
+    url: $url
+    data: _params
+    beforeSend: ->
+    	$(".loader_1").html("<i style=\"text-align:center;\" class=\"fa fa-spinner fa-spin fa-3x\"></i>")
+    error: (response) ->
+      swal 'oops', 'Something went wrong'
 
 allocateTeachers = ->
   $('#allocate_btn').on 'click', (e) ->
@@ -38,9 +55,6 @@ allocateTeachers = ->
             allow_dismiss: true,
             z_index: 10000
           }
-
-          # $('.allocation_errors').css("text-align", "center") # if this class was added in success
-          # wrapperAllocationCss($('.allocation_details_list')) # custom css if status is "Error"
         else
           $.notify {
             icon: 'glyphicon glyphicon-ok'
@@ -80,15 +94,15 @@ window.removeAllocations = (elem) ->
 	    error: (response) ->
 	      swal 'oops', 'Something went wrong'
 
-wrapperAllocationCss = (elem) ->
-	elem.css("text-align", "left")
-	elem.css("margin", "0 auto")
-	elem.css("width", "80%")
-	elem.css("padding-left", "64px")
-	elem.find("li").css("margin-bottom", "7px")
-	elem.find("li span").css("font-weight", "bold")
-	elem.find("li span").css("text-align", "center")
-	elem.find("li span").closest("li").css("list-style-type", "none")
+# wrapperAllocationCss = (elem) ->
+# 	elem.css("text-align", "left")
+# 	elem.css("margin", "0 auto")
+# 	elem.css("width", "80%")
+# 	elem.css("padding-left", "64px")
+# 	elem.find("li").css("margin-bottom", "7px")
+# 	elem.find("li span").css("font-weight", "bold")
+# 	elem.find("li span").css("text-align", "center")
+# 	elem.find("li span").closest("li").css("list-style-type", "none")
 
 $(document).on "page:change", ->
 	allocateTeachers()

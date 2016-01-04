@@ -29,7 +29,7 @@ getStudents = ->
       	swal("Oops", "Something went wrong")
 
 $(document).on "page:change", ->
-	getStudents()
+	# getStudents()
 
 	$('ul.students_search_index a').on "click", ->
 		$(this).tab('show')
