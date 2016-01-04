@@ -1,18 +1,17 @@
 module Administrations
 	class StudentsController < ApplicationController
 		respond_to :js, :html
+		add_breadcrumb "Students"
 		
 		def index
-			@sections = Batch.first.sections
-
+			@sections = Section.where(batch_id: Batch.current_batches.first["id"])
 			@batches = Batch.current_batches
 
 			respond_with :js, :html
 		end
 
+
 		def search
-			@sections = Section.all
-			@batches = Batch.all
 			@students, @batch = Student.search(params)
 			respond_with :js
 		end

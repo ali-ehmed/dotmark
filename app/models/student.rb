@@ -53,12 +53,13 @@ class Student < ActiveRecord::Base
   has_one :account, as: :resource, dependent: :destroy
   has_many :notifications, as: :resource
 
-  scope :current_batches, -> { joins(:batch).where("batches.name like ?", "#{Time.now.year - 5}%") }
+  scope :current_batches, -> (batch = "") {joins(:batch).where("batches.name like ?", "#{batch.blank? ? Time.now.year : batch}%") }
 
   attr_accessor :password_validity, :email_validity, :login
 
   validates_presence_of :section, :batch
-  validates_presence_of :first_name, :last_name, :username, :email, if: :email_validity?
+  validates_presence_of :first_name, :last_name, :on => :create, if: :email_validity?
+  validates_presence_of :first_name, :last_name, :username, :email, on: :update, if: :email_validity?
   validates :username,
     :presence => true,
     :uniqueness => {
@@ -100,7 +101,6 @@ class Student < ActiveRecord::Base
           @students = @batch.students.where("section_id = ?", params[:student_section])
         end
         @students ||= @batch.students
-        logger.debug @students.count
       end
 
       return @students, @batch

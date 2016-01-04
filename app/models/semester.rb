@@ -34,19 +34,24 @@ class Semester < ActiveRecord::Base
 		end
 
 		def current_semesters
-			semesters = self.all
-			current_semesters = Array.new
-			if ("July".to_date.month.."December".to_date.month).include?(Date.today.month)
-				self.all.each do |semester|
-					current_semesters.push({ id: semester.id, name: semester.name }) if semester.which_semester.even?
+			current_semesters = $redis.get("current_semesters")
+
+			if current_semesters.nil?
+				current_semesters = Array.new
+				if ("July".to_date.month.."December".to_date.month).include?(Date.today.month)
+					self.all.each do |semester|
+						current_semesters.push({ id: semester.id, name: semester.name }).to_json if semester.which_semester.even?
+					end
+				else
+					self.all.each do |semester|
+						current_semesters.push({ id: semester.id, name: semester.name }).to_json if semester.which_semester.odd?
+					end
 				end
-			else
-				self.all.each do |semester|
-					current_semesters.push({ id: semester.id, name: semester.name }) if semester.which_semester.odd?
-				end
+				$redis.set("current_semesters", current_semesters.to_json)
+				$redis.expire("current_semesters", 15.minutes.to_i)
 			end
 
-			current_semesters
+			@current_semesters = JSON.load current_semesters
 		end
 	end
 end

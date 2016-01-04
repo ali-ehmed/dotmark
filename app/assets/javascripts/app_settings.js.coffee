@@ -12,8 +12,10 @@ window.activeTabs = (elem) ->
     $("ul.nav").find("li").each ->
       if $(this).hasClass("active")
         $(this).css("font-weight", "bold")
+        $(this).find("a").css("border-left", "4px solid #CF9451")
       else
         $(this).css("font-weight", "normal")
+        $(this).find("a").css("border-left", "0px")
   , 10
 
 $(document).on 'page:change', ->

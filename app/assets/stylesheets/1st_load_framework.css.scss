@@ -163,6 +163,9 @@ body {
 .alert-empty {
   padding: 7px 16px;
 }
+.alert-fade {
+  opacity: 0.6 !important;
+}
 @media (min-width: 768px) {
   .admin-navbar {
     .navbar-brand {

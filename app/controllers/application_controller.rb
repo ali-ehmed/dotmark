@@ -15,7 +15,7 @@ class ApplicationController < ActionController::Base
   add_breadcrumb "Dashboard"
   
   before_action :set_account, :require_account!, :make_action_mailer_use_request_host_and_protocol
-  before_action :configure_permitted_parameters, if: :devise_controller?
+  before_action :configure_permitted_parameters, :devise_breadcrumbs, if: :devise_controller?
 
   devise_group :user, contains: [:student, :teacher, :admin]
 
@@ -30,6 +30,14 @@ class ApplicationController < ActionController::Base
 
     def self.student_dashboard
       "students/dashboard"
+    end
+  end
+
+  def devise_breadcrumbs
+    if resource_class == Student
+      add_breadcrumb "Admissions-#{params[:batch_name]}" if params[:batch_name].present?
+    elsif resource_class == Teacher
+      add_breadcrumb "Teachers"
     end
   end
   

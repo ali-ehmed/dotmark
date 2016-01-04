@@ -9,7 +9,7 @@
       	<% if @current_batches.count > 1 %>
 	        <% @current_batches.each do |batch| %>
 	        	<li class="list-group-item">
-	        		<strong><%= batch[:name] + " - " + batch[:semester] %></strong>
+	        		<strong><%= "#{batch["name"]} - #{batch["semester"]}" %></strong>
 	      		</li>
 	        <% end %>
         <% else %>

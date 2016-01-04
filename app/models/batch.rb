@@ -28,14 +28,17 @@ class Batch < ActiveRecord::Base
 	extend ApplicationHelper
 
 	scope :allocations, -> (batch_id) { find(batch_id).course_allocations }
+	scope :batch_students, -> (batch) { batch.students }
 
 	def self.current_batches
-		if Batch.batches_running_currently.count > 1
-			Batch.where("id in (?)", self.batches_running_currently.map{|m| m[:id]}) 
-		else
+		current_batches = $redis.get("current_batches")
+
+		if current_batches.nil?
 			Batch.build_current_batch
-			Batch.where("id in (?)", self.batches_running_currently.map{|m| m[:id]}) 
+			current_batches = Batch.batches_running_currently.to_json
 		end
+
+		@batches = JSON.load current_batches 
 	end
 
 	def grouped_teacher_allocation
@@ -54,7 +57,7 @@ class Batch < ActiveRecord::Base
 
 	def self.batches_running_currently
 		current_batch_year = Batch.where("name like ?", "%#{Date.today.year.to_s}%")
-		current_semester = Semester.current_semesters.last[:name].to_i
+		current_semester = Semester.current_semesters.last["name"].to_i
 
 		@batches = Array.new
 
@@ -83,7 +86,8 @@ class Batch < ActiveRecord::Base
 								name: prev_batch.batch_name,
 								start_date: prev_batch.start_date,
 								end_date: prev_batch.end_date,
-								semester: semester.name
+								semester: semester.name,
+								students: prev_batch.students.count
 							}
 							@batches.push(attributes)
 							current_semester -= 2 #use to get current semster from semester array
@@ -94,6 +98,9 @@ class Batch < ActiveRecord::Base
 		end
 
 		logger.debug "#{@batches}"
+ 
+		$redis.set("current_batches", @batches.to_json)
+		$redis.expire("current_batches", 15.minutes.to_i)
 		return @batches
 	end
 

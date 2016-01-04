@@ -13,7 +13,7 @@ module Administrations
 		end
 
 		def current_batches
-			@current_batches = Batch.batches_running_currently
+			@current_batches = Batch.current_batches
 		end
 
 		def update

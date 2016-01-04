@@ -2,7 +2,7 @@ class Resources::SessionsController < Devise::SessionsController
   # GET /resource/sign_in
   # before_action :require_account!, :except => [:new]
   # skip_before_action :require_account!
-  
+  # skip_before_filter :verify_authenticity_token, :only => :create
   def new
     @student_name = @account.resource.username
     super

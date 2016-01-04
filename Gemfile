@@ -32,12 +32,17 @@ gem 'jquery-minicolors-rails'
   # gem 'puma'
 	gem "passenger"
 #End
-
 gem 'premailer-rails'
+
+gem 'redis'
+gem 'redis-namespace'
+gem 'redis-rails'
+gem 'redis-rack-cache'
 group :development, :test do
   gem 'byebug'
 end
 group :development do
+  gem "rack-mini-profiler", require: false
   gem 'web-console', '~> 2.0'
   gem 'spring'
   gem "letter_opener"

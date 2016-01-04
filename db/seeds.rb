@@ -27,10 +27,10 @@ puts 'CREATING CLASSROOMS & CREATING SEMESTERS'
 
 (1..8).each do |number|
 	Classroom.find_or_create_by!(:name => "HS-#{'%02d' % number}") do |classroom|
-		if classrooms == 5
+		if classroom == 5
 			classroom.strength = "60"
 			classroom.type_of_room = "Lab"
-		elsif classrooms == 6
+		elsif classroom == 6
 			classroom.strength = "60"
 			classroom.type_of_room = "Lab"
 		else

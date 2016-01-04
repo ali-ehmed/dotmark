@@ -9,7 +9,7 @@
         <%= form_tag setup_admissions_path, method: :post do %>
         	<div class="form-group">
 				    <label>*Batch</label>
-				    <%= select_tag :batch, options_for_select(Batch.current_batches.map{|m| [m.name, m.id]}), class: "form-control", prompt: "--Select Batch--", onchange: "gettingSections(this);" %>
+				    <%= select_tag :batch, options_for_select(Batch.current_batches.map{|m| [m["name"], m["id"]]}), class: "form-control", prompt: "--Select Batch--", onchange: "gettingSections(this);" %>
 				  </div>
 			  	<div class="form-group">
             <div class="admission_sections">
@@ -17,7 +17,7 @@
 				  </div>
 				  <div class="form-group">
 				    <%= label_tag "Semester" %>
-				    <%= select_tag :semester, options_for_select(Semester.current_semesters.map{|m| [m[:name], m[:id]]}), class: "form-control", prompt: "--Select Semester--" %>
+				    <%= select_tag :semester, options_for_select(Semester.current_semesters.map{|m| [m["name"], m["id"]]}), class: "form-control", prompt: "--Select Semester--" %>
 				  </div>
         <% end %>
       </div>

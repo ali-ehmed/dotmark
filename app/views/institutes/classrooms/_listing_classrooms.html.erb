@@ -19,21 +19,18 @@
 		        <%= count %>
 		      </td>
 		      <td>
-		        <a href="#"><%= best_in_place classroom, :name, :as => :input, :inner_class => "form-control input-sm", placeholder: "---", :path => institutes_classroom_path(classroom.id) %></a>
+		        <a href="#"><%= best_in_place classroom, :name, :as => :input, :inner_class => "form-control input-sm", placeholder: "---", :url => institutes_classroom_path(classroom.id) %></a>
 		      </td>
 		      <td>
-		        <a href="#"><%= best_in_place classroom, :strength, :as => :input, :inner_class => "form-control input-sm", placeholder: "---", :path => institutes_classroom_path(classroom.id) %></a>
+		        <a href="#"><%= best_in_place classroom, :strength, :as => :input, :inner_class => "form-control input-sm", placeholder: "---", :url => institutes_classroom_path(classroom.id) %></a>
 		      </td>
 		      <td>
-		        <a href="#"><%= best_in_place classroom, :type_of_room, :as => :input, :inner_class => "form-control input-sm", placeholder: "---", :path => institutes_classroom_path(classroom.id) %></a>
+		        <a href="#"><%= best_in_place classroom, :type_of_room, :as => :input, :inner_class => "form-control input-sm", placeholder: "---", :url => institutes_classroom_path(classroom.id) %></a>
 		      </td>
 		      <td>
 		        <%= get_color(classroom, true) %>
 		        <%= render "institutes/color_form", object: classroom, url: institutes_classroom_path(classroom) %>
 		      </td>
-		      <!-- <td> -->
-		        <%#= link_to "Edit", edit_institutes_classroom_path(classroom), class: "label label-info" %>
-		      <!-- </td> -->
 		      <td>
 		        <%= link_to "Remove", "javascript:void(0)", "data-url" => institutes_classroom_path(classroom), class: "label label-danger", method: "delete", :onClick => "confirmation('Remove this class?', this);" %>
 		      </td>

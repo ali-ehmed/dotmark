@@ -41,9 +41,9 @@
 	  <ul class="nav nav-tabs students_search_index" role="tablist">
 	  	<% @batches.each_with_index do |batch, count| %>
 	  		<% count += 1 %>
-	    	<li role="presentation" class="student_batch_name_count_<%= batch.id %>">
-	    		<%= link_to search_students_path(batch_id_param: batch.id, format: :js), remote: true, "data-target" => "##{batch.batch_name}_#{count}", "data-toggle" => "tab", onclick: "getBatchid(this, #{batch.id});", id: "tab_student_#{batch.id}" do %>
-	    			<%= "#{batch.batch_name} (#{batch.students.count})" %>
+	    	<li role="presentation" class="student_batch_name_count_<%= batch['id'] %>">
+	    		<%= link_to search_students_path(batch_id_param: batch['id'], format: :js), remote: true, "data-target" => "##{batch['name']}_#{count}", "data-toggle" => "tab", onclick: "getBatchid(this, #{batch['id']});", id: "tab_student_#{batch['id']}" do %>
+	    			<%= "#{batch['name']} (#{batch['students']})" %>
 	    		<% end %>
     		</li>
     	<% end %>
@@ -53,9 +53,11 @@
 	  <div class="tab-content students_search_index">
 	  	<% @batches.each_with_index do |batch, count| %>
 	  		<% count += 1 %>
-		    <div role="tabpanel" class="tab-pane fade in" data-batch-id="<%= batch.id %>" id="<%= batch.batch_name %>_<%= count %>">
-		    	<div id="students_in_<%= batch.id %>">
-		    		<%= render "students_list", students: batch.students, batch: batch %>
+		    <div role="tabpanel" class="tab-pane fade in" data-batch-id="<%= batch['id'] %>" id="<%= batch['name'] %>_<%= count %>">
+		    	<div id="students_in_<%= batch['id'] %>">
+		    		<% if batch['id'] == @batches.first['id'] %>
+		    			<%= render "students_list", batch: batch %>
+	    			<% end %>
 	    		</div>
 		    </div>
 	    <% end %>

@@ -1,5 +1,7 @@
 module Administrations
 	class	TeachersController < ApplicationController
+		add_breadcrumb "Teachers"
+		
 		def index
 			@teachers = Teacher.present
 		end

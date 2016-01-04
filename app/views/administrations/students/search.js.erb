@@ -14,13 +14,15 @@ $("a#tab_student_<%= @batch.id %>").bind("ajax:beforeSend", function(evt, data, 
 	$("ul.students_search_index").find("li").each(function(){
 		if ($(this).hasClass("active")) {
 		  $(this).css("font-weight", "bold");
+		  $(this).find("a").css("border-left", "4px solid #CF9451")
 		} else {
 		  $(this).css("font-weight", "normal");
+		  $(this).find("a").css("border-left", "0px")
 		}
 	})
 
-	$(".student_batch_name_count_<%= @batch.id %> a").html("<%= @batch.batch_name %> (<%= @batch.students.count %>)")
-	$("#students_in_<%= @batch.id %>").hide().html("<%= escape_javascript(render 'students_list', students: @students, batch: @batch).html_safe %>").fadeIn(500);	
+	$(".student_batch_name_count_<%= @batch.id %> a").html("<%= @batch.batch_name %> (<%= @batch.students.select('id').count %>)")
+	$("#students_in_<%= @batch.id %>").hide().html("<%= escape_javascript(render 'students_list', batch: @batch).html_safe %>").fadeIn(500);	
 
 }).bind("ajax:error", function(evt, data, status, xhr){
 	swal("Oops Something went wrong!")
