@@ -36,7 +36,6 @@ window.getSectionsByCourse = (elem) ->
 
 allocateTeachers = ->
   $('#allocate_btn').on 'click', (e) ->
-    $form = undefined
     e.preventDefault()
     $form = $(this).closest('form')
     $.ajax
@@ -94,43 +93,53 @@ window.removeAllocations = (elem) ->
 	    error: (response) ->
 	      swal 'oops', 'Something went wrong'
 
-window.removeTeacherAlloactions = () ->
-	_params = parameters
-	swal {
-	  title: "Remove All Allocations"
-	  type: 'warning'
-	  showCancelButton: true
-	  confirmButtonColor: '#DD6B55'
-	  confirmButtonText: 'Remove'
-	  cancelButtonText: 'No'
-	  closeOnConfirm: false
-	  closeOnCancel: true
-	}, ->
-		$.ajax
-	    type: "Delete"
-	    url: "/institutes/course_allocations/_params['teacher_id']/remove_teacher_allocations.json"
-	    data: _params
-	    dataType: 'json'
-	    success: (response) ->
-	    	$.notify {
-          icon: 'glyphicon glyphicon-ok'
-          title: '<strong>Allocation Details: </strong>'
-          message: "<ul><li><strong>#{response.teacher_name}'s</strong> allocations have been removed.</li></ul>"
-        }, {
-          type: "danger"
-        }
-	      $('table.allocations_table_for_' + _params["batch-id"]).DataTable().ajax.url('/institutes/course_allocations/' + _params["batch-id"] + '/get_allocations.json').load()
-	    error: (response) ->
-	      swal 'oops', 'Something went wrong'
-# wrapperAllocationCss = (elem) ->
-# 	elem.css("text-align", "left")
-# 	elem.css("margin", "0 auto")
-# 	elem.css("width", "80%")
-# 	elem.css("padding-left", "64px")
-# 	elem.find("li").css("margin-bottom", "7px")
-# 	elem.find("li span").css("font-weight", "bold")
-# 	elem.find("li span").css("text-align", "center")
-# 	elem.find("li span").closest("li").css("list-style-type", "none")
+window.removeTeacherAllocations = (course_id, type) ->
+  _params = {}
+  _params = parameters()
+  _params['course_id'] = course_id
+  _params['type'] = type
+  swal {
+    title: 'Are you sure?'
+    type: 'warning'
+    showCancelButton: true
+    confirmButtonColor: '#DD6B55'
+    confirmButtonText: 'Remove'
+    cancelButtonText: 'No'
+    closeOnConfirm: true
+    closeOnCancel: true
+  }, ->
+    $.ajax
+      type: 'Delete'
+      url: '/institutes/course_allocations/' + _params['teacher_id'] + '/remove_teacher_allocations.json'
+      data: _params
+      dataType: 'json'
+      success: (response) ->
+        if response.status == 'ok'
+          $('table.allocations_table_for_' + _params['batch_id']).DataTable().ajax.url('/institutes/course_allocations/' + _params['batch_id'] + '/get_allocations.json').load()
+          $.notify {
+            icon: 'glyphicon glyphicon-ok'
+            title: '<strong>Allocation Details: </strong>'
+            message: "<ul><li>#{response.msg}</li></ul>"
+          }, type: 'success'
+
+          deactivateAllActiveLists()
+        else
+          $.notify {
+            icon: 'glyphicon glyphicon-warning-sign'
+            title: '<strong>Errors: </strong>'
+            message: "<ul><li>#{response.msg}</li></ul>"
+          }, type: 'danger'
+      error: (response) ->
+        swal 'oops', 'Something went wrong'
+
+deactivateAllActiveLists = ->
+	$("ul[data-type='sections']").find("li").each ->
+  	if $(this).hasClass("list-active")
+  		$(this).removeClass('list-group-item-primary list-active')
+  		$(this).find("span").removeClass("glyphicon-check")
+  		$(this).find("span").addClass("glyphicon-unchecked")
+  		$(this).find("input[type='checkbox']").removeAttr("checked")
+	$("#remove_teacher_allocations").empty()
 
 $(document).on "page:change", ->
 	allocateTeachers()

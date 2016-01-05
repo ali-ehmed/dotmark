@@ -6,9 +6,11 @@
 			</blockquote>
 		</div>
 		<div class="col-md-6">
-			<% if Batch.allocations(batch["id"]).present? %>
-				<a href="javascript:void(0)" onclick="removeAllocations(this);" data-batch-id="<%= batch["id"] %>" data-url="<%= remove_allocations_institutes_course_allocations_path(batch["id"], format: :json) %>" class="btn btn-danger btn-sm pull-right" data-batch-name="<%= batch["name"] %>">Remove All</a>
-			<% end %>
+			<div id="remove_all_allocations">
+				<% if Batch.allocations(batch["id"]).present? %>
+					<%= raw remove_all_allocations(batch['id'], batch['name']) %>
+				<% end %>
+			</div>
 		</div>
 	</div>
 	

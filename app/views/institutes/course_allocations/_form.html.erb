@@ -36,7 +36,17 @@
       </div>
 		</div>
 	</div>
-  <div id="remove_teacher_allocations">
+  <div class="row">
+    <div class="col-md-12">
+      <ul class="list-inline pull-right">
+        <li class="pull-right">
+          <span id="remove_teacher_allocations"></span>
+        </li>
+        <li>
+          <%= button_tag "<i class=\"glyphicon glyphicon-send\"></i> Allocate Teacher".html_safe, class: "btn btn-success pull-right", id: "allocate_btn" %>
+        </li>
+      </ul>
+    </div>
   </div>
-  <%= submit_tag "Allocate Teacher", class: "btn btn-success pull-right btn-lg", id: "allocate_btn" %>
+  
 <% end %>

@@ -18,8 +18,14 @@
 	// List Items Checkbox
 	check_box_list();
 
-	<% if @teacher.course_allocations.present? %>
-		$("#remove_teacher_allocations").html("<a href='javascript:void(0);' class='btn btn-danger btn-sm' onclick='removeTeacherAllocations(<%= @teacher.id %>)'>Remove <%= @teacher.full_name %>'s Allocation</a>")
+	<% if @teacher and @teacher_allocations_for_removal.present? %>
+		$("#remove_teacher_allocations").html("<%= escape_javascript(teacher_allocation_options(@options)) %>")
+	<% else %>
+		$("#remove_teacher_allocations").empty();
+	<% end %>
+
+	<% if @batch.course_allocations.blank? %>
+		$('#remove_all_allocations').empty();
 	<% end %>
 
 	<% @sections.each do |section| %>
@@ -34,7 +40,7 @@
 			$list.removeClass("list-active")
 			$list.addClass("list-already-active")
 			$list.attr("disabled", "disabled").off('click');
-			$list.find("strong").append("(<%= section[:is_already_assigned_teacher] %>)")
+			$list.find("strong").append("<span> (<%= section[:is_already_assigned_teacher] %>)</span>")
 		<% end %>
 	<% end %>
 
