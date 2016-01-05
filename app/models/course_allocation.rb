@@ -28,7 +28,7 @@ class CourseAllocation < ActiveRecord::Base
 	include ActionView::Helpers::TagHelper
 
 	SectionsValidity = "Please select Sections"
-	def self.build_allocation(&block)
+	def self.build_transaction(&block)
 		CourseAllocation.transaction do 
 			yield
 		end

@@ -114,17 +114,22 @@ module Institutes
 				end
 			end
 
+			# taking that course which is assigned to current teacher in the current batch
 			@assigned_courses = @courses.select {|key, hash| key[:has_course] == true}
+
+			# checking if any other section is allocated to any other teacher
+			# this donot include the current teacher
 			if @already_assigned_allocations.present? and @is_a_new_teacher == true
 
 				@courses.each do |course|
 					course[:is_already_assigned] = true if @already_assigned_allocations.first.course_id == course[:id]
 				end
 
-				unless @course
-					@already_assigned_allocations = @already_assigned_allocations.where(course_id: @already_assigned_allocations.first.course_id)
-				end
+				# unless @course
+				# 	@already_assigned_allocations = @already_assigned_allocations.where(course_id: @already_assigned_allocations.first.course_id)
+				# end
 
+				# this is checked by the "has course" value if it is not first in the list
 				if @assigned_courses.present?
 					@already_assigned_allocations = @already_assigned_allocations.where(course_id: @assigned_courses.first[:id])
 				end
@@ -193,13 +198,13 @@ module Institutes
 
 			@msg = Array.new
 
-			CourseAllocation.build_allocation do 
+			CourseAllocation.build_transaction do 
 				render :json => { status: :error, msg: CourseAllocation::SectionsValidity  } and return if @sections.blank?
 
 				if attributes[:teacher_id].present?
-					teacher = Teacher.find(attributes[:teacher_id])
-					allocations = teacher.has_courses(attributes[:batch_id], attributes[:course_id])
-					if allocations.present?
+					@teacher = Teacher.find(attributes[:teacher_id])
+					allocations = @teacher.has_courses(attributes[:batch_id], attributes[:course_id])
+					if allocations.present? and allocations.count <= 3
 						logger.debug "--Removing old allocations--"
 						allocations.destroy_all
 					end
@@ -207,34 +212,37 @@ module Institutes
 
 				
 				for section in @sections do
-					allocation = CourseAllocation.new
-					allocation.teacher_id = attributes[:teacher_id]
-					allocation.section_id = section
-					allocation.batch_id = attributes[:batch_id]
-					allocation.course_id = attributes[:course_id]
-					unless allocation.save
-						@msg = []
-						@msg << content_tag(:ul, :class => 'allocation_details_list') do
-							 
-						  allocation.errors.full_messages.collect do |item|
-						    content_tag(:li, item)
-						  end.join.html_safe
+
+					CourseAllocation.new do |allocation|
+						allocation.teacher_id = attributes[:teacher_id]
+						allocation.section_id = section
+						allocation.batch_id = attributes[:batch_id]
+						allocation.course_id = attributes[:course_id]
+					
+
+						unless allocation.save
+							@msg = []
+							@msg << content_tag(:ul, :class => 'allocation_details_list') do
+								 
+							  allocation.errors.full_messages.collect do |item|
+							    content_tag(:li, item)
+							  end.join.html_safe
+							end
+
+							render :json => { status: :error, msg: @msg  } and return
+						else
+							@course = "#{allocation.course.name} - #{allocation.course.type_name}"
+							@batch = allocation.batch
+							@msg << Section.find(section).name
 						end
-						# .map { |msg| content_tag(:li, msg) }.join
-						render :json => { status: :error, msg: @msg  } and return
-					else
-						@teacher_name = allocation.teacher.full_name
-						@course = "#{allocation.course.name} - #{allocation.course.type_name}"
-						@batch = allocation.batch.name
-						@msg << Section.find(section).name
 					end
 				end
 				render :json => { status: :created, 
-													batch: @batch, 
-													teacher_name: @teacher_name,
-													batch_id: attributes[:batch_id], 
-													course: @course, 
-													sections: @msg  }
+													teacher_name: @teacher.full_name,
+													batch_id: @batch.id, 
+													course_name: @course, 
+													sections: @msg  
+												}
 			end
 		end
 

@@ -60,7 +60,7 @@ allocateTeachers = ->
             title: '<strong>Allocation Details: </strong>'
             message: '<ul><li><strong>Teacher:</strong> ' + response.teacher_name + '</li> <li><strong>' + pluralize(response.sections, 'Section') + ': </strong>' + $.map(response.sections, (n) ->
               n
-            ) + '</li> <li><strong>Course: </strong>' + response.course + '</li></ul>'
+            ) + '</li> <li><strong>Course: </strong>' + response.course_name + '</li></ul>'
           }, {
             type: "success",
             allow_dismiss: true,
