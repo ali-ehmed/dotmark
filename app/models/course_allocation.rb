@@ -34,6 +34,8 @@ class CourseAllocation < ActiveRecord::Base
 		end
 	end
 
+	attr_accessor :already_assigned_allocations
+
 	def restrict_allocations
 		if self.teacher_id and self.batch_id and self.course_id
 			teacher = Teacher.find(self.teacher_id)
@@ -44,6 +46,7 @@ class CourseAllocation < ActiveRecord::Base
 
 			for assigned_allocation in allocations do
 				if assigned_allocation.section_id == self.section_id
+					self.already_assigned_allocations = true
 					teacher_allocations = allocations.select("teacher_id").group("teacher_id")
 					errors.add(:base, "<span>\"Allocations already assigned\"</span>".html_safe)
 

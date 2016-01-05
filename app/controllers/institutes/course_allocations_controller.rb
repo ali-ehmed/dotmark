@@ -35,17 +35,35 @@ module Institutes
 
 			@batch = Batch.find(params[:batch_id])
 
-			# search teacher's allocation by batch 
-			if @teacher and @batch
-				teacher_allocations = @teacher.course_allocations.where(batch_id: @batch.id)
-				logger.debug "Techer Allocations -> #{teacher_allocations.count}"
+			# this is to check if current teacher is new, if new then it is necessary to select course first
+			@is_a_new_teacher = false
+			if @teacher.course_allocations.present?
+				@is_a_new_teacher = true
 			end
 
-			# search teacher's allocation by course
+			# search by teacher and batch 
+			if @teacher and @batch
+				# current teacher allocations
+				teacher_allocations = @teacher.course_allocations.where(batch_id: @batch.id).order("course_id")
+				logger.debug "Techer Allocations -> #{teacher_allocations.inspect}"
+
+				# assigned allocations
+				@already_assigned_allocations = CourseAllocation.where(:batch_id => @batch.id)
+																												.where.not(teacher_id: @teacher.id).order("course_id")
+			end
+
+			# search by course
 			@course = Course.find(params[:course_id]) if params[:course_id].present?
 			if @course
+				# current teacher allocations
 				teacher_allocations = teacher_allocations.where(course_id: @course.id)
+				# assigned allocations
+				@already_assigned_allocations = @already_assigned_allocations.where(course_id: @course.id)
+
+				@is_a_new_teacher = true
 			end
+
+			
 
 			current_batch = Batch.current_batches.select {|key, hash| key['id'] == @batch.id }
 
@@ -95,6 +113,26 @@ module Institutes
 				end
 			end
 
+			if @already_assigned_allocations.present? and @is_a_new_teacher == true
+
+				@courses.each do |course|
+					course[:is_already_assigned] = true if @already_assigned_allocations.first.course_id == course[:id]
+				end
+
+				unless @course
+					@already_assigned_allocations = @already_assigned_allocations.where(course_id: @already_assigned_allocations.first.course_id)
+				end
+
+				for assigned_allocation in @already_assigned_allocations
+					@sections.each do |section|
+						if assigned_allocation.section_id == section[:id]
+							section[:is_already_assigned_section] = true
+							section[:is_already_assigned_teacher] = assigned_allocation.teacher.full_name
+						end
+					end
+				end
+			end
+
 			logger.debug "Sections: -> #{@sections.inspect}"
 			logger.debug "Courses -> #{@courses.inspect}"
 			
@@ -107,6 +145,15 @@ module Institutes
 			@batch = Batch.find(params[:batch_id])
 			@allocations = @batch.course_allocations
 			@allocations.destroy_all if @allocations.present?
+
+			respond_to do |format|
+	  		format.json { render json: { status: :ok, teacher_name: @teacher.full_name } }
+			end
+		end
+
+		def remove_teacher_allocations
+			@teacher = Teacher.find(params[:teacher_id])
+			@teacher.course_allocations.destroy_all
 
 			respond_to do |format|
 	  		format.json { render json: { status: :ok } }
@@ -147,7 +194,6 @@ module Institutes
 					allocation.course_id = attributes[:course_id]
 					unless allocation.save
 						@msg = []
-						
 						@msg << content_tag(:ul, :class => 'allocation_details_list') do
 							 
 						  allocation.errors.full_messages.collect do |item|

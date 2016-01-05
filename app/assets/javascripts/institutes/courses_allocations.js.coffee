@@ -94,6 +94,34 @@ window.removeAllocations = (elem) ->
 	    error: (response) ->
 	      swal 'oops', 'Something went wrong'
 
+window.removeTeacherAlloactions = () ->
+	_params = parameters
+	swal {
+	  title: "Remove All Allocations"
+	  type: 'warning'
+	  showCancelButton: true
+	  confirmButtonColor: '#DD6B55'
+	  confirmButtonText: 'Remove'
+	  cancelButtonText: 'No'
+	  closeOnConfirm: false
+	  closeOnCancel: true
+	}, ->
+		$.ajax
+	    type: "Delete"
+	    url: "/institutes/course_allocations/_params['teacher_id']/remove_teacher_allocations.json"
+	    data: _params
+	    dataType: 'json'
+	    success: (response) ->
+	    	$.notify {
+          icon: 'glyphicon glyphicon-ok'
+          title: '<strong>Allocation Details: </strong>'
+          message: "<ul><li><strong>#{response.teacher_name}'s</strong> allocations have been removed.</li></ul>"
+        }, {
+          type: "danger"
+        }
+	      $('table.allocations_table_for_' + _params["batch-id"]).DataTable().ajax.url('/institutes/course_allocations/' + _params["batch-id"] + '/get_allocations.json').load()
+	    error: (response) ->
+	      swal 'oops', 'Something went wrong'
 # wrapperAllocationCss = (elem) ->
 # 	elem.css("text-align", "left")
 # 	elem.css("margin", "0 auto")

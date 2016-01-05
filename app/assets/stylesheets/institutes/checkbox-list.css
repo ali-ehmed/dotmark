@@ -15,3 +15,10 @@
 	background-color: #6EA5D4;
   border-color: #4583B9;
 }
+
+.list-already-active {
+  background-color: rgba(232, 70, 70, 0.59);
+  border-color: #F97070;
+  color: #fff;
+  cursor: no-drop !important;
+}

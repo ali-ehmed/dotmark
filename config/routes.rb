@@ -83,6 +83,7 @@ Rails.application.routes.draw do
         get ":batch_id/get_allocations" => "course_allocations#get_allocations", as: :get_allocations
         delete ":batch_id/remove_allocations" => "course_allocations#remove_allocations", as: :remove_allocations
         get ":batch_id/courses_and_sections"=> "course_allocations#courses_and_sections", as: :courses_and_sections
+        delete ":teacher_id/remove_teacher_allocations"=> "course_allocations#remove_teacher_allocations", as: :remove_teacher_allocations
       end
     end
   end

@@ -18,13 +18,23 @@
 	// List Items Checkbox
 	check_box_list();
 
+	<% if @teacher.course_allocations.present? %>
+		$("#remove_teacher_allocations").html("<a href='javascript:void(0);' class='btn btn-danger btn-sm' onclick='removeTeacherAllocations(<%= @teacher.id %>)'>Remove <%= @teacher.full_name %>'s Allocation</a>")
+	<% end %>
+
 	<% @sections.each do |section| %>
+		var $list = $("ul[data-type='sections']").find("li[data-section-id='<%= section[:id] %>']")
 		<% if section[:has_section] == true %>
-			var $list = $("ul[data-type='sections']").find("li[data-section-id='<%= section[:id] %>']")
 			$list.addClass("list-group-item-primary list-active")
 			$list.find("span").removeClass("glyphicon-unchecked")
 			$list.find("span").addClass("glyphicon-check")
 			$list.find("input[type='checkbox']").attr("checked", "checked")
+		<% end %>
+		<% if section[:is_already_assigned_section] == true %>
+			$list.removeClass("list-active")
+			$list.addClass("list-already-active")
+			$list.attr("disabled", "disabled").off('click');
+			$list.find("strong").append("(<%= section[:is_already_assigned_teacher] %>)")
 		<% end %>
 	<% end %>
 
