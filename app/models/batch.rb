@@ -55,6 +55,13 @@ class Batch < ActiveRecord::Base
 		name.split("-").first
 	end
 
+	def batch_semester
+		current_batch = Batch.current_batches.select {|key, hash| key['id'] == self.id }
+		@semester = Semester.find_by_name "#{current_batch.first['semester']}"
+
+		@semester
+	end
+
 	def self.batches_running_currently
 		current_batch_year = Batch.where("name like ?", "%#{Date.today.year.to_s}%")
 		current_semester = Semester.current_semesters.first["name"].to_i

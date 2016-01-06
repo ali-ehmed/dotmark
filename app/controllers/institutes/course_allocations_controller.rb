@@ -1,6 +1,8 @@
 module Institutes
 	class CourseAllocationsController < BaseController
 		add_breadcrumb "Allocate Courses"
+		include AllocationsHelper
+
 		def index
 			@batches = Batch.current_batches
 		end
@@ -14,12 +16,13 @@ module Institutes
 			@teacher_allocations.each do |allocation|
 				sections = allocation.teacher.sections_by_course(allocation.course_id).map{|m| m.section.try(:name) }
 
+
 				attributes << {
 					teacher: allocation.teacher.full_name,
 					course: "#{allocation.course.name} - (#{allocation.course.type_name})",
 					section: sections.count > 2 ? sections.join(", ") : sections.join(" & "),
-					timings: content_tag(:a, "Under Approval", href: "#"),
-					week_day: content_tag(:a, "Under Approval", href: "#")
+					status: content_tag(:span, "Under Approval", class: "label label-warning"),
+					send_instructions: notification_link(allocation.teacher_id, @batch.id, allocation.course_id)
 				}
 			end
 
@@ -161,6 +164,7 @@ module Institutes
 			@teacher = Teacher.find(params[:teacher_id])
 			message = ""
 			message << content_tag(:strong, "#{@teacher.full_name}'s")
+
 			if params[:type] == "all"
 				@teacher_allocations = @teacher.course_allocations.where("batch_id = ?", params[:batch_id])
 				message << " allocations have been removed from #{@teacher_allocations.first.batch.batch_name}"
@@ -168,6 +172,7 @@ module Institutes
 				@teacher_allocations = @teacher.course_allocations.where("course_id = ? and batch_id = ?", params[:course_id], params[:batch_id])
 				message << " allocations have been removed from this course"
 			end
+
 			respond_to do |format|
 				if params[:course_id].present? and params[:batch_id].present?
 					@teacher_allocations.destroy_all
@@ -215,8 +220,8 @@ module Institutes
 			@created_sections << Section.where("id in (?)", @sections).order("name").map(&:name)
 
 			for section in @sections do
-				# allocation = {}
 				allocation = teacher_allocations.find_by_section_id(section) if teacher_allocations.present?
+
 				if allocation.present?
 					logger.debug "Present #{section}"
 					next
@@ -229,6 +234,7 @@ module Institutes
 						allocation.course_id = attributes[:course_id]
 					end
 				end
+
 				course_alloc << new_allocation
 			end
 
@@ -256,6 +262,7 @@ module Institutes
 						logger.debug "Removing On Failed When New Record"
 						@teacher.course_allocations.where("batch_id = ? and course_id = ?", @batch_id, @course.id).destroy_all
 					end
+
 					@msg = []
 					@msg << content_tag(:ul, :class => 'allocation_details_list') do
 						 
@@ -263,17 +270,27 @@ module Institutes
 					    content_tag(:li, item)
 					  end.join.html_safe
 					end
+
 					render :json => { status: :error, msg: @msg  } and return
 				end
-				respond_to do |format|
 
+				respond_to do |format|
 					get_current_semester()
 					get_removal_options[:course_id] = @course.id
+
 					format.js {}
 				end
-					
 			end
 		end
+
+		def notify_teacher_for_approval
+			@teacher = Teacher.find(params[:teacher_id].to_i)
+			CourseAllocation.send_for_approval(@teacher, params[:batch_id].to_i, params[:course_id].to_i)
+
+			render :json => { status: :ok, msg: CourseAllocation::Approval  } and return
+		end
+
+		private
 
 		def get_current_semester
 

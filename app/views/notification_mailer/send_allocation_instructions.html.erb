@@ -1,0 +1,37 @@
+<%= stylesheet_link_tag 'landings', media: 'all' %>
+<div class="container">
+	<div class="row">
+		<div class="col-md-9 col-md-offset-3">
+			<h3>
+				<blockquote><strong>Dear <%= @teacher.full_name %>!</strong></blockquote>
+			</h3>
+			<div class="jumbotron">
+				<p>You have been allocated to the following <strong>Course</strong>. Please check the details below:</p>
+				
+				<table class="table table-striped">
+					<tr style="font-size:19px;">
+						<th style="padding: 14px;border: 1px solid;text-align:center;">Batch</th>
+						<th style="padding: 14px;border: 1px solid;text-align:center;">Semester</th>
+						<th style="padding: 14px;border: 1px solid;text-align:center;">Course</th>
+						<th style="padding: 14px;border: 1px solid;text-align:center;">Course Type</th>
+						<th style="padding: 14px;border: 1px solid;text-align:center;">Section</th>
+					</tr>
+
+					<% @allocations.each do |allocation| %>
+						<tr style="font-size: 19px;">
+							<td style="padding: 14px;border: 1px solid;text-align:center;"><%= allocation.batch.name %></td>
+							<td style="padding: 14px;border: 1px solid;text-align:center;"><%= allocation.batch.batch_semester.name %></td>
+							<td style="padding: 14px;border: 1px solid;text-align:center;"><%= allocation.course.name %></td>
+							<td style="padding: 14px;border: 1px solid;text-align:center;"><%= allocation.course.type_name %></td>
+							<td style="padding: 14px;border: 1px solid;text-align:center;"><%= allocation.section.name %></td>
+						</tr>
+					<% end %>
+				</table>
+
+			</div>
+			<h3>
+				<blockquote class="blockquote-reverse">Please visit you dashboard and select available classrooms. <a href="<%= @teacher_dashboard_url %>" style="color: #207CE0 !important;">My Dashboard</a> </blockquote>
+			</h3>
+		</div>
+	</div>
+</div>

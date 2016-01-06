@@ -56,7 +56,7 @@ class Teacher < ActiveRecord::Base
 		"#{first_name} #{last_name}"
 	end
 
-	def has_courses(batch_id, course_id)
+	def allocations(batch_id, course_id)
 		course_allocations.where("batch_id = ? and course_id = ?", batch_id, course_id)
 	end
 

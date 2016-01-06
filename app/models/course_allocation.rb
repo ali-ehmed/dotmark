@@ -30,10 +30,17 @@ class CourseAllocation < ActiveRecord::Base
 	include ActionView::Helpers::TagHelper
 
 	SectionsValidity = "Please select Sections"
+	Approval = "Notification has been sent successfully."
+	
 	def self.build_transaction(&block)
 		CourseAllocation.transaction do 
 			yield
 		end
+	end
+
+	def self.send_for_approval(teacher, batch_id, course_id)
+		allocations = teacher.allocations(batch_id, course_id)
+		NotificationMailer.send_allocation_instructions(teacher, allocations).deliver_now!
 	end
 
 	def restrictions
@@ -51,17 +58,18 @@ class CourseAllocation < ActiveRecord::Base
 				return
 			end
 
+			# Not to assign more than three sections of any course
 			teacher_allocations = @teacher.course_allocations.where("batch_id = ? and course_id = ?", batch_id, course_id)
 
 			if teacher_allocations.count == 3
 				errors.add(:base, "'#{content_tag(:strong, @teacher.full_name)}' cannot be assigned to more than 3 sections for #{content_tag(:strong, self.batch.batch_name)}".html_safe)
 			end
 
+			# Not to assign more than two course in any batch
 			unless teacher_allocations.present?
 				course_allocations = @teacher.course_allocations.where("course_allocations.batch_id = ?", batch_id).joins(:course).where("courses.lab = false or courses.lab = true").select("course_allocations.course_id").group("course_allocations.course_id")
 
 				if course_allocations.length >= 2
-
 					errors.add(:base, "'#{content_tag(:strong, @teacher.full_name)}' can only be assign to 1 Lab and 1 Theory of any course in this Batch.".html_safe)
 				end
 			end

@@ -16,6 +16,10 @@ module AllocationsHelper
 											 					   class: "btn btn-danger btn-sm pull-right"
 	end
 
+	def notification_link(teacher, batch, course)
+		content_tag(:a, "Send For Approval", :href => "javascript:void(0)", onclick: "sendApprovalInstructions(this, #{teacher}, #{batch}, #{course})", "data-url" => notify_teacher_institutes_course_allocations_path(format: :json), class: "btn btn-info btn-sm")
+	end
+
 	def teacher_allocation_options(options = {})
 		html = ""
 		html << "<!-- Split button -->
