@@ -187,6 +187,7 @@ module Institutes
 
 		def allocate
 			logger.debug "Params are: #{params.inspect}"
+			
 			attributes = {
 				teacher_id: params[:teacher_id],
 				course_id: params[:course_id],
@@ -194,55 +195,87 @@ module Institutes
 				batch_id: params[:batch_id]
 			}
 
+			@created_sections = Array.new
+
 			@sections = attributes[:section_ids]
 
-			@msg = Array.new
+			render :json => { status: :error, msg: CourseAllocation::SectionsValidity  } and return if @sections.blank?
 
-			CourseAllocation.build_transaction do 
-				render :json => { status: :error, msg: CourseAllocation::SectionsValidity  } and return if @sections.blank?
+			@batch = attributes[:batch_id]
+			@course = Course.find(attributes[:course_id])
 
-				if attributes[:teacher_id].present?
-					@teacher = Teacher.find(attributes[:teacher_id])
-					allocations = @teacher.has_courses(attributes[:batch_id], attributes[:course_id])
-					if allocations.present? and allocations.count <= 3
-						logger.debug "--Removing old allocations--"
-						allocations.destroy_all
-					end
-				end
+			if attributes[:teacher_id].present?
+				@teacher = Teacher.find(attributes[:teacher_id])
+				teacher_allocations = @teacher.course_allocations.where("batch_id = ? and course_id = ?", @batch, @course.id)
+			end
 
-				
-				for section in @sections do
+			course_alloc = Array.new
 
-					CourseAllocation.new do |allocation|
+			old_allocations = teacher_allocations.where.not("section_id in (?)", @sections)
+			if old_allocations.present?
+				logger.debug "Removing Old Allocations not present in #{old_allocations.inspect}"
+				old_allocations.destroy_all
+			end
+
+			@created_sections << Section.where("id in (?)", @sections).order("name").map(&:name)
+
+			for section in @sections do
+				# allocation = {}
+				allocation = teacher_allocations.find_by_section_id(section)
+				if allocation.present?
+					logger.debug "Present #{section}"
+					next
+				else
+					logger.debug "Not Present #{section}"
+					new_allocation = CourseAllocation.new do |allocation|
 						allocation.teacher_id = attributes[:teacher_id]
 						allocation.section_id = section
 						allocation.batch_id = attributes[:batch_id]
 						allocation.course_id = attributes[:course_id]
-					
-
-						unless allocation.save
-							@msg = []
-							@msg << content_tag(:ul, :class => 'allocation_details_list') do
-								 
-							  allocation.errors.full_messages.collect do |item|
-							    content_tag(:li, item)
-							  end.join.html_safe
-							end
-
-							render :json => { status: :error, msg: @msg  } and return
-						else
-							@course = "#{allocation.course.name} - #{allocation.course.type_name}"
-							@batch = allocation.batch
-							@msg << Section.find(section).name
-						end
 					end
 				end
-				render :json => { status: :created, 
-													teacher_name: @teacher.full_name,
-													batch_id: @batch.id, 
-													course_name: @course, 
-													sections: @msg  
-												}
+				course_alloc << new_allocation
+			end
+
+			CourseAllocation.transaction do
+				failed = ""
+				is_a_new_record = false
+
+				if course_alloc.all?(&:valid?)
+					unless teacher_allocations.present?
+						is_a_new_record = true
+					end
+				end
+
+				logger.debug "Total #{course_alloc.count}"
+
+				course_alloc.reverse.each do |allocation|
+					unless allocation.save
+						failed = allocation
+						# raise ActiveRecord::Rollback
+					end
+				end
+
+				if failed.present?
+					if is_a_new_record == true
+						logger.debug "Removing On Failed When New Record"
+						@teacher.course_allocations.where("batch_id = ? and course_id = ?", @batch, @course.id).destroy_all
+					end
+					@msg = []
+					@msg << content_tag(:ul, :class => 'allocation_details_list') do
+						 
+					  failed.errors.full_messages.collect do |item|
+					    content_tag(:li, item)
+					  end.join.html_safe
+					end
+					render :json => { status: :error, msg: @msg  } and return
+				end
+					render :json => { status: :created, 
+														teacher_name: @teacher.full_name,
+														batch_id: @batch, 
+														course_name: @course.name, 
+														sections: @created_sections  
+													}
 			end
 		end
 

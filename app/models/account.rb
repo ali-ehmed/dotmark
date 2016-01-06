@@ -15,4 +15,16 @@ class Account < ActiveRecord::Base
 	belongs_to :resource, polymorphic: true, dependent: :delete
 	# validates_uniqueness_of :resource_id
 	validates_uniqueness_of :subdomain
+
+	# include ActiveModel::Serializers::JSON
+
+  # def attributes=(hash)
+  #   hash.each do |key, value|
+  #     send("#{key}=", value)
+  #   end
+  # end
+
+  # def attributes
+  #   instance_values
+  # end
 end
