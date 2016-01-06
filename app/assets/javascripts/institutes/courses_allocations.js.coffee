@@ -42,12 +42,12 @@ allocateTeachers = ->
       type: $form.attr('method')
       url: $form.attr('action')
       data: $form.serialize()
-      dataType: 'json'
+      cache: false
       success: (response) ->
         if response.status == 'error'
           $.notify {
             icon: 'glyphicon glyphicon-warning-sign'
-            title: '<strong>Couldn\'t Allocate: </strong>'
+            title: '<strong>Allocation Errors Instructions: </strong>'
             message: "#{response.msg}"
           }, {
             type: "danger",
@@ -55,18 +55,7 @@ allocateTeachers = ->
             z_index: 10000
           }
         else
-          $.notify {
-            icon: 'glyphicon glyphicon-ok'
-            title: '<strong>Allocation Details: </strong>'
-            message: '<ul><li><strong>Teacher:</strong> ' + response.teacher_name + '</li> <li><strong>' + pluralize(response.sections, 'Section') + ': </strong>' + $.map(response.sections, (n) ->
-              n
-            ) + '</li> <li><strong>Course: </strong>' + response.course_name + '</li></ul>'
-          }, {
-            type: "success",
-            allow_dismiss: true,
-            z_index: 10000
-          }
-          $('table.allocations_table_for_' + response.batch_id).DataTable().ajax.url('/institutes/course_allocations/' + response.batch_id + '/get_allocations.json').load()
+          console.log "Allocated"
       error: (response) ->
         swal 'oops', 'Something went wrong'
 

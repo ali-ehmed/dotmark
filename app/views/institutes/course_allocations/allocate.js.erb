@@ -1,0 +1,13 @@
+
+$.notify({
+  icon: 'glyphicon glyphicon-ok',
+  title: '<strong>Allocation Details: </strong>',
+  message: '<ul><li><strong>Teacher:</strong> <%= @teacher.full_name %></li> <li><strong><%= "Section".pluralize(@created_sections.count) %>: </strong><%= escape_javascript(@created_sections.join(", ")) %></li> <li><strong>Course: </strong><%= @course.name %></li></ul>'
+}, {
+  type: "success",
+  allow_dismiss: true,
+  z_index: 10000
+});
+
+$('table.allocations_table_for_<%= @batch_id %>').DataTable().ajax.url('/institutes/course_allocations/<%= @batch_id %>/get_allocations.json').load()
+$("#remove_teacher_allocations").html("<%= escape_javascript(teacher_allocation_options(@options)) %>")

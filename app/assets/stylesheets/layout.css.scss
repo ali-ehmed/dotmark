@@ -78,3 +78,8 @@ body {
 		// background-image: $background-img;
 	}
 }
+
+// Profile
+.students_profile_tabs > li.active > a, .students_profile_tabs > li.active > a:hover, .students_profile_tabs > li.active > a:focus {
+	background-color: rgba(46, 181, 232, 0.5);
+}

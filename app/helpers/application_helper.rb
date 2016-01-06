@@ -75,7 +75,7 @@ module ApplicationHelper
     if current_resource_name.to_s == "admin"
       "Admin Panel"
     else
-      @account.resource.username
+      @account["resource"]["username"]
     end
   end
 end

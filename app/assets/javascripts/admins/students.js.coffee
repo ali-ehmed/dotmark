@@ -11,9 +11,6 @@ getStudents = ->
 		$path = $(this).attr("action")
 		$method = $(this).attr("method")
 		$submit_btn = $form.find("input[type='submit']")
-		# $form_data.push
-		#   name: 'revision_date'
-		#   value: revision_date_val
 		$.ajax
 	    type: $method
 	    data: $form_data

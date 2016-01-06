@@ -4,7 +4,7 @@ class Resources::SessionsController < Devise::SessionsController
   # skip_before_action :require_account!
   # skip_before_filter :verify_authenticity_token, :only => :create
   def new
-    @student_name = @account.resource.username
+    @student_name = @account["resource"]["username"]
     super
   end
 

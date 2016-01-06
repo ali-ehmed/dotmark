@@ -54,7 +54,7 @@ class ApplicationController < ActionController::Base
   end
 
   def current_resource_name
-    @account.resource_type.underscore
+    @account["resource_type"].underscore
   end
 
   def resource_signed_in?
@@ -62,17 +62,18 @@ class ApplicationController < ActionController::Base
   end
 
   def set_account
-    @account = Account.find_by(subdomain: request.subdomain)
+    account = $redis.get("#{request.subdomain}")
+    if account.nil?
+      account = Account.find_by(subdomain: request.subdomain).as_json(include: :resource).to_json
+      $redis.set("#{request.subdomain}", account)
+    end
+    @account = JSON.load(account)
   end
-
-  # def after_sign_out_path_for(resource_or_scope)
-  #   root_url(subdomain: nil) if resource_or_scope == :admin
-  # end
   
   def require_account!
     if request.subdomain.present?
       unless @account.blank?
-        case @account.resource_type
+        case @account["resource_type"]
         when :student.to_s.capitalize
           unless current_controller?("students/sessions")
             student_authentication
@@ -88,7 +89,7 @@ class ApplicationController < ActionController::Base
 
   %w(Admin Student Teacher).each do |k|
     define_method "#{k.underscore}_resource" do
-      @account.resource_type == k.constantize.to_s
+      @account["resource_type"] == k.constantize.to_s
     end
 
     define_method "#{k.underscore}_authentication" do
@@ -142,7 +143,7 @@ class ApplicationController < ActionController::Base
 
   # Profile params
   def update_account_parameters_sanitizer(resource)
-    case @account.resource_type
+    case @account["resource_type"]
     when "Student"
       params.require(resource).permit(:email, :username, :username,
                                       :first_name, :last_name, :date_of_birth, :roll_number, :address, :phone, 

@@ -34,7 +34,8 @@ module Institutes
 			return if params[:batch_id].blank?
 
 			@batch = Batch.find(params[:batch_id])
-
+			@batch_id = @batch.id
+			
 			# this is to check if current teacher is new, if new then it is necessary to select course first
 			@is_a_new_teacher = false
 
@@ -57,18 +58,14 @@ module Institutes
 			@course = Course.find(params[:course_id]) if params[:course_id].present?
 			if @course
 				# current teacher allocations
-				@teacher_allocations = @teacher_allocations.where(course_id: @course.id)
+				@teacher_allocations = @teacher_allocations.where(course_id: @course.id) if @teacher_allocations.present?
 				# assigned allocations
-				@already_assigned_allocations = @already_assigned_allocations.where(course_id: @course.id)
+				@already_assigned_allocations = @already_assigned_allocations.where(course_id: @course.id) if @already_assigned_allocations.present?
 
 				@is_a_new_teacher = true
 			end
 
-			
-
-			current_batch = Batch.current_batches.select {|key, hash| key['id'] == @batch.id }
-
-			@semester = Semester.find_by_name "#{current_batch.first['semester']}"
+			get_current_semester() #get the current semster to load courses
 
 			@courses = Array.new
 			course_attributes = Hash.new
@@ -124,10 +121,6 @@ module Institutes
 				@courses.each do |course|
 					course[:is_already_assigned] = true if @already_assigned_allocations.first.course_id == course[:id]
 				end
-
-				# unless @course
-				# 	@already_assigned_allocations = @already_assigned_allocations.where(course_id: @already_assigned_allocations.first.course_id)
-				# end
 
 				# this is checked by the "has course" value if it is not first in the list
 				if @assigned_courses.present?
@@ -201,17 +194,19 @@ module Institutes
 
 			render :json => { status: :error, msg: CourseAllocation::SectionsValidity  } and return if @sections.blank?
 
-			@batch = attributes[:batch_id]
+			@batch_id = attributes[:batch_id]
+
+			@batch = Batch.find(@batch_id)
 			@course = Course.find(attributes[:course_id])
 
 			if attributes[:teacher_id].present?
 				@teacher = Teacher.find(attributes[:teacher_id])
-				teacher_allocations = @teacher.course_allocations.where("batch_id = ? and course_id = ?", @batch, @course.id)
+				teacher_allocations = @teacher.course_allocations.where("batch_id = ? and course_id = ?", @batch_id, @course.id)
 			end
 
 			course_alloc = Array.new
 
-			old_allocations = teacher_allocations.where.not("section_id in (?)", @sections)
+			old_allocations = teacher_allocations.where.not("section_id in (?)", @sections) if teacher_allocations.present?
 			if old_allocations.present?
 				logger.debug "Removing Old Allocations not present in #{old_allocations.inspect}"
 				old_allocations.destroy_all
@@ -221,7 +216,7 @@ module Institutes
 
 			for section in @sections do
 				# allocation = {}
-				allocation = teacher_allocations.find_by_section_id(section)
+				allocation = teacher_allocations.find_by_section_id(section) if teacher_allocations.present?
 				if allocation.present?
 					logger.debug "Present #{section}"
 					next
@@ -259,7 +254,7 @@ module Institutes
 				if failed.present?
 					if is_a_new_record == true
 						logger.debug "Removing On Failed When New Record"
-						@teacher.course_allocations.where("batch_id = ? and course_id = ?", @batch, @course.id).destroy_all
+						@teacher.course_allocations.where("batch_id = ? and course_id = ?", @batch_id, @course.id).destroy_all
 					end
 					@msg = []
 					@msg << content_tag(:ul, :class => 'allocation_details_list') do
@@ -270,13 +265,22 @@ module Institutes
 					end
 					render :json => { status: :error, msg: @msg  } and return
 				end
-					render :json => { status: :created, 
-														teacher_name: @teacher.full_name,
-														batch_id: @batch, 
-														course_name: @course.name, 
-														sections: @created_sections  
-													}
+				respond_to do |format|
+
+					get_current_semester()
+					get_removal_options[:course_id] = @course.id
+					format.js {}
+				end
+					
 			end
+		end
+
+		def get_current_semester
+
+			current_batch = Batch.current_batches.select {|key, hash| key['id'] == @batch_id.to_i }
+			@semester = Semester.find_by_name "#{current_batch.first['semester']}"
+
+			@semester
 		end
 
 		def get_removal_options

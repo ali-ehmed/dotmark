@@ -9,7 +9,7 @@ class ProfileController < ApplicationController
 		respond_to do |format|
 			if @resource.update_with_password(resource_account_params)
 				sign_in @resource, :bypass => true
-				format.html { redirect_to authenticated_root(@account.subdomain), notice: "Account successfully updated." }
+				format.html { redirect_to authenticated_root(@account["subdomain"]), notice: "Account successfully updated." }
 			else
 				@profile_error = true
 				params[:tab] = "account"
@@ -26,7 +26,7 @@ class ProfileController < ApplicationController
 		respond_to do |format|
 			if @resource.update_attributes(resource_params)
 				sign_in @resource, :bypass => true
-				format.html { redirect_to authenticated_root(@account.subdomain), notice: "Profile successfully updated." }
+				format.html { redirect_to authenticated_root(@account["subdomain"]), notice: "Profile successfully updated." }
 			else
 				@account_error = true
 				params[:tab] = "profile"
@@ -41,14 +41,14 @@ class ProfileController < ApplicationController
 	def set_resource
 		@resource = current_resource
 		unless current_resource.username == params[:username]
-			redirect_to authenticated_root(@account.subdomain), flash: { alert: "This area is restricted" }
+			redirect_to authenticated_root(@account["subdomain"]), flash: { alert: "This area is restricted" }
 		end
 
 		@resource
 	end
 
 	def resource_account_params
-		params.require(@account.resource_type.downcase.to_sym).permit(:password, :password_confirmation, :current_password)
+		params.require(@account["resource_type"].downcase.to_sym).permit(:password, :password_confirmation, :current_password)
 	end
 
 	def resource_params
