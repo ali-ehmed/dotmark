@@ -1,0 +1,51 @@
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="row">
+				<div class="col-md-6">
+					<blockquote>
+						<h1>
+							Welcome <small><%= current_resource.full_name %></small>
+						</h1>
+					</blockquote>
+				</div>
+				<div class="col-md-4 pull-right">
+					<blockquote class="blockquote-reverse">
+						<h1>
+							Allocations <small>(2016)</small>
+						</h1>
+						<button class="btn-block btn btn-info" data-toggle="modal" data-target="#myAllocations">View Allocations</button>
+					</blockquote>
+				</div>
+			</div>
+		</div>
+	</div>
+	<br />
+	<div class="row">
+		<div class="col-md-12">
+			<table class="table table-bordered">
+				<tr>
+					<td align="center"><strong>Week Days</strong></td>
+					<% Timing.where("week_day_type = 'Normal Day'").each do |timing| %>
+						<td align="center"><%= timing.start_time.strftime("%I:%M") %> - <%= timing.end_time.strftime("%I:%M") %></td>
+					<% end %>
+				</tr>
+				<% WeekDay.all.each_with_index do |days, i| %>
+					<tr>
+						<td align="center"><strong><%= days.name %></strong></td>
+						<td>---</td>
+						<td>---</td>
+						<td>---</td>
+						<td>---</td>
+						<td>---</td>
+						<td>---</td>
+						<td>---</td>
+						<td>---</td>
+					</tr>
+				<% end %>
+			</table>
+		</div>
+	</div>
+</div>
+
+<%= render partial: "time_table/view_allocations" %>

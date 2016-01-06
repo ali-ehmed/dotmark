@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get 'time_table/index'
+
   constraints(Subdomain) do
     match "/:username/profile" => "profile#index", via: :get, as: :profile
     match "/:username/update_account" => "profile#account_update", via: :put, as: :update_account
