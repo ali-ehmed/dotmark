@@ -52,6 +52,6 @@ class ProfileController < ApplicationController
 	end
 
 	def resource_params
-		update_account_parameters_sanitizer(:student)
+		update_account_parameters_sanitizer(@account["resource_type"].downcase.to_sym)
 	end
 end

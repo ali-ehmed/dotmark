@@ -126,6 +126,8 @@ class ApplicationController < ActionController::Base
       admin_authenticated_root_path(subdomain: subdomain)
     elsif student_resource
       student_authenticated_root_path(subdomain: subdomain)
+    elsif teacher_resource
+      teacher_authenticated_root_path(subdomain: subdomain)
     end
   end
 
@@ -143,11 +145,14 @@ class ApplicationController < ActionController::Base
 
   # Profile params
   def update_account_parameters_sanitizer(resource)
-    case @account["resource_type"]
-    when "Student"
-      params.require(resource).permit(:email, :username, :username,
+    case resource
+    when "student".to_sym
+      params.require(resource).permit(:email, :username,
                                       :first_name, :last_name, :date_of_birth, :roll_number, :address, :phone, 
                                       :section_id, :batch_id, :semester_id, :gender)
+    when "teacher".to_sym
+      params.require(resource).permit(:email, :username, :username,
+                                      :first_name, :last_name)
     end 
   end
 

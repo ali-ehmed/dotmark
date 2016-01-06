@@ -27,13 +27,17 @@
 #  current_sign_in_ip     :string
 #  last_sign_in_ip        :string
 #  username               :string
+#  temp_password          :text
+#  confirmation_token     :string
+#  confirmed_at           :datetime
+#  confirmation_sent_at   :datetime
 #
 
 class Teacher < ActiveRecord::Base
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :trackable, :validatable
+         :recoverable, :rememberable, :trackable, :validatable, :confirmable
 	has_many :course_allocations
 	has_many :allocated_sections, class_name: "CourseAllocation", foreign_key: :teacher_id
 	has_one :account, as: :resource
@@ -42,10 +46,16 @@ class Teacher < ActiveRecord::Base
 
 	include BuildAccount
 
-	attr_accessor :teacher_password, :full_name
+	attr_accessor :full_name
+	attr_accessor :password_validity, :email_validity, :login
 
-	before_create :set_employee_number, :default_values
-	after_create :set_account
+	before_create :set_employee_number, :default_values, :set_account, :generate_password
+	after_create :send_welcome_email
+
+	validate :validates_subdomain, on: :create
+
+	# validates_presence_of :first_name, :last_name, :on => :create
+  validates_presence_of :first_name, :last_name, :username, :email, on: :update, if: :email_validity?
 
 	def set_employee_number
 		initialize_emp_number = self.class.last.blank? ? 1 : self.class.last.employee_number.to_i + 1 
@@ -78,6 +88,15 @@ class Teacher < ActiveRecord::Base
 		self.last_name = set_last_name
 	end
 
+	def self.find_for_database_authentication(warden_conditions)
+    conditions = warden_conditions.dup
+    if login = conditions.delete(:login)
+      where(conditions.to_hash).where(conditions).where(["username = :value or email = :value", { :value => login }]).first
+    else
+      where(conditions.to_hash).first
+    end
+  end
+
 	def self.search(params)
     if params[:teacher_name].present?
       @teachers = where("first_name || ' ' || last_name LIKE ?", "%#{params[:teacher_name]}%") 
@@ -85,17 +104,13 @@ class Teacher < ActiveRecord::Base
       @teachers = where("first_name || ' ' || last_name LIKE ? and employee_number = ?", "%#{params[:teacher_name]}%", params[:employee_no]) 
     elsif params[:employee_no].present?
       @teachers = where("employee_number = ?", params[:employee_no])
-    # elsif params[:teacher_courses].present?
-    #   @students = @batch.students.where("course_id = ?", params[:teacher_courses])
+    elsif params[:teacher_courses].present?
+    #   @teachers = joins(:course_allocations).where("course_allocations.course_id = ?", params[:teacher_courses])
     end
     @teachers ||= present
 
 	  return @teachers
 	end
-
-	def password_required?
-    !persisted? || !password.nil? || !password_confirmation.nil? if teacher_password == true
-  end
 
   def is_present?
   	if is_present
@@ -106,6 +121,10 @@ class Teacher < ActiveRecord::Base
   end
 
 	private
+
+	def password_required?
+    !persisted? || !password.nil? || !password_confirmation.nil? if self.password_validity == true
+  end
 
 	def default_values
 		self.is_present = true

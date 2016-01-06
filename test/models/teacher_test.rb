@@ -27,6 +27,10 @@
 #  current_sign_in_ip     :string
 #  last_sign_in_ip        :string
 #  username               :string
+#  temp_password          :text
+#  confirmation_token     :string
+#  confirmed_at           :datetime
+#  confirmation_sent_at   :datetime
 #
 
 require 'test_helper'

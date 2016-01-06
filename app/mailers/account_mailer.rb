@@ -8,11 +8,7 @@ class AccountMailer < Devise::Mailer
 	default from: 'notifications@dotmark.com'
 
   def confirmation_instructions(record, token, opts={})
-  	if record.first_name.blank? and record.last_name.blank?
-  		@full_name =  "Test Student # #{record.id}"
-  	else
-  		@full_name = record.full_name
-  	end
+  	@full_name = record.full_name
   	@subdomain = record.account.subdomain
 	  headers["Custom-header"] = "Bar"
 	  opts[:from] = 'donotreply@dotmark.com'
@@ -20,14 +16,18 @@ class AccountMailer < Devise::Mailer
 	  super
 	end
 
-	def account_access(student)
-		@resource = student
+	def account_access(user)
+		@resource = user
 		@full_name = @resource.full_name
 		@login_email = "#{@resource.email}"
 		@login_username = "#{@resource.username}"
-		@login_password = "#{DecryptedHash.new.decrypt_hash(@resource.temp_password)}"
+		@login_password = "#{StringEncryptor.new.decrypt_hash(@resource.temp_password)}"
 		
-		@login_url = students_login_after_confirmation_url(resource: @resource.username, subdomain: "#{@resource.account.subdomain}")
+		if @resource.class == Student
+			@login_url = students_login_after_confirmation_url(resource: @resource.username, subdomain: "#{@resource.account.subdomain}")
+		else
+			@login_url = teachers_login_after_confirmation_url(resource: @resource.username, subdomain: "#{@resource.account.subdomain}")
+		end
     mail(to: @resource.email, subject: 'Account Credentials')
 	end
 end

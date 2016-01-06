@@ -107,36 +107,15 @@ class Student < ActiveRecord::Base
     end
 	end
 
-  def email_validity?
-    email_validity == true
-  end
-
-  def password_validity?
-    password_validity == true
-  end
-
   def full_name
     "#{first_name} #{last_name}"
   end
 
-  def send_welcome_email
-    ApplicationMailer.welcome_email(self).deliver_now!
-  end
-
-  def generate_random_string
-    alphabets = [('a'..'z'), ('A'..'Z')].map { |i| i.to_a }.flatten
-    random_string = (0...8).map { alphabets[rand(alphabets.length)] }.join
-    random_string
-  end
-
-  def first_confirmation?
-    previous_changes[:confirmed_at] && previous_changes[:confirmed_at].first.nil?
-  end
-
-  def confirm!
-    super
-    if first_confirmation?
-      AccountMailer.account_access(self).deliver_now!
+  def passed_out
+    if read_attribute(:passed_out) == true
+      "Yes"
+    else
+      "No"
     end
   end
 
@@ -149,23 +128,15 @@ class Student < ActiveRecord::Base
     end
   end
 
-  def passed_out
-    if read_attribute(:passed_out) == true
-      "Yes"
-    else
-      "No"
-    end
-  end
-
   private
 
   # Set Validities of devise
   def email_required?
-    true if self.email_validity?
+    true if email_validity?
   end
 
   def password_required?
-    !persisted? || !password.nil? || !password_confirmation.nil? if self.password_validity?
+    !persisted? || !password.nil? || !password_confirmation.nil? if password_validity?
   end
 
   def default_values
@@ -176,31 +147,8 @@ class Student < ActiveRecord::Base
     disable_authentication_fields
   end
 
-  def generate_password
-    rand_string = self.generate_random_string
-
-    attributes = {
-      :password => rand_string, 
-      :password_confirmation => rand_string, 
-      :temp_password => rand_string
-    }
-    self.password = attributes[:password]
-    self.password_confirmation = attributes[:password_confirmation]
-
-    cipher_key = ActiveSupport::MessageEncryptor.new(Rails.application.secrets.secret_key_base)
-    encryted_temp_password = cipher_key.encrypt_and_sign(attributes[:temp_password])
-    
-    self.temp_password = encryted_temp_password
-  end
-
   def creating_joining_date
     self.joining_date = created_at
     self.save!
-  end
-
-  # Used when initializing
-  def disable_authentication_fields
-    self.email_validity == false
-    self.password_validity == false
   end
 end
