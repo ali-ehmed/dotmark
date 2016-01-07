@@ -52,6 +52,7 @@ class Teacher < ActiveRecord::Base
 	before_create :set_employee_number, :default_values, :set_account, :generate_password
 	after_create :send_welcome_email
 
+	before_validation :build_username
 	validate :validates_subdomain, on: :create
 
 	# validates_presence_of :first_name, :last_name, :on => :create
@@ -97,21 +98,6 @@ class Teacher < ActiveRecord::Base
     end
   end
 
-	def self.search(params)
-    if params[:teacher_name].present?
-      @teachers = where("first_name || ' ' || last_name LIKE ?", "%#{params[:teacher_name]}%") 
-    elsif params[:teacher_name].present? and params[:employee_no].present?
-      @teachers = where("first_name || ' ' || last_name LIKE ? and employee_number = ?", "%#{params[:teacher_name]}%", params[:employee_no]) 
-    elsif params[:employee_no].present?
-      @teachers = where("employee_number = ?", params[:employee_no])
-    elsif params[:teacher_courses].present?
-    #   @teachers = joins(:course_allocations).where("course_allocations.course_id = ?", params[:teacher_courses])
-    end
-    @teachers ||= present
-
-	  return @teachers
-	end
-
   def is_present?
   	if is_present
   		"Yes"
@@ -122,6 +108,10 @@ class Teacher < ActiveRecord::Base
 
 	private
 
+	def build_username
+		self.username = self.email.split("@").first
+	end
+
 	def password_required?
     !persisted? || !password.nil? || !password_confirmation.nil? if self.password_validity == true
   end
@@ -129,7 +119,6 @@ class Teacher < ActiveRecord::Base
 	def default_values
 		self.is_present = true
 		self.first_name = "dotmark" if first_name.blank?
-		self.last_name = "-teacher-#{employee_number}" if last_name.blank?
-		self.username = self.email.split("@").first
+		self.last_name = "-teacher-#{employee_number}" if last_name.blank?		
 	end
 end

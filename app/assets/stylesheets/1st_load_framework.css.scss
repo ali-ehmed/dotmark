@@ -3,13 +3,13 @@
 @import "bootstrap";
 
 /* Animated Dropdown */
-.open > .dropdown-menu {
+.open > .dropdown-animated {
   -webkit-transform: scale(1, 1);
   transform: scale(1, 1);  
   opacity:1;
 }
   
-.dropdown-menu {
+.dropdown-animated {
   opacity:.3;
   -webkit-transform-origin: top;
   transform-origin: top;

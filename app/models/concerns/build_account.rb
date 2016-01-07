@@ -14,8 +14,13 @@ module BuildAccount
   end
 
   def validates_subdomain
-  	account = Account.find_by(subdomain: self.username)
-  	if account
+    if self.class == Student
+      subdomain = "#{self.username}.student"
+    elsif self.class == Teacher
+      subdomain = "#{self.username}.teacher"
+    end
+  	account = Account.find_by(subdomain: subdomain)
+  	if account.present?
   		errors.add(:base, "'#{content_tag(:strong, account.subdomain)}' This username is already registered as a Subdomain".html_safe)
   	end
   end

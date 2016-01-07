@@ -12,7 +12,7 @@ module Administrations
 
 
 		def search
-			@students, @batch = Student.search(params)
+			@students, @batch = Search.students_search(params)
 			respond_with :js
 		end
 	end

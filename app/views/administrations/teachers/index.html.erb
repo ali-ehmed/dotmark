@@ -19,7 +19,7 @@
 				<div class="col-md-3">
 					<label>Course:</label>
 					<div id="students_sections">
-						<%= select_tag :teacher_courses, options_for_select(Course.all.map{|m| [m.name, m.id]}), class: "form-control", prompt: "--Select Course--" %>
+						<%= grouped_collection_select("", :course_id, Semester.all, :courses, :name, :id, "detailed_name", { selected: params[:course_id], include_blank: "--Select Course--" }, { class: "form-control" }) %>
 					</div>
 				</div>
 			</div>

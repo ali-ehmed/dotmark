@@ -84,27 +84,6 @@ class Student < ActiveRecord::Base
     def enroll_new(params = nil)
       new(params)
     end
-
-    def search(params)
-      if params[:batch_id_param].present?
-        @batch = Batch.find(params[:batch_id_param])
-        @students = nil
-        if params[:student_name].present?
-          @students = @batch.students.where("first_name || ' ' || last_name LIKE ?", "%#{params[:student_name]}%") 
-        elsif params[:student_name].present? and params[:roll_no].present?
-          @students = @batch.students.where("first_name || ' ' || last_name LIKE ? and roll_number = ?", "%#{params[:student_name]}%", params[:roll_no]) 
-        elsif params[:student_name].present? and params[:roll_no].present? and params[:student_section].present?
-          @students = @batch.students.where("first_name || ' ' || last_name LIKE ? and roll_number = ? and section_id = ?", "%#{params[:student_name]}%", params[:roll_no], params[:student_section])
-        elsif params[:roll_no].present?
-          @students = @batch.students.where("roll_number = ?", params[:roll_no])
-        elsif params[:student_section].present?
-          @students = @batch.students.where("section_id = ?", params[:student_section])
-        end
-        @students ||= @batch.students
-      end
-
-      return @students, @batch
-    end
 	end
 
   def full_name

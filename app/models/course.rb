@@ -37,6 +37,10 @@ class Course < ActiveRecord::Base
 		end
 	end
 
+	def detailed_name
+		"#{name} - (#{type_name})"
+	end
+
 	def course_type=(value)
 		write_attribute(:lab, value)
 	end

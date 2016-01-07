@@ -62,10 +62,10 @@ class ApplicationController < ActionController::Base
   end
 
   def set_account
-    account = $redis.get("#{request.subdomain}")
+    account = $redis.get("account_#{request.subdomain}")
     if account.nil?
       account = Account.find_by(subdomain: request.subdomain).as_json(include: :resource).to_json
-      $redis.set("#{request.subdomain}", account)
+      $redis.set("account_#{request.subdomain}", account)
     end
     @account = JSON.load(account)
   end

@@ -7,7 +7,7 @@ module Administrations
 		end
 
 		def search
-			@teachers = Teacher.search(params)
+			@teachers = Search.teachers_search(params)
 			render :index
 		end
 
