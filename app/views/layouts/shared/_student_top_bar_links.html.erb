@@ -1,6 +1,6 @@
 <ul class="nav navbar-nav navbar-top-links navbar-right">
   <li>
-    <%= link_to profile_url(subdomain: @account["subdomain"], username: current_resource.username) do %>
+    <%= link_to profiles_url(subdomain: @account["subdomain"], username: current_resource.username) do %>
       <i class="fa fa-user fa-fw"></i> Settings
     <% end %>
   </li>

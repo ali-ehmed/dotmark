@@ -1,11 +1,16 @@
-class ProfileController < ApplicationController
+class ProfilesController < ApplicationController
 	before_action :set_resource
 
-	def profile
+	def index
+		render :profile
+	end
+
+	def edit
+		render :template => "devise/registrations/edit"
 	end
 
 	# Account
-	def account_update
+	def account
 		respond_to do |format|
 			if @resource.update_with_password(resource_account_params)
 				sign_in @resource, :bypass => true
@@ -19,7 +24,7 @@ class ProfileController < ApplicationController
 		end
 	end
 
-	# Settings
+	# profile
 	def update
 		@resource.password_validity = true
 		@resource.email_validity = true
@@ -30,7 +35,7 @@ class ProfileController < ApplicationController
 			else
 				@account_error = true
 				params[:tab] = "profile"
-				format.html { render action: :index }
+				format.html { render "/devise/registrations/edit" }
 				format.json { render :json => @resource.errors.full_messages }
 			end
 		end

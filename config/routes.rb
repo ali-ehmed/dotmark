@@ -2,9 +2,16 @@ Rails.application.routes.draw do
   get 'time_table/index'
 
   constraints(Subdomain) do
-    match "/:username/profile" => "profile#index", via: :get, as: :profile
-    match "/:username/update_account" => "profile#account_update", via: :put, as: :update_account
-    match "/:username/update_profile" => "profile#update", via: :put, as: :profile_account
+    resources :profiles, :path => ":username", only: [:index] do
+      collection do
+        get "/settings" => "profiles#edit", as: :edit
+        put "settings" => "profiles#account", as: :account
+        put "settings" => "profiles#update"
+      end
+    end
+    # match "/:username/profile" => "profiles#index", via: :get, as: :profile
+    # match "/:username/update_account" => "profiles#account_update", via: :put, as: :update_account
+    # match "/:username/update_profile" => "profiles#update", via: :put, as: :profile_account
 
     %w(student teacher).each do |resource|
       resource_name = resource.pluralize
@@ -33,7 +40,10 @@ Rails.application.routes.draw do
     
     scope :module => 'administrations' do
       # Admin Settings
-      resources :settings, only: [:index] do 
+      # scope(:path_names => { :new => "neu", :edit => "bearbeiten" }) do
+      #   resources :categories, :path => "kategorien"
+      # end
+      resources :settings, :path => "admin/settings", only: [:index] do 
         collection do
           get "/account" => "settings#admin_account", as: :admin_account
           put "/" => "settings#update", as: :update_account

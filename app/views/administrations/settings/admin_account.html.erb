@@ -1,9 +1,10 @@
 <% content_for :admin_settings do %>
-	<div class="col-md-6">
+	<div class="col-md-4">
 		<blockquote>
-			<h3>Admin Account</h3>
+			<h3>Account Settings</h3>
 		</blockquote>
-		<br />
+	</div>
+	<div class="col-md-7">
 		<%= validation_errors_notifications(@admin) %>
 		<%= simple_form_for @admin, url: update_account_settings_path, method: :put do |f| %>
 			<div class="form-group">
@@ -22,23 +23,5 @@
 				<%= f.submit "Update", class: "btn btn-primary" %>
 			</div>
 		<% end %>
-	</div>
-	<div class="col-md-6">
-		<blockquote class="blockquote-reverse"><h3>Set Admin Rights</h3></blockquote>
-		<br /><br />
-		<table class="table table-striped">
-			<tr>
-				<th>Username</th>
-				<th>Email Address</th>
-				<th>Admin</th>
-				<th></th>
-			</tr>
-			<tr>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td></td>
-			</tr>
-		</table>
 	</div>
 <% end %>
