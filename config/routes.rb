@@ -2,13 +2,15 @@ Rails.application.routes.draw do
   get 'time_table/index'
 
   constraints(Subdomain) do
-    resources :profiles, :path => ":username", only: [:index] do
-      collection do
-        get "/settings" => "profiles#edit", as: :edit
-        put "settings" => "profiles#account", as: :account
-        put "settings" => "profiles#update"
+    # authenticated :student do
+      resources :profiles, :path => ":username", only: [:index] do
+        collection do
+          get "/settings" => "profiles#edit", as: :edit
+          put "settings" => "profiles#account", as: :account
+          put "settings" => "profiles#update"
+        end
       end
-    end
+    # end
     # match "/:username/profile" => "profiles#index", via: :get, as: :profile
     # match "/:username/update_account" => "profiles#account_update", via: :put, as: :update_account
     # match "/:username/update_profile" => "profiles#update", via: :put, as: :profile_account
@@ -35,14 +37,11 @@ Rails.application.routes.draw do
   constraints :subdomain => "admin" do 
     devise_for :admins, :skip => [:passwords, :registrations, :confirmations], controllers: { sessions: "resources/sessions" }
     devise_scope :admin do
-      get "/login" => "resources/sessions#new", as: :admins_login
+      get "admin/login" => "resources/sessions#new", as: :admins_login
     end
     
     scope :module => 'administrations' do
       # Admin Settings
-      # scope(:path_names => { :new => "neu", :edit => "bearbeiten" }) do
-      #   resources :categories, :path => "kategorien"
-      # end
       resources :settings, :path => "admin/settings", only: [:index] do 
         collection do
           get "/account" => "settings#admin_account", as: :admin_account
@@ -62,12 +61,12 @@ Rails.application.routes.draw do
       end
 
       # Admin Students
-      resources :students, only: [:index] do
+      resources :students, path: "admin/students", only: [:index] do
         get "/search" => "students#search", on: :collection, as: :search
       end
 
       # Admin Teachers
-      resources :teachers, only: [:index, :update]do
+      resources :teachers, path: "admin/teachers", only: [:index, :update] do
         get "/search" => "teachers#search", on: :collection, as: :search
       end
     end

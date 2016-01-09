@@ -40,7 +40,7 @@ class Teacher < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable, :confirmable
 	has_many :course_allocations
 	has_many :allocated_sections, class_name: "CourseAllocation", foreign_key: :teacher_id
-	has_one :account, as: :resource
+	has_one :account, as: :resource, dependent: :destroy
 
 	scope :present, -> { where("is_present = ?", true) }
 

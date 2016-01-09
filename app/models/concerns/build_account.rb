@@ -21,7 +21,7 @@ module BuildAccount
     end
   	account = Account.find_by(subdomain: subdomain)
   	if account.present?
-  		errors.add(:base, "'#{content_tag(:strong, account.subdomain)}' This username is already registered as a Subdomain".html_safe)
+  		errors.add(:base, "'#{content_tag(:strong, account.subdomain)}' This is already registered as a Subdomain".html_safe)
   	end
   end
 

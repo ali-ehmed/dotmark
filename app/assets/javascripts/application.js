@@ -12,38 +12,28 @@
 //
 //= require jquery
 //= require jquery_ujs
-
 //= require bootstrap-notify
-
 //= require dataTables/jquery.dataTables
 //= require dataTables/bootstrap/3/jquery.dataTables.bootstrap
-
 //= require jquery.minicolors
 //= require jquery.minicolors.simple_form
-
 //= require bootstrap-wizard
-
-
 //= require typeahead
-
 //= require moment
 //= require bootstrap-datetimepicker
-
 //= require jquery-ui/datepicker
-
 //= require admin-theme
 //= require turbolinks
 //= require bootstrap-sprockets
 //= require jasny-bootstrap.min
 //= require sweet-alert
-
 //= require jquery.purr
 //= require best_in_place
 //= require best_in_place.jquery-ui
 //= require best_in_place.purr
+//= require jquery.cookie.js
 
 //= require_tree .
-
 
 
 $(document).ready(function(){

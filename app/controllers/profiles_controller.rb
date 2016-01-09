@@ -1,12 +1,12 @@
 class ProfilesController < ApplicationController
-	before_action :set_resource
+	# before_action :set_resource
 
 	def index
-		render :profile
+		# render :profile
 	end
 
 	def edit
-		render :template => "devise/registrations/edit"
+		# render :template => "devise/registrations/edit"
 	end
 
 	# Account

@@ -82,6 +82,10 @@ class ApplicationController < ActionController::Base
           unless current_controller?("admins/sessions")
             admin_authentication
           end
+        when :teacher.to_s.capitalize
+          unless current_controller?("teachers/sessions")
+            teacher_authentication
+          end
         end
       end
     end
@@ -105,7 +109,7 @@ class ApplicationController < ActionController::Base
           cookies[:login_path] = nil
           students_domain = k.underscore.pluralize if k.constantize == Student
           # resource_name = students_domain || k.underscore 
-          redirect_to send("#{k.underscore.pluralize}_login_path", subdomain: @account.subdomain)
+          redirect_to send("#{k.underscore.pluralize}_login_path", subdomain: @account["subdomain"])
         else
           send("authenticate_#{k.underscore}!")
         end
