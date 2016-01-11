@@ -67,11 +67,11 @@ module BuildAccount
   end
 
   def date_of_birth
-    read_attribute(:date_of_birth).blank? ? "---" : read_attribute(:date_of_birth).strftime("%d %B, %Y")
+    read_attribute(:date_of_birth).blank? ? "---" : (I18n.l read_attribute(:date_of_birth), format: :short_date)
   end
 
   def joining_date
-    read_attribute(:joining_date).blank? ? "---" : read_attribute(:joining_date).strftime("%d %B, %Y")
+    read_attribute(:joining_date).blank? ? "---" : (I18n.l read_attribute(:joining_date), format: :short_date)
   end
 
   def email_validity?

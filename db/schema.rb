@@ -84,7 +84,6 @@ ActiveRecord::Schema.define(version: 20160111124743) do
     t.datetime "updated_at",   null: false
     t.string   "credit_hours"
     t.boolean  "lab"
-    t.string   "course_type"
   end
 
   create_table "guardian_relations", force: :cascade do |t|

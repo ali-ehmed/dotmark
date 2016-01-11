@@ -1,6 +1,6 @@
 <ul class="nav navbar-nav navbar-top-links navbar-right">
   <li class="navbar-image">
-    <img src="<%= image_path(current_resource.avatar.image.url(:thumb)) %>", class="img-rounded img-responsive">
+    <img src="<%= image_path(navbar_image(current_resource)) %>", class="img-rounded img-responsive">
   </li>
   <li>
     <%= link_to profiles_url(subdomain: @account["subdomain"], username: current_resource.username) do %>

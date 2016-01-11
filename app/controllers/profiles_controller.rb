@@ -37,6 +37,7 @@ class ProfilesController < ApplicationController
 		@resource.email_validity = true
 		respond_to do |format|
 			if @resource.update_attributes(resource_params)
+				$redis.del("user_avatar")
 				sign_in @resource, :bypass => true
 				format.html { redirect_to profiles_path(params[:username]), notice: "Profile successfully updated." }
 			else

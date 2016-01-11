@@ -17,7 +17,7 @@
 					<tr>
 						<td><%= student.roll_number %></td>
 						<td><%= student.full_name %></td>
-						<td><%= l student.joining_date, format: :short_date %></td>
+						<td><%= student.joining_date %></td>
 						<td><%= student.passed_out %></td>
 						<td><%= student.semester.try(:name) %></td>
 						<td><%= student.section.try(:name) %></td>

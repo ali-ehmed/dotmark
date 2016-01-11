@@ -10,6 +10,19 @@ module ApplicationHelper
 		end
 	end
 
+  def navbar_image(resource)
+    image = $redis.get("user_avatar")
+    if image.nil?
+      if resource.avatar.present? and resource.avatar.image.present?
+        image = resource.avatar.image.url(:thumb).to_json
+      else
+        image = "user-avatar.png".to_json
+      end
+      $redis.set("user_avatar", image)
+    end
+    JSON.load image
+  end
+
   def semesters_select_tag(semesters)
     select_tag :semester_courses, options_for_select(semesters.map{|m| [m.name, m.name]}), class: "form-control"
   end
