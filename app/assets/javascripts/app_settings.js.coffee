@@ -18,6 +18,14 @@ window.activeTabs = (elem) ->
         $(this).find("a").css("border-left", "0px")
   , 10
 
+$.urlParam = (name) ->
+  results = new RegExp('[?&]' + name + '=([^&#]*)').exec(window.location.href)
+  if results == null
+    null
+  else
+    results[1] or 0
+
+
 $(document).on 'page:change', ->
   activeTabs()
 
@@ -39,6 +47,13 @@ $(document).on 'page:change', ->
   	dateFormat: 'yy-mm-dd'
   	changeMonth: 'true'
   	changeYear: "true"
+
+  $('[data-toggle="tooltip"]').tooltip()
+
+  $('.profile_url_btn').on 'click', (e) ->
+    e.preventDefault()
+    $('#accountModal').modal 'show'
+
 
   
 

@@ -51,6 +51,9 @@ class Student < ActiveRecord::Base
   has_one :parent, through: :guardian_relation
 
   has_one :account, as: :resource, dependent: :destroy
+  has_one :avatar, as: :resource, class_name: "ResourceAvatar", foreign_key: :resource_id
+  accepts_nested_attributes_for :avatar
+
   has_many :notifications, as: :resource
 
   scope :current_batches, -> (batch = "") {joins(:batch).where("batches.name like ?", "#{batch.blank? ? Time.now.year : batch}%") }

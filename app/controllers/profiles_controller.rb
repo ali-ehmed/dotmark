@@ -1,24 +1,31 @@
 class ProfilesController < ApplicationController
-	# before_action :set_resource
+	before_action :set_resource
+	before_action :upload_image, only: [:index, :edit, :update]
 
 	def index
-		# render :profile
+		render :profile
 	end
 
 	def edit
-		# render :template => "devise/registrations/edit"
+		respond_to do |format|
+			format.html { render :template => template }
+			format.js {}
+		end
 	end
 
 	# Account
-	def account
+	def security
 		respond_to do |format|
 			if @resource.update_with_password(resource_account_params)
 				sign_in @resource, :bypass => true
-				format.html { redirect_to authenticated_root(@account["subdomain"]), notice: "Account successfully updated." }
+				format.html { redirect_to profiles_path(params[:username]), notice: "Account successfully updated." }
 			else
-				@profile_error = true
-				params[:tab] = "account"
-				format.html { render action: :index }
+				if params[:tab] == "account"
+					@security_error = Account::CurrentPassword
+				else
+					flash.now[:warning] = content_tag(:li, @resource.errors.full_messages.to_sentence)
+				end
+				format.html { render template }
 				format.json { render :json => @resource.errors.full_messages }
 			end
 		end
@@ -31,14 +38,17 @@ class ProfilesController < ApplicationController
 		respond_to do |format|
 			if @resource.update_attributes(resource_params)
 				sign_in @resource, :bypass => true
-				format.html { redirect_to authenticated_root(@account["subdomain"]), notice: "Profile successfully updated." }
+				format.html { redirect_to profiles_path(params[:username]), notice: "Profile successfully updated." }
 			else
-				@account_error = true
-				params[:tab] = "profile"
-				format.html { render "/devise/registrations/edit" }
+				flash.now[:warning] = content_tag(:li, @resource.errors.full_messages.to_sentence)
+				format.html { render template }
 				format.json { render :json => @resource.errors.full_messages }
 			end
 		end
+	end
+
+	def upload_image
+		@resource.build_avatar if @resource.avatar.blank?
 	end
 
 	private
@@ -50,6 +60,10 @@ class ProfilesController < ApplicationController
 		end
 
 		@resource
+	end
+
+	def template
+		@@template = "devise/registrations/edit"
 	end
 
 	def resource_account_params

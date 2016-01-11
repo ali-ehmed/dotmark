@@ -1,24 +1,20 @@
 Rails.application.routes.draw do
   get 'time_table/index'
 
+  # Routes for Students and Teachers
   constraints(Subdomain) do
     resources :profiles, :path => ":username", only: [:index] do
       collection do
         get "/settings" => "profiles#edit", as: :edit
-        put "settings" => "profiles#account", as: :account
-        put "settings" => "profiles#update"
+        put "settings/security" => "profiles#security", as: :security
+        put "settings/profile" => "profiles#update", as: :profile
       end
     end
 
     %w(student teacher).each do |resource|
       resource_name = resource.pluralize
-      devise_for resource_name.to_sym, :skip => [:passwords], controllers: { registrations: "resources/registrations", confirmations: "resources/confirmations", sessions: "resources/sessions" }
+      devise_for resource_name.to_sym, :skip => [:passwords, :registrations], controllers: { confirmations: "resources/confirmations", sessions: "resources/sessions" }
       devise_scope resource.to_sym do
-        if resource == "student"
-          get "#{resource_name}/admissions/:batch_name" => "resources/registrations#new", as: "new_#{resource}".to_sym
-        else
-          get "#{resource_name}/new" => "resources/registrations#new", as: "new_#{resource}".to_sym
-        end
         get "#{resource_name}/login" => "resources/sessions#new", as: "#{resource_name}_login".to_sym
         get "#{resource_name}/login_after_confirmation" => "resources/sessions#login_after_confirmation", as: "#{resource_name}_login_after_confirmation".to_sym
       end
@@ -29,10 +25,22 @@ Rails.application.routes.draw do
     end
   end
 
+  # Routes for Admin
   constraints :subdomain => "admin" do 
     devise_for :admins, :skip => [:passwords, :registrations, :confirmations], controllers: { sessions: "resources/sessions" }
     devise_scope :admin do
       get "admin/login" => "resources/sessions#new", as: :admins_login
+    end
+
+    %w(student teacher).each do |resource|
+      devise_for resource.pluralize.to_sym, :skip => [:passwords, :confirmations, :sessions], controllers: { registrations: "resources/registrations" }
+      devise_scope resource.to_sym do
+        if resource == "student"
+          get "#{resource.pluralize}/admissions/:batch_name" => "resources/registrations#new", as: "new_#{resource}".to_sym
+        else
+          get "#{resource.pluralize}/new" => "resources/registrations#new", as: "new_#{resource}".to_sym
+        end
+      end
     end
     
     scope :module => 'administrations' do
@@ -56,12 +64,12 @@ Rails.application.routes.draw do
       end
 
       # Admin Students
-      resources :students, path: "admin/students", only: [:index] do
+      resources :students, path: "students", only: [:index] do
         get "/search" => "students#search", on: :collection, as: :search
       end
 
       # Admin Teachers
-      resources :teachers, path: "admin/teachers", only: [:index, :update] do
+      resources :teachers, path: "teachers", only: [:index, :update] do
         get "/search" => "teachers#search", on: :collection, as: :search
       end
     end

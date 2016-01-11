@@ -13,6 +13,10 @@ module BuildAccount
     @account.save
   end
 
+  def is_a?(resource)
+    resource.to_s.capitalize.constantize == self.class
+  end
+
   def validates_subdomain
     if self.class == Student
       subdomain = "#{self.username}.student"
@@ -62,12 +66,24 @@ module BuildAccount
     end
   end
 
+  def date_of_birth
+    read_attribute(:date_of_birth).blank? ? "---" : read_attribute(:date_of_birth).strftime("%d %B, %Y")
+  end
+
+  def joining_date
+    read_attribute(:joining_date).blank? ? "---" : read_attribute(:joining_date).strftime("%d %B, %Y")
+  end
+
   def email_validity?
     self.email_validity == true
   end
 
   def password_validity?
     self.password_validity == true
+  end
+
+  def address
+    read_attribute(:address).blank? ? "---" : read_attribute(:address)
   end
 
   # Used when initializing

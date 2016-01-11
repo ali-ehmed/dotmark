@@ -28,6 +28,7 @@
 		$('#remove_all_allocations').empty();
 	<% end %>
 
+	// Highligting the fields
 	<% @sections.each do |section| %>
 		var $list = $("ul[data-type='sections']").find("li[data-section-id='<%= section[:id] %>']")
 		<% if section[:has_section] == true %>

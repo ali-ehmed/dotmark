@@ -1,7 +1,10 @@
 <ul class="nav navbar-nav navbar-top-links navbar-right">
+  <li class="navbar-image">
+    <img src="<%= image_path(current_resource.avatar.image.url(:thumb)) %>", class="img-rounded img-responsive">
+  </li>
   <li>
     <%= link_to profiles_url(subdomain: @account["subdomain"], username: current_resource.username) do %>
-      <i class="fa fa-user fa-fw"></i> Settings
+      <i class="fa fa-user fa-fw"></i> My Profile
     <% end %>
   </li>
   <li>

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160106133943) do
+ActiveRecord::Schema.define(version: 20160111124743) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -84,6 +84,7 @@ ActiveRecord::Schema.define(version: 20160106133943) do
     t.datetime "updated_at",   null: false
     t.string   "credit_hours"
     t.boolean  "lab"
+    t.string   "course_type"
   end
 
   create_table "guardian_relations", force: :cascade do |t|
@@ -126,6 +127,17 @@ ActiveRecord::Schema.define(version: 20160106133943) do
 
   add_index "parents", ["email"], name: "index_parents_on_email", unique: true, using: :btree
   add_index "parents", ["reset_password_token"], name: "index_parents_on_reset_password_token", unique: true, using: :btree
+
+  create_table "resource_avatars", force: :cascade do |t|
+    t.integer  "resource_id"
+    t.string   "resource_type"
+    t.datetime "created_at",         null: false
+    t.datetime "updated_at",         null: false
+    t.string   "image_file_name"
+    t.string   "image_content_type"
+    t.integer  "image_file_size"
+    t.datetime "image_updated_at"
+  end
 
   create_table "sections", force: :cascade do |t|
     t.string   "name"
@@ -211,6 +223,7 @@ ActiveRecord::Schema.define(version: 20160106133943) do
     t.string   "confirmation_token"
     t.datetime "confirmed_at"
     t.datetime "confirmation_sent_at"
+    t.text     "address"
   end
 
   add_index "teachers", ["confirmation_token"], name: "index_teachers_on_confirmation_token", unique: true, using: :btree

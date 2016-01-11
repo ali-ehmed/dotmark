@@ -40,7 +40,10 @@ class Teacher < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable, :confirmable
 	has_many :course_allocations
 	has_many :allocated_sections, class_name: "CourseAllocation", foreign_key: :teacher_id
+	
 	has_one :account, as: :resource, dependent: :destroy
+	has_one :avatar, as: :resource, class_name: "ResourceAvatar", foreign_key: :resource_id
+  accepts_nested_attributes_for :avatar
 
 	scope :present, -> { where("is_present = ?", true) }
 
@@ -50,7 +53,7 @@ class Teacher < ActiveRecord::Base
 	attr_accessor :password_validity, :email_validity, :login
 
 	before_create :set_employee_number, :default_values, :set_account, :generate_password
-	after_create :send_welcome_email
+	after_create :send_welcome_email, :creating_joining_date
 
 	before_validation :build_username
 	validate :validates_subdomain, on: :create
@@ -73,6 +76,10 @@ class Teacher < ActiveRecord::Base
 
 	def sections_by_course(course_id)
 		allocated_sections.where(course_id: course_id)
+	end
+
+	def skills
+		read_attribute(:skills).blank? ? "---" : read_attribute(:skills)
 	end
 
 	def full_name=(value)
@@ -121,4 +128,11 @@ class Teacher < ActiveRecord::Base
 		self.first_name = "dotmark" if first_name.blank?
 		self.last_name = "-teacher-#{employee_number}" if last_name.blank?		
 	end
+
+	def creating_joining_date
+		if self.joining_date.blank?
+	    self.joining_date = created_at
+	    self.save!
+	  end
+  end
 end

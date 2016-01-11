@@ -15,7 +15,7 @@ class Account < ActiveRecord::Base
 	belongs_to :resource, polymorphic: true, dependent: :delete
 	# validates_uniqueness_of :resource_id
 	validates_uniqueness_of :subdomain
-
+  CurrentPassword = "Warning: Current Password must be filled."
 	# include ActiveModel::Serializers::JSON
 
   # def attributes=(hash)

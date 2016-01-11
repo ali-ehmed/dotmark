@@ -1,23 +1,33 @@
 <div class="row">
   <div class="col-md-3 col-sm-3">
-    <blockquote class="blockquote-reverse">
-      <ul class="nav nav-pills nav-stacked students_profile_tabs">
+    <blockquote class="">
+      <ul class="nav nav-pills nav-stacked profile_tabs">
         <li role="presentation" class="<%= if params[:tab] == 'profile' then 'active' elsif !params[:tab] then 'active' end %>" onclick="activeTabs(this);">
-          <a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Profile</a>
+          <%= link_to "Profile", edit_profiles_path(params[:username], format: :js), remote: true, "data-id" => "profile_settings" %>
+        </li>
+        <li role="presentation" class="<%= if params[:tab] == 'security' then 'active' elsif !params[:tab] then '' end %>" onclick="activeTabs(this);">
+          <%= link_to "Security Settings", edit_profiles_path(params[:username], format: :js), remote: true, "data-id" => "security_settings" %>
         </li>
         <li role="presentation" class="<%= if params[:tab] == 'account' then 'active' elsif !params[:tab] then '' end %>" onclick="activeTabs(this);">
-          <a href="#account" aria-controls="account" role="tab" data-toggle="tab">Account</a>
+          <%= link_to "Account Settings", edit_profiles_path(params[:username], format: :js), remote: true, "data-id" => "account_settings" %>
         </li>
       </ul>
     </blockquote>
   </div>
-  <div class="col-md-9">
-    <div class="tab-content">
-      <div role="tabpanel" class="tab-pane <%= if params[:tab] == 'profile' then 'active' elsif !params[:tab] then 'active' end %>" id="profile">
-        <%= render "profiles/profile_settings" %>
-      </div>
-      <div role="tabpanel" class="tab-pane <%= if params[:tab] == 'account' then 'active' elsif !params[:tab] then '' end %>" id="account">
-        <%= render "profiles/account_settings" %>
+  <div class="col-md-6">
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <div class="tab-content profiles-tabs-content">
+          <div role="tabpanel" class="tab-pane <%= if params[:tab] == 'profile' then 'active' elsif !params[:tab] then 'active' end %>" id="profile_settings">
+            <%= render "profiles/profile_settings" %>
+          </div>
+          <div role="tabpanel" class="tab-pane <%= if params[:tab] == 'security' then 'active' elsif !params[:tab] then '' end %>" id="security_settings">
+            <%= render "profiles/security_settings" %>
+          </div>
+          <div role="tabpanel" class="tab-pane <%= if params[:tab] == 'account' then 'active' elsif !params[:tab] then '' end %>" id="account_settings">
+            <%= render "profiles/account_settings" %>
+          </div>
+        </div>
       </div>
     </div>
   </div>

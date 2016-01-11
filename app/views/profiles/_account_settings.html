@@ -1,0 +1,46 @@
+<h2><small>Account Settings</small></h2>
+<%= simple_form_for(@resource, url: security_profiles_path(params[:username], tab: "account"), html: { method: :put }) do |f| %>
+	<% if @security_error.present? %>
+		<div class="alert alert-warning">
+			<strong><%= @security_error %></strong>
+		</div>
+	<% end %>
+	<div class="form-inputs">
+		<div class="panel panel-danger">
+			<div class="panel-heading">Student Profile URL</div>
+			<div class="panel-body">
+				<div class="form-group">
+					<%= f.fields_for @resource.account do |account_f| %>
+						<label>Profile URL:</label>
+						<%= account_f.input :subdomain, input_html: { disabled: true }, label: false %>
+						<div class="form-actions">
+							<%= link_to "Change Your URL", "#", class: "btn btn-default profile_url_btn" %>
+						</div>
+
+						<div class="modal fade" id="accountModal" tabindex="-1" role="dialog">
+						  <div class="modal-dialog">
+						    <div class="modal-content">
+						      <div class="modal-header">
+						        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						        <h4 class="modal-title">We need your current password in order to change your <strong>Profile URL</strong></h4>
+						      </div>
+						      <div class="modal-body">
+						      	<label>Change URL:</label>
+						      	<% hint = @resource.is_a?(:student) ? ".student" : ".teacher" %>
+						      	<%= account_f.input :subdomain, label: false, hint: "You must place '#{hint}' in the end of your URL." %>
+						      	<hr />
+						        <%= f.input :current_password, label: "Current password" %>
+						      </div>
+						      <div class="modal-footer">
+						        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+						        <%= f.button :submit, "Save", class: "btn btn-danger" %>
+						      </div>
+						    </div>
+						  </div>
+						</div>
+					<% end %>
+				</div>
+			</div>
+		</div>
+	</div>
+<% end %>

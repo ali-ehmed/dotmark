@@ -1,4 +1,55 @@
-.profile-avatar {
+.avatar {
   background-color: #EAEAEA;
   padding: 10px;
+}
+.edit-avatar {
+	width: 100px;
+  height: 100px;
+}
+.profile-avatar {
+  width: 230px;
+  height: 230px;
+}
+.navbar-image {
+  padding: 10px 0px 0px 0px;
+  img {
+    width: 30px;
+    height: 30px;
+  }
+}
+.profile {
+	div.profile-views {
+		padding: 14px 0px 0px 10px;
+	}
+	div.info {
+    margin-top: 6px;
+		.full_name {
+			font-size: 26px;
+    	font-weight: bold;
+		}
+		> small {
+	    font-size: 21px;
+    	color: #A2A2A2;
+		}
+		ul {
+			font-size: 15px;
+	    padding: 0px 0px 0px 8px;
+	    list-style: none;
+	    li i {
+  	    padding-right: 8px;
+	    }
+		}
+		.institute_details {
+			text-align: center;
+
+			a { 
+				text-decoration: none;
+				strong { font-size: 16px; }
+				span { font-size: 11px; }
+			}
+		}
+		strong.url {
+			font-size: 16px;
+		}
+	}
 }

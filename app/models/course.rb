@@ -12,6 +12,7 @@
 #  updated_at   :datetime         not null
 #  credit_hours :string
 #  lab          :boolean
+#  course_type  :string
 #
 
 class Course < ActiveRecord::Base

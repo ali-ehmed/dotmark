@@ -38,6 +38,8 @@ gem 'redis'
 gem 'redis-namespace'
 gem 'redis-rails'
 gem 'redis-rack-cache'
+
+gem "paperclip", git: "git://github.com/thoughtbot/paperclip.git"
 group :development, :test do
   gem 'byebug'
 end

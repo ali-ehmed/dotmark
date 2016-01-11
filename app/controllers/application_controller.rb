@@ -151,12 +151,15 @@ class ApplicationController < ActionController::Base
   def update_account_parameters_sanitizer(resource)
     case resource
     when "student".to_sym
-      params.require(resource).permit(:email, :username,
+      params.require(:student).permit(:email, :username,
                                       :first_name, :last_name, :date_of_birth, :roll_number, :address, :phone, 
-                                      :section_id, :batch_id, :semester_id, :gender)
+                                      :section_id, :batch_id, :semester_id, :gender, 
+                                      :avatar_attributes => [ :id, :image ], 
+                                      :account_attributes => [:id, :subdomain])
     when "teacher".to_sym
-      params.require(resource).permit(:email, :username, :username,
-                                      :first_name, :last_name)
+      params.require(:teacher).permit(:email, :username,
+                                      :first_name, :last_name, :address, 
+                                      :avatar_attributes => [ :id, :image ])
     end 
   end
 

@@ -11,7 +11,7 @@ class Subdomain
 
       if account
         # if account["resource_type"] == "Student" or account["resource_type"] == "Teacher"
-        return true  # -> if account is not found, return false (IE no route)
+        return true if account["resource_type"] == "Student" or account["resource_type"] == "Teacher" # -> if account is not found, return false (IE no route)
       end
     end
   end

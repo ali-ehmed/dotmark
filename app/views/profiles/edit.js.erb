@@ -1,0 +1,40 @@
+$("ul.profile_tabs li a").bind("ajax:beforeSend", function(evt, data, status, xhr){
+	var $anchor = $(this)
+	var $elem = $("div.profiles-tabs-content .tab-pane#" + ($anchor.data('id')))
+	$elem.css('text-align', 'center').html('<i class="fa fa-spinner fa-pulse fa-3x"></i>')
+}).bind("ajax:success", function(evt, data, status, xhr){
+	var $anchor = $(this)
+	$("ul.profile_tabs").find("li a").each(function(){
+		$(this).closest("li").removeClass("active")
+	  $(this).closest("li").css("font-weight", "normal");
+	  $(this).closest("li").find("a").css("border-left", "0px")
+	});
+
+	$("div.profiles-tabs-content").find("div.tab-pane").each(function(){
+		$(this).removeClass("active")
+	});
+
+	$anchor.closest("li").addClass("active")
+  $anchor.closest("li").css("font-weight", "bold");
+  $anchor.closest("li").find("a").css("border-left", "4px solid #CF9451")
+
+  var $elem = $("div.profiles-tabs-content .tab-pane#" + ($anchor.data('id')))
+  $elem.css('text-align', 'left')
+  $elem.addClass("active")
+
+  switch ($elem.attr("id")) {
+	  case "profile_settings":
+	    $elem.empty().html("<%= escape_javascript(render partial: 'profile_settings')%>")
+      break
+    case "account_settings":
+    	$elem.empty().html("<%= escape_javascript(render partial: 'account_settings')%>")
+      break
+  	case "security_settings":
+  		$elem.empty().html("<%= escape_javascript(render partial: 'security_settings')%>")
+      break
+	}
+	$(".profile_url_btn").on("click", function(e) {
+	  e.preventDefault();
+	  return $("#accountModal").modal("show");
+	});
+})
