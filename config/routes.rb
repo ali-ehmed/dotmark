@@ -2,18 +2,13 @@ Rails.application.routes.draw do
   get 'time_table/index'
 
   constraints(Subdomain) do
-    # authenticated :student do
-      resources :profiles, :path => ":username", only: [:index] do
-        collection do
-          get "/settings" => "profiles#edit", as: :edit
-          put "settings" => "profiles#account", as: :account
-          put "settings" => "profiles#update"
-        end
+    resources :profiles, :path => ":username", only: [:index] do
+      collection do
+        get "/settings" => "profiles#edit", as: :edit
+        put "settings" => "profiles#account", as: :account
+        put "settings" => "profiles#update"
       end
-    # end
-    # match "/:username/profile" => "profiles#index", via: :get, as: :profile
-    # match "/:username/update_account" => "profiles#account_update", via: :put, as: :update_account
-    # match "/:username/update_profile" => "profiles#update", via: :put, as: :profile_account
+    end
 
     %w(student teacher).each do |resource|
       resource_name = resource.pluralize

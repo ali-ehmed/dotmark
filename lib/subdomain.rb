@@ -10,7 +10,8 @@ class Subdomain
 	    account = JSON.load(account)
 
       if account
-        return true # -> if account is not found, return false (IE no route)
+        # if account["resource_type"] == "Student" or account["resource_type"] == "Teacher"
+        return true  # -> if account is not found, return false (IE no route)
       end
     end
   end
