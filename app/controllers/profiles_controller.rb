@@ -1,6 +1,6 @@
 class ProfilesController < ApplicationController
 	before_action :set_resource
-	before_action :upload_image, only: [:index, :edit, :update]
+	before_action :upload_image
 
 	def index
 		render :profile
@@ -40,6 +40,7 @@ class ProfilesController < ApplicationController
 				$redis.del("user_avatar")
 				sign_in @resource, :bypass => true
 				format.html { redirect_to profiles_path(params[:username]), notice: "Profile successfully updated." }
+				format.json { respond_with_bip(@resource) }
 			else
 				flash.now[:warning] = content_tag(:li, @resource.errors.full_messages.to_sentence)
 				format.html { render template }
@@ -48,11 +49,12 @@ class ProfilesController < ApplicationController
 		end
 	end
 
+	
+	private
+	
 	def upload_image
 		@resource.build_avatar if @resource.avatar.blank?
 	end
-
-	private
 
 	def set_resource
 		@resource = current_resource

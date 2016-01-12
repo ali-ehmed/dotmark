@@ -2,10 +2,16 @@ class DashboardController < ApplicationController
 	def index
 		if admin_resource
 			dashbaord = "admins_dashboard"
+
+			admins_dashboard
 		elsif student_resource
 			dashbaord = "students_dashboard"
+
+			students_dashboard
 		elsif teacher_resource
 			dashbaord = "teachers_dashboard"
+
+			teachers_dashboard
 		end
 
 		render action: dashbaord.to_sym
@@ -20,6 +26,9 @@ class DashboardController < ApplicationController
 	end
 
 	def teachers_dashboard
-		
+		@batches = Batch.current_batches
+		@week_days = TimeSlot.week_days
+		@non_fridays = TimeSlot.non_fridays
+		@fridays = TimeSlot.fridays
 	end
 end

@@ -1,11 +1,21 @@
 <div class="modal fade" id="myAllocations" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-  <div class="modal-dialog" role="document">
+  <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <h4 class="modal-title" id="myModalLabel"><%= current_resource.full_name %>'s Allocations</h4>
       </div>
       <div class="modal-body">
+        <table class="table table-striped teacher_allocations" data-source="<%= time_table_search_allocations_path(format: :json) %>">
+          <thead>
+            <th>Course</th>
+            <th>Course Type</th>
+            <th>Section</th>
+            <th>Batch</th>
+            <th>Semester</th>
+            <th>Sent Date</th>
+          </thead>
+        </table>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

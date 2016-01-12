@@ -1,3 +1,18 @@
-// Place all the styles related to the time_table controller here.
-// They will automatically be included in application.css.
-// You can use Sass (SCSS) here: http://sass-lang.com/
+#timetable {
+	div.divider-cell {
+    border-top: 1px solid #ddd;
+    padding-bottom: 6px;
+    margin-top: 9px;
+	}
+	tr.period_days {
+    font-size: 17px;
+    font-weight: bold;
+	}
+}
+
+span.timings {
+  font-size: 20px;
+}
+span.week_day {
+  font-size: 34px;
+}

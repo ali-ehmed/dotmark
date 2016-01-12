@@ -31,6 +31,7 @@
 #  confirmation_token     :string
 #  confirmed_at           :datetime
 #  confirmation_sent_at   :datetime
+#  address                :text
 #
 
 class Teacher < ActiveRecord::Base
@@ -103,6 +104,10 @@ class Teacher < ActiveRecord::Base
     else
       where(conditions.to_hash).first
     end
+  end
+
+  def grouped_allocations
+  	course_allocations.select("teacher_id, batch_id, course_id, semester_id").group("teacher_id, batch_id, course_id, semester_id")
   end
 
   def is_present?

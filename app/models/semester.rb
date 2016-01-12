@@ -13,6 +13,7 @@
 
 class Semester < ActiveRecord::Base
 	has_many :courses
+	has_many :course_allocations
 	validates_uniqueness_of :name
 	
 	def which_semester

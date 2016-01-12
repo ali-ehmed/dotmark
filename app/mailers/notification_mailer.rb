@@ -4,6 +4,7 @@ class NotificationMailer < ApplicationMailer
 		@teacher = teacher
 		@allocations = allocations
 		@teacher_dashboard_url = teachers_login_url(resource: @teacher.username, subdomain: "#{@teacher.account.subdomain}")
+		$redis.del("teacher_allocations")
 		mail(to: @teacher.email, subject: 'Allocation Instructions')
 	end
 end

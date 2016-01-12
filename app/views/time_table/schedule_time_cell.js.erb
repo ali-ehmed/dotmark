@@ -1,0 +1,7 @@
+$(".schedule_timings").html("<%= escape_javascript(render 'schedule_time') %>")
+$("#scheduleTeacherTimeModal").modal({
+  keyboard: false,
+  show: true,
+  backdrop: 'static'
+});
+check_box_list();

@@ -158,7 +158,7 @@ class ApplicationController < ActionController::Base
                                       :account_attributes => [:id, :subdomain])
     when "teacher".to_sym
       params.require(:teacher).permit(:email, :username,
-                                      :first_name, :last_name, :address, 
+                                      :first_name, :last_name, :address, :qualification, :past_experience, 
                                       :avatar_attributes => [ :id, :image ])
     end 
   end

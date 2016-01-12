@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
   get 'time_table/index'
+  get "time_table/search_allocations" => "time_table#search_allocations"
+  get "time_table/schedule_time_cell/:week_day/:time" => "time_table#schedule_time_cell", as: :schedule_a_time
 
   # Routes for Students and Teachers
   constraints(Subdomain) do

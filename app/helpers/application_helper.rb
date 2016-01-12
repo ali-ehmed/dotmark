@@ -11,6 +11,9 @@ module ApplicationHelper
 	end
 
   def navbar_image(resource)
+    if resource.avatar.nil?
+      $redis.del("user_avatar")
+    end
     image = $redis.get("user_avatar")
     if image.nil?
       if resource.avatar.present? and resource.avatar.image.present?
@@ -29,6 +32,10 @@ module ApplicationHelper
 
   def batches_select_tag(batches, options = "")
     select_tag :batch_id, options_for_select(batches.map{|m| [m[:name], m[:id]]}), class: "form-control input-sm", prompt: "Choose Batch", onchange: "#{options}"
+  end
+
+  def courses_select_tag(courses, options = "")
+    select_tag :course_id, options_for_select(courses.map{|m| [m.name, m.id]}), class: "form-control", prompt: "Choose Course", onchange: "#{options}"
   end
 
 	def validation_errors_notifications(object)

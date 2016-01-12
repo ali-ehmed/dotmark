@@ -197,12 +197,13 @@ module Institutes
 
 			@sections = attributes[:section_ids]
 
-			render :json => { status: :error, msg: CourseAllocation::SectionsValidity  } and return if @sections.blank?
+			render :json => { status: :error, msg: CourseAllocation::AllocationsValidity  } and return if @sections.blank? or attributes[:course_id].blank?
 
 			@batch_id = attributes[:batch_id]
 
 			@batch = Batch.find(@batch_id)
 			@course = Course.find(attributes[:course_id])
+
 
 			if attributes[:teacher_id].present?
 				@teacher = Teacher.find(attributes[:teacher_id])
@@ -232,6 +233,7 @@ module Institutes
 						allocation.section_id = section
 						allocation.batch_id = attributes[:batch_id]
 						allocation.course_id = attributes[:course_id]
+						allocation.semester_id = @course.semester.id
 					end
 				end
 
@@ -275,6 +277,8 @@ module Institutes
 				end
 
 				respond_to do |format|
+					
+					$redis.del("teacher_allocations")
 					get_current_semester()
 					get_removal_options[:course_id] = @course.id
 

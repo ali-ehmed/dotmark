@@ -50,10 +50,6 @@ $(document).on 'page:change', ->
 
   $('[data-toggle="tooltip"]').tooltip()
 
-  $('.profile_url_btn').on 'click', (e) ->
-    e.preventDefault()
-    $('#accountModal').modal 'show'
-
 
   
 

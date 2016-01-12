@@ -1,0 +1,42 @@
+<div class="modal fade" id="scheduleTeacherTimeModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <hr />
+      <div class="modal-body">
+        <p class="text-center">
+          <span class="week_day">
+            <strong><%= @week_day.week_day %></strong>
+          </span>
+        </p>
+        <p class="text-center"><i class="fa fa-clock-o fa-3x"></i></p>
+        <p class="text-center">
+          <span class="timings">
+            <%= @week_day.timings %>
+          </span>
+        </p>
+        <div class="row">
+          <div class="col-md-6">
+            <blockquote>
+              <strong>Available Classrooms:</strong>
+            </blockquote>
+            <br />
+            <ul class="list-group">
+              <% Classroom.all.each do |classroom| %>
+                <li class="list-group-item text-center" data-classroom-id="<%= classroom.id %>">
+                  <div class="radio" style="margin-top:1px;">
+                    <input type="radio" name="classroom_id" value="<%= classroom.id %>" id="classroom_<%= classroom.id %>_radio" />
+                    <label for="course_<%= classroom.id %>_radio" style="padding-left:7px;"><strong>Classroom <%= classroom.name %></strong></label>
+                  </div>
+                </li>
+              <% end %>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-success">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>

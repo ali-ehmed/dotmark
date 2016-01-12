@@ -1,51 +1,65 @@
-<div class="container-fluid">
-	<div class="row">
-		<div class="col-md-12">
-			<div class="row">
-				<div class="col-md-6">
-					<blockquote>
-						<h1>
-							Welcome <small><%= current_resource.full_name %></small>
-						</h1>
-					</blockquote>
-				</div>
-				<div class="col-md-4 pull-right">
-					<blockquote class="blockquote-reverse">
-						<h1>
-							Allocations <small>(2016)</small>
-						</h1>
-						<button class="btn-block btn btn-info" data-toggle="modal" data-target="#myAllocations">View Allocations</button>
-					</blockquote>
+<div id="timetable">
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="row">
+					<div class="col-md-6">
+						<blockquote>
+							<h1>
+								Welcome <small><%= current_resource.full_name %></small>
+							</h1>
+						</blockquote>
+					</div>
+					<div class="col-md-4 pull-right">
+						<blockquote class="blockquote-reverse">
+							<h1>
+								Allocations <small>(2016)</small>
+							</h1>
+							<button class="btn-block btn btn-info" onclick="getCurrentTeacherAllocationsForTimeTable();">View Allocations</button>
+						</blockquote>
+					</div>
 				</div>
 			</div>
 		</div>
-	</div>
-	<br />
-	<div class="row">
-		<div class="col-md-12">
-			<table class="table table-bordered">
-				<tr>
-					<td align="center"><strong>Week Days</strong></td>
-					<% Timing.where("week_day_type = 'Normal Day'").each do |timing| %>
-						<td align="center"><%= timing.start_time.strftime("%I:%M") %> - <%= timing.end_time.strftime("%I:%M") %></td>
-					<% end %>
-				</tr>
-				<% WeekDay.all.each_with_index do |days, i| %>
+		<br />
+		<div class="row">
+			<div class="col-md-12">
+				<table class="table table-bordered">
 					<tr>
-						<td align="center"><strong><%= days.name %></strong></td>
-						<td>---</td>
-						<td>---</td>
-						<td>---</td>
-						<td>---</td>
-						<td>---</td>
-						<td>---</td>
-						<td>---</td>
-						<td>---</td>
+						<td align="center" rowspan="2">
+							<strong>Fridays</strong>
+							<div class="divider-cell"></div>
+							<strong>Days</strong>
+						</td>
+						<% @non_fridays.each do |timing| %>
+							<td align="center"><%= timing.timings %></td>
+						<% end %>
 					</tr>
-				<% end %>
-			</table>
+					<tr>
+						<% @fridays.each do |timing| %>
+							<td align="center"><%= timing.timings %></td>
+						<% end %>
+					</tr>
+					<tr class="period_days">
+						<td align="center"><strong>Week Days</strong></td>
+						<% (1..9).each do |period_days| %>
+							<td align="center"><%= period_days %></td>
+						<% end %>
+					</tr>
+					<% @week_days.each_with_index do |days, i| %>
+						<tr>
+							<td align="center"><strong><%= days.week_day %></strong></td>
+							<% TimeSlot.for(days.week_day).each do |time_slot| %>
+								<td align="center">
+									<%= link_to "Available", "javascript:void(0);", id: "time_cell", onclick: "openTimeScheduleCell(this);", data: { url: schedule_a_time_path(week_day: time_slot.week_day, time: time_slot.start_time, format: :js) } %>
+								</td>
+							<% end %>
+						</tr>
+					<% end %>
+				</table>
+			</div>
 		</div>
 	</div>
 </div>
-
 <%= render partial: "time_table/view_allocations" %>
+<div class="schedule_timings"></div>

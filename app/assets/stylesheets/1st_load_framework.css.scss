@@ -185,6 +185,23 @@ body {
 .alert-fade {
   opacity: 0.6 !important;
 }
+
+// Default BTN
+.btn.btn-default {
+  border: 2px solid #f0ad4e;
+}
+.btn.btn-success {
+  border: 2px solid #2E802D;
+}
+.btn.btn-info {
+  border: 2px solid #2D6980;
+}
+.btn.btn-warning {
+  border: 2px solid #BD8A54;
+}
+.btn.btn-danger {
+  border: 2px solid #981E1E;
+}
 @media (min-width: 768px) {
   .admin-navbar {
     .navbar-brand {

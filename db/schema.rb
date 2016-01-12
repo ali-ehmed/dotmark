@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160111124743) do
+ActiveRecord::Schema.define(version: 20160112143259) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -67,11 +67,12 @@ ActiveRecord::Schema.define(version: 20160111124743) do
     t.integer  "teacher_id"
     t.integer  "batch_id"
     t.string   "timings"
-    t.integer  "class_timing_id"
-    t.integer  "week_day_id"
-    t.datetime "created_at",      null: false
-    t.datetime "updated_at",      null: false
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
     t.integer  "section_id"
+    t.integer  "semester_id"
+    t.integer  "time_slot_id"
+    t.integer  "classroom_id"
   end
 
   create_table "courses", force: :cascade do |t|
@@ -84,6 +85,7 @@ ActiveRecord::Schema.define(version: 20160111124743) do
     t.datetime "updated_at",   null: false
     t.string   "credit_hours"
     t.boolean  "lab"
+    t.string   "course_type"
   end
 
   create_table "guardian_relations", force: :cascade do |t|
@@ -229,16 +231,10 @@ ActiveRecord::Schema.define(version: 20160111124743) do
   add_index "teachers", ["email"], name: "index_teachers_on_email", unique: true, using: :btree
   add_index "teachers", ["reset_password_token"], name: "index_teachers_on_reset_password_token", unique: true, using: :btree
 
-  create_table "timings", force: :cascade do |t|
-    t.time     "start_time"
-    t.time     "end_time"
-    t.string   "week_day_type"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
-  end
-
-  create_table "week_days", force: :cascade do |t|
-    t.string   "name"
+  create_table "time_slots", force: :cascade do |t|
+    t.string   "week_day"
+    t.datetime "start_time"
+    t.datetime "end_time"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

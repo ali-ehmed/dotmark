@@ -94,6 +94,7 @@ class Batch < ActiveRecord::Base
 								start_date: prev_batch.start_date,
 								end_date: prev_batch.end_date,
 								semester: semester.name,
+								semester_id: semester.id,
 								students: prev_batch.students.count
 							}
 							@batches.push(attributes)

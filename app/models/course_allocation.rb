@@ -2,16 +2,17 @@
 #
 # Table name: course_allocations
 #
-#  id              :integer          not null, primary key
-#  course_id       :integer
-#  teacher_id      :integer
-#  batch_id        :integer
-#  timings         :string
-#  class_timing_id :integer
-#  week_day_id     :integer
-#  created_at      :datetime         not null
-#  updated_at      :datetime         not null
-#  section_id      :integer
+#  id           :integer          not null, primary key
+#  course_id    :integer
+#  teacher_id   :integer
+#  batch_id     :integer
+#  timings      :string
+#  created_at   :datetime         not null
+#  updated_at   :datetime         not null
+#  section_id   :integer
+#  semester_id  :integer
+#  time_slot_id :integer
+#  classroom_id :integer
 #
 
 class CourseAllocation < ActiveRecord::Base
@@ -19,8 +20,9 @@ class CourseAllocation < ActiveRecord::Base
 	belongs_to :teacher
 	belongs_to :batch
 	belongs_to :section
-	belongs_to :class_timing, class_name: "Timing", foreign_key: :class_timing_id
-	belongs_to :week_day
+	belongs_to :semester
+	belongs_to :time_slot
+	belongs_to :classroom
 
 	attr_accessor :skip_lab_and_theory_validation
 
@@ -29,7 +31,7 @@ class CourseAllocation < ActiveRecord::Base
 
 	include ActionView::Helpers::TagHelper
 
-	SectionsValidity = "Please select Sections"
+	AllocationsValidity = "Please Select Course and Sections"
 	Approval = "Notification has been sent successfully."
 	
 	def self.build_transaction(&block)

@@ -12,5 +12,6 @@
 #
 
 class Classroom < ActiveRecord::Base
+	has_many :course_allocations
 	validates_presence_of :name, :strength
 end

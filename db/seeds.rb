@@ -41,30 +41,37 @@ puts 'CREATING CLASSROOMS & CREATING SEMESTERS'
 	Semester.find_or_create_by!(name: "#{number.ordinalize} Semester")
 end
 
-puts 'CREATING WEEKDAYS'
-%w(Monday Tuesday Wednesday Thursday Friday).each do |day|
-	WeekDay.find_or_create_by!(name: "#{day}")
+puts 'CREATING TIMINGS SLOTS'
+@start_range = DateTime.parse("08:30")
+@end_range = DateTime.parse("15:10")
+@slots = Array.new
+
+%w(Monday Tuesday Wednesday Thursday).each do |day|
+	Range.new(@start_range.to_i, @end_range.to_i).step(50.minutes) do |hour|
+		start_time = hour
+		end_time = hour + 50.minutes
+		
+		puts "#{day} ---> Start Time: #{Time.zone.at(start_time)} <---> End Time: #{Time.zone.at(end_time)}"
+
+	  TimeSlot.find_or_create_by!(start_time: Time.zone.at(start_time), end_time: Time.zone.at(end_time), week_day: day)
+	end
 end
+%w(Friday).each do |day|
+	Range.new(@start_range.to_i, @end_range.to_i).step(45.minutes) do |hour|
+		start_time = hour
+		end_time = hour + 45.minutes
 
-puts 'CREATING TIMINGS FOR NORMAL DAYS'
-Timing.find_or_create_by!(start_time: "08:30", end_time: "09:20", week_day_type: "Normal Day")
-Timing.find_or_create_by!(start_time: "09:20", end_time: "10:10", week_day_type: "Normal Day")
-Timing.find_or_create_by!(start_time: "10:10", end_time: "11:00", week_day_type: "Normal Day")
-Timing.find_or_create_by!(start_time: "11:00", end_time: "11:50", week_day_type: "Normal Day")
-Timing.find_or_create_by!(start_time: "13:40", end_time: "14:30", week_day_type: "Normal Day")
-Timing.find_or_create_by!(start_time: "14:30", end_time: "15:20", week_day_type: "Normal Day")
-Timing.find_or_create_by!(start_time: "15:20", end_time: "16:10", week_day_type: "Normal Day")
-Timing.find_or_create_by!(start_time: "16:10", end_time: "17:00", week_day_type: "Normal Day")
+		if Time.zone.at(start_time) >= Time.zone.at("13:00".to_datetime.to_i)
+			hour += (1.hour + 30.minutes)
+			start_time = hour
+			end_time = hour + 45.minutes
+		end
 
-puts 'CREATING TIMINGS FOR FRIDAYs'
-Timing.find_or_create_by!(start_time: "08:30", end_time: "09:10", week_day_type: "FriDay")
-Timing.find_or_create_by!(start_time: "09:10", end_time: "10:00", week_day_type: "FriDay")
-Timing.find_or_create_by!(start_time: "10:00", end_time: "10:50", week_day_type: "FriDay")
-Timing.find_or_create_by!(start_time: "10:50", end_time: "11:40", week_day_type: "FriDay")
-Timing.find_or_create_by!(start_time: "11:40", end_time: "13:30", week_day_type: "FriDay")
-Timing.find_or_create_by!(start_time: "14:30", end_time: "15:00", week_day_type: "FriDay")
-Timing.find_or_create_by!(start_time: "15:00", end_time: "16:00", week_day_type: "FriDay")
-Timing.find_or_create_by!(start_time: "16:00", end_time: "16:50", week_day_type: "FriDay")
+		puts "#{day} ---> Start Time: #{Time.zone.at(start_time)} <---> End Time: #{Time.zone.at(end_time)}"
+
+	  TimeSlot.find_or_create_by!(start_time: Time.zone.at(start_time), end_time: Time.zone.at(end_time), week_day: day)
+	end
+end
 
 puts "CREATING COURSES"
 

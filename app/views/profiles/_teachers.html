@@ -14,6 +14,24 @@
   	<blockquote>
   		<h3>Qualification & Experience</h3>
   	</blockquote>
+    <br />
+    <p class="lead">My Qualification</p>
+    <p>
+      <%= best_in_place current_resource, "qualification", :as => :textarea, :inner_class => "form-control", placeholder: "---", nil: "---", :url => profile_profiles_path(params[:username]), activator: '#edit-teacher-qualification', :display_with => lambda { |v| v.html_safe } %>
+      <br />
+      <%= link_to "javscript:void(0);", class: "btn btn-warning btn-sm pull-right", id: 'edit-teacher-qualification' do %>
+        <strong>Edit</strong> <i class="glyphicon glyphicon-pencil"> </i>
+      <% end %>
+    </p>
+
+    <p class="lead">My Experience</p>
+    <p>
+      <%= best_in_place current_resource, "past_experience", :as => :textarea, :inner_class => "form-control", placeholder: "---", nil: "---", :url => profile_profiles_path(params[:username]), activator: '#edit-teacher-experience', :display_with => lambda { |v| v.html_safe } %>
+      <br />
+      <%= link_to "javscript:void(0);", class: "btn btn-warning btn-sm pull-right", id: 'edit-teacher-experience' do %>
+        <strong>Edit</strong> <i class="glyphicon glyphicon-pencil"> </i>
+      <% end %>
+    </p>
   </div>
   <div role="tabpanel" class="tab-pane" id="time_table">
   	<blockquote>
