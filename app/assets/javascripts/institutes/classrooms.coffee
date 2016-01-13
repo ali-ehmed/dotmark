@@ -8,5 +8,3 @@ $(document).on "page:change", ->
   $(".classrooms_table").DataTable
     responsive: true
     "dom": '<"pull-left"f><"pull-right"l>tip'
-
-  # $('.classroom_color').minicolors theme: 'bootstrap'

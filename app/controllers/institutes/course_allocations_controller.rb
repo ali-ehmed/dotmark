@@ -10,20 +10,22 @@ module Institutes
 		def get_allocations
 			@batch = Batch.find(params[:batch_id])
 
-			@teacher_allocations = @batch.grouped_teacher_allocation
+			@teacher_allocations = @batch.grouped_teacher_allocation #All Allocations
 
 			attributes = Array.new
 			@teacher_allocations.each do |allocation|
-				sections = allocation.teacher.sections_by_course(allocation.course_id).map{|m| m.section.try(:name) }
 
+				status = CourseAllocation.statuses[allocation.status]
+				sections = allocation.sections.where("course_id = ? and teacher_id = ? and status = ?", allocation.course_id, allocation.teacher_id, status).collect {|m| m.try(:name) }
 
 				attributes << {
 					teacher: allocation.teacher.full_name,
-					course: "#{allocation.course.name} - (#{allocation.course.type_name})",
-					section: sections.count > 2 ? sections.join(", ") : sections.join(" & "),
-					status: content_tag(:span, "Under Approval", class: "label label-warning"),
+					course: allocation.course.detailed_name,
+					section: pluralize_sections(sections),
+					status: allocation.alloc_statuses,
 					send_instructions: notification_link(allocation.teacher_id, @batch.id, allocation.course_id)
 				}
+				
 			end
 
 			respond_to do |format|
@@ -329,6 +331,10 @@ module Institutes
 			end
 
 			@options
+		end
+
+		def allocation_params
+			params.require(:course_allocation).permit(:status)
 		end
 	end
 end

@@ -8,8 +8,8 @@ module Administrations
 
 		def week_days_and_timings
 			@week_days = WeekDay.all
-			@normal_timings = Timing.non_fridays
-			@friday_timings = Timing.fridays
+			@normal_timings = TimeSlot.non_fridays
+			@friday_timings = TimeSlot.fridays
 		end
 
 		def current_batches

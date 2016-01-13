@@ -1,10 +1,6 @@
 module AllocationsHelper
 	def has_courses(course)
-		if course[:has_course] == true
-			"checked='checked'"
-		# elsif course[:is_already_assigned] == true
-		# 	"checked='checked'"
-		end
+		return "checked='checked'" if course[:has_course] == true
 	end
 
 	def remove_all_allocations(batch_id, batch_name)
@@ -39,5 +35,20 @@ module AllocationsHelper
 						</div>"
 
 		html.html_safe
+	end
+
+	def editable_status(alloc)
+		case alloc.status.humanize
+		when "Archived"
+			content_tag(:span, alloc.status.humanize, class: "label label-danger")
+		when "Under approval"
+			content_tag(:span, alloc.status.humanize, class: "label label-warning")
+		else
+			content_tag(:span, alloc.status.humanize, class: "label label-success")
+		end
+	end
+
+	def pluralize_sections(sections)
+		sections.count > 2 ? sections.join(", ") : sections.join(" & ")
 	end
 end

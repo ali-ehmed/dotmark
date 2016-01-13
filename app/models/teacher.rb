@@ -75,8 +75,8 @@ class Teacher < ActiveRecord::Base
 		course_allocations.where("batch_id = ? and course_id = ?", batch_id, course_id)
 	end
 
-	def sections_by_course(course_id)
-		allocated_sections.where(course_id: course_id)
+	def sections_by_course(course_id, status)
+		allocated_sections.where(course_id: course_id).where(status: status)
 	end
 
 	def skills
@@ -106,8 +106,14 @@ class Teacher < ActiveRecord::Base
     end
   end
 
-  def grouped_allocations
-  	course_allocations.select("teacher_id, batch_id, course_id, semester_id").group("teacher_id, batch_id, course_id, semester_id")
+  def under_approval_allocations(batch_id = "")
+  	allocs = course_allocations.select("teacher_id, batch_id, course_id, semester_id, status")
+  										.under_approval
+  										.group("status, teacher_id, batch_id, course_id, semester_id")
+
+		allocs = allocs.where(batch_id: batch_id) if batch_id.present?
+
+		allocs
   end
 
   def is_present?

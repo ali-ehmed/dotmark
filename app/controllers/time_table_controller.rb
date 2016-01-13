@@ -1,20 +1,26 @@
 class TimeTableController < ApplicationController
+	prepend_before_action :time_table_slots, only: [:teacher_allocations]
+	include AllocationsHelper
+
   def index
   end
 
   def search_allocations
-
   	allocations = $redis.get("teacher_allocations")
+
   	if allocations.blank?
-  		@teacher_allocations = current_resource.grouped_allocations
+  		@teacher_allocations = current_resource.under_approval_allocations #Only Under Approval
 
   		allocations = []
 			@teacher_allocations.each do |allocation|
-				sections = allocation.teacher.sections_by_course(allocation.course_id).map{|m| m.section.try(:name) }
+
+        status = CourseAllocation.statuses[allocation.status]
+				sections = allocation.sections.where("course_id = ? and teacher_id = ? and status = ?", allocation.course_id, allocation.teacher_id, status).collect {|m| m.try(:name) }
+
 				allocations << {
 					course: allocation.course.name,
 					course_type: allocation.course.type_name,
-					section: sections.count > 2 ? sections.join(", ") : sections.join(" & "),
+					section: pluralize_sections(sections),
 					batch: allocation.batch.name,
 					semester: allocation.semester.try(:name),
 					sent_date: "---"
@@ -26,15 +32,39 @@ class TimeTableController < ApplicationController
 		end
 
 		@allocs = JSON.load allocations
+    
 		respond_to do |format|
   		format.json { render json: { data: @allocs } }
 		end
   end
 
-  def schedule_time_cell
-  	@week_day = TimeSlot.find_by_week_day_and_start_time(params[:week_day], params[:time])
+  def teacher_allocations
+  	@teacher_allocations = current_resource.under_approval_allocations(params[:batch_id])
   	respond_to do |format|
   		format.js {}
 		end
+  end
+
+  def schedule_time_cell
+  	@batch = Batch.find(params[:batch_id])
+
+  	@week_day = TimeSlot.find_by_week_day_and_start_time(params[:week_day], params[:time])
+  	@count_allocations = $redis.get("count_teacher_allocations_#{@batch.id}")
+
+  	if @count_allocations.blank?
+  		@count_allocations = current_resource.course_allocations.under_approval.where(batch_id: @batch.id).count.to_json
+  		$redis.set("count_teacher_allocations_#{@batch.id}", @count_allocations)
+  	end
+
+		@count_teacher_allocations = JSON.load @count_allocations
+  	respond_to do |format|
+  		format.js {}
+		end
+  end
+
+  def time_table_slots
+		@week_days = TimeSlot.week_days
+		@non_fridays = TimeSlot.non_fridays
+		@fridays = TimeSlot.fridays
   end
 end

@@ -13,6 +13,7 @@
 #  semester_id  :integer
 #  time_slot_id :integer
 #  classroom_id :integer
+#  status       :integer          default(0)
 #
 
 require 'test_helper'

@@ -27,8 +27,5 @@ class DashboardController < ApplicationController
 
 	def teachers_dashboard
 		@batches = Batch.current_batches
-		@week_days = TimeSlot.week_days
-		@non_fridays = TimeSlot.non_fridays
-		@fridays = TimeSlot.fridays
 	end
 end

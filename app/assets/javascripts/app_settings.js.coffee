@@ -25,11 +25,21 @@ $.urlParam = (name) ->
   else
     results[1] or 0
 
+# find the account whose resource is teacher
+window.current_teacher = ->
+  resource_name = window.location["hostname"].split(".")[0]
+  resource_type = window.location["hostname"].split(".")[1]
+  subdomain = ""
+  subdomain = "#{resource_name}.#{resource_type}" if resource_type == "teacher"
+
+  return subdomain
+
 
 $(document).on 'page:change', ->
   activeTabs()
 
   currentAppActiveLink $('.navbar-nav')
+  
   window.setTimeout (->
     $('.alert-timeout').fadeTo(500, 0).slideUp 500, ->
       $(this).hide()

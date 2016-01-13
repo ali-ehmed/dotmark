@@ -1,63 +1,53 @@
 <div id="timetable">
 	<div class="container-fluid">
+
 		<div class="row">
 			<div class="col-md-12">
 				<div class="row">
 					<div class="col-md-6">
 						<blockquote>
-							<h1>
-								Welcome <small><%= current_resource.full_name %></small>
-							</h1>
+							<p class="lead">Select Batch to View your Allocations:</p>
+							<ul class="list-inline allocations_current_batches">
+								<% @batches.each do |current_batch| %>
+									<li>
+										<div class="radio" style="margin-top:1px;">
+								      <%= radio_button_tag :current_batch_id, current_batch['id'], false, checked: @batches.first == current_batch, id: "current_batch_#{current_batch['id']}_radio", onchange: "getTeacherAllocationsByBatch(this);" %>
+								      <label for="current_batch_<%= current_batch['id'] %>_radio" style="padding-left:7px;"><strong><%= current_batch["name"] %></strong></label>
+								    </div>
+									</li>
+								<% end %>
+							</ul>
 						</blockquote>
 					</div>
 					<div class="col-md-4 pull-right">
 						<blockquote class="blockquote-reverse">
-							<h1>
-								Allocations <small>(2016)</small>
-							</h1>
-							<button class="btn-block btn btn-info" onclick="getCurrentTeacherAllocationsForTimeTable();">View Allocations</button>
+							<h2>
+								Welcome <small><%= current_resource.full_name %></small>
+							</h2>
 						</blockquote>
 					</div>
 				</div>
 			</div>
 		</div>
-		<br />
 		<div class="row">
-			<div class="col-md-12">
-				<table class="table table-bordered">
-					<tr>
-						<td align="center" rowspan="2">
-							<strong>Fridays</strong>
-							<div class="divider-cell"></div>
-							<strong>Days</strong>
-						</td>
-						<% @non_fridays.each do |timing| %>
-							<td align="center"><%= timing.timings %></td>
-						<% end %>
-					</tr>
-					<tr>
-						<% @fridays.each do |timing| %>
-							<td align="center"><%= timing.timings %></td>
-						<% end %>
-					</tr>
-					<tr class="period_days">
-						<td align="center"><strong>Week Days</strong></td>
-						<% (1..9).each do |period_days| %>
-							<td align="center"><%= period_days %></td>
-						<% end %>
-					</tr>
-					<% @week_days.each_with_index do |days, i| %>
-						<tr>
-							<td align="center"><strong><%= days.week_day %></strong></td>
-							<% TimeSlot.for(days.week_day).each do |time_slot| %>
-								<td align="center">
-									<%= link_to "Available", "javascript:void(0);", id: "time_cell", onclick: "openTimeScheduleCell(this);", data: { url: schedule_a_time_path(week_day: time_slot.week_day, time: time_slot.start_time, format: :js) } %>
-								</td>
-							<% end %>
-						</tr>
-					<% end %>
-				</table>
+			<div class="col-md-6">
+				<blockquote class="teacher_allocation_for_batch">
+					<h1>
+						Allocations <small></small>
+					</h1>
+				</blockquote>
 			</div>
+			<div class="col-md-4 pull-right">
+				<br />
+				<div class="display_teacher_allocations">
+					<blockquote class="blockquote-reverse blockquote-view-allocations">
+						<button class="btn-block btn btn-info btn-view-allocations" onclick="getCurrentTeacherAllocationsForTimeTable();">View All Allocations</button>
+					</blockquote>
+				</div>
+			</div>
+		</div>
+		<br />
+		<div class="time_table_for_teacher loader">	
 		</div>
 	</div>
 </div>

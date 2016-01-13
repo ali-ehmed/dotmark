@@ -50,7 +50,6 @@ module Administrations
 
 		private
 
-
 		def get_new_admission_sections
 			@admission_sections = Batch.find(session[:admission]["batch_id"]).sections
 		end

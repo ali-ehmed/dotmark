@@ -7,6 +7,7 @@ parameters = ->
 	}
 
 	_params
+  
 window.getAllCoursesAndSections = () ->
 	_params = parameters()
 	unless _params['batch_id'] == ""
@@ -146,7 +147,7 @@ window.sendApprovalInstructions = (elem, teacher_id, batch_id, course_id) ->
       dataType: 'json'
       success: (response) ->
         if response.status == 'ok'
-          # $('table.allocations_table_for_' + _params['batch_id']).DataTable().ajax.url('/institutes/course_allocations/' + _params['batch_id'] + '/get_allocations.json').load()
+          $('table.allocations_table_for_' + _params['batch_id']).DataTable().ajax.url('/institutes/course_allocations/' + _params['batch_id'] + '/get_allocations.json').load()
           $.notify {
             icon: 'glyphicon glyphicon-ok'
             title: ''
@@ -154,6 +155,7 @@ window.sendApprovalInstructions = (elem, teacher_id, batch_id, course_id) ->
           }, type: 'success'
       error: (response) ->
         swal 'oops', 'Something went wrong'
+
 $(document).on "page:change", ->
 	allocateTeachers()
 

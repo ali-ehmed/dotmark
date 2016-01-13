@@ -42,7 +42,7 @@ class Batch < ActiveRecord::Base
 	end
 
 	def grouped_teacher_allocation
-		course_allocations.select("teacher_id, course_id").group("teacher_id, course_id")
+		course_allocations.select("status, teacher_id, course_id").group("status, teacher_id, course_id")
 	end
 
 	def set_session_date

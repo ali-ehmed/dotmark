@@ -34,6 +34,7 @@ class Semester < ActiveRecord::Base
 	  	end
 		end
 
+		# to get the current running semesters according to current year's season
 		def current_semesters
 			current_semesters = $redis.get("current_semesters")
 			if current_semesters.blank?

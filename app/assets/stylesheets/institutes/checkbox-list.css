@@ -17,8 +17,8 @@
 }
 
 .list-already-active {
-  background-color: rgba(232, 70, 70, 0.59);
-  border-color: #F97070;
+  background-color: rgba(27,16,16,0.6);
+  border-color: #564D4D;
   color: #fff;
   cursor: no-drop !important;
 }

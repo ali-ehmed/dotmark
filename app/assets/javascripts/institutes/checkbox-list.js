@@ -1,5 +1,8 @@
+// Custom Select Checkboxes with Bootstrap List
+
 window.check_box_list = function(){
-  $('.list-group.checked-list-box .list-group-item').each(function () {    
+  $('.list-group.checked-list-box .list-group-item').each(function () {
+
     // Settings
     var $widget = $(this),
     $checkbox = $('<input type="checkbox" class="hidden" />'),
@@ -74,6 +77,7 @@ window.check_box_list = function(){
     init();
   });
 }
+// this is to return the data in the check box
 ready = function() {
   // List
   check_box_list();

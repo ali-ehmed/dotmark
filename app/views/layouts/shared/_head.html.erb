@@ -8,3 +8,11 @@
 	<script src="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/js/select2.min.js"></script>
 <% end %>
 <%= csrf_meta_tags %>
+
+<%= javascript_tag do %>
+	window.current_resource = "N/A"
+
+	<% if @account["resource_type"] == "Teacher" %>
+  	window.current_resource = "<%= @account["subdomain"] %>"
+	<% end %>
+<% end %>

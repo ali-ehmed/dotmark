@@ -50,6 +50,7 @@ class Search
 	    if params[:course_id].present?
 	    	conditions = ""
 	    	conditions << "course_allocations.course_id = #{params[:course_id]}"
+	    	
 	    	if params[:teacher_name].present?
     	 		conditions << " and " << find_by_name
     	 	elsif params[:employee_no].present?
