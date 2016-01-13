@@ -1,0 +1,9 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  course_allocation_id: 1
+  section_id: 1
+
+two:
+  course_allocation_id: 1
+  section_id: 1

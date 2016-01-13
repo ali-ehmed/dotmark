@@ -15,8 +15,7 @@ module Institutes
 			attributes = Array.new
 			@teacher_allocations.each do |allocation|
 
-				status = CourseAllocation.statuses[allocation.status]
-				sections = allocation.sections.where("course_id = ? and teacher_id = ? and status = ?", allocation.course_id, allocation.teacher_id, status).collect {|m| m.try(:name) }
+				sections = allocation.sections(allocation).collect {|m| m.try(:name) }
 
 				attributes << {
 					teacher: allocation.teacher.full_name,
@@ -24,8 +23,7 @@ module Institutes
 					section: pluralize_sections(sections),
 					status: allocation.alloc_statuses,
 					send_instructions: notification_link(allocation.teacher_id, @batch.id, allocation.course_id)
-				}
-				
+				}	
 			end
 
 			respond_to do |format|
@@ -121,22 +119,24 @@ module Institutes
 
 			# checking if any other section is allocated to any other teacher
 			# this donot include the current teacher
-			if @already_assigned_allocations.present? and @is_a_new_teacher == true
+			if @course.present? or @assigned_courses.present?
+				if @already_assigned_allocations.present? and @is_a_new_teacher == true
 
-				@courses.each do |course|
-					course[:is_already_assigned] = true if @already_assigned_allocations.first.course_id == course[:id]
-				end
+					@courses.each do |course|
+						course[:is_already_assigned] = true if @already_assigned_allocations.first.course_id == course[:id]
+					end
 
-				# this is checked by the "has course" value if it is not first in the list
-				if @assigned_courses.present?
-					@already_assigned_allocations = @already_assigned_allocations.where(course_id: @assigned_courses.first[:id])
-				end
+					# this is checked by the "has course" value if it is not first in the list
+					if @assigned_courses.present?
+						@already_assigned_allocations = @already_assigned_allocations.where(course_id: @assigned_courses.first[:id])
+					end
 
-				for assigned_allocation in @already_assigned_allocations
-					@sections.each do |section|
-						if assigned_allocation.section_id == section[:id]
-							section[:is_already_assigned_section] = true
-							section[:is_already_assigned_teacher] = assigned_allocation.teacher.full_name
+					for assigned_allocation in @already_assigned_allocations
+						@sections.each do |section|
+							if assigned_allocation.section_id == section[:id]
+								section[:is_already_assigned_section] = true
+								section[:is_already_assigned_teacher] = assigned_allocation.teacher.full_name
+							end
 						end
 					end
 				end

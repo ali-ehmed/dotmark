@@ -51,8 +51,9 @@ class CourseAllocation < ActiveRecord::Base
 		end
 	end
 
-	def sections
-		Section.allocated
+	def sections(allocation)
+		status = CourseAllocation.statuses[allocation.status]
+		Section.allocated.where("course_id = ? and teacher_id = ? and status = ?", allocation.course_id, allocation.teacher_id, status)
 	end
 
 	def alloc_statuses

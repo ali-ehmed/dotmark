@@ -14,8 +14,7 @@ class TimeTableController < ApplicationController
   		allocations = []
 			@teacher_allocations.each do |allocation|
 
-        status = CourseAllocation.statuses[allocation.status]
-				sections = allocation.sections.where("course_id = ? and teacher_id = ? and status = ?", allocation.course_id, allocation.teacher_id, status).collect {|m| m.try(:name) }
+				sections = allocation.sections(allocation).collect {|m| m.try(:name) }
 
 				allocations << {
 					course: allocation.course.name,
@@ -25,7 +24,9 @@ class TimeTableController < ApplicationController
 					semester: allocation.semester.try(:name),
 					sent_date: "---"
 				}
+        
 			end
+
 			allocations = allocations.to_json
 			$redis.set("teacher_allocations", allocations)
 			$redis.expire("teacher_allocations", 2.minutes.to_i)
@@ -54,9 +55,13 @@ class TimeTableController < ApplicationController
   	if @count_allocations.blank?
   		@count_allocations = current_resource.course_allocations.under_approval.where(batch_id: @batch.id).count.to_json
   		$redis.set("count_teacher_allocations_#{@batch.id}", @count_allocations)
+      $redis.expire("count_teacher_allocations_#{@batch.id}", 1.second.to_i)
   	end
 
 		@count_teacher_allocations = JSON.load @count_allocations
+
+    @teacher_allocations = current_resource.under_approval_allocations(@batch.id)
+
   	respond_to do |format|
   		format.js {}
 		end

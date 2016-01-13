@@ -7,7 +7,7 @@ module Administrations
 		end
 
 		def week_days_and_timings
-			@week_days = WeekDay.all
+			@week_days = TimeSlot.week_days
 			@normal_timings = TimeSlot.non_fridays
 			@friday_timings = TimeSlot.fridays
 		end

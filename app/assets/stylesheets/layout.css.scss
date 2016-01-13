@@ -13,6 +13,14 @@
   min-height: 398px;
 }
 
+.scrollable {
+	max-height: 300px;
+	overflow: auto;
+  padding: 10px;
+  border: 2px solid #D4D4D4;
+  border-radius: 4px;
+}
+
 #app-nav {
 	.navbar-brand {
 		padding: 15px 7px 0px 7px !important;

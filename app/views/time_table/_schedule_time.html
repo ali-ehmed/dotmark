@@ -23,16 +23,18 @@
               </strong>
             </blockquote>
             <br />
-            <ul class="list-group">
-              <% Classroom.all.each do |classroom| %>
-                <li class="list-group-item text-center" data-classroom-id="<%= classroom.id %>">
-                  <div class="radio" style="margin-top:1px;">
-                    <input type="radio" name="classroom_id" value="<%= classroom.id %>" id="classroom_<%= classroom.id %>_radio" />
-                    <label for="course_<%= classroom.id %>_radio" style="padding-left:7px;"><strong>Classroom <%= classroom.name %></strong></label>
-                  </div>
-                </li>
-              <% end %>
-            </ul>
+            <div class="scrollable">
+              <ul class="list-group">
+                <% Classroom.all.each do |classroom| %>
+                  <li class="list-group-item text-center" data-classroom-id="<%= classroom.id %>">
+                    <div class="radio" style="margin-top:1px;">
+                      <input type="radio" name="classroom_id" value="<%= classroom.id %>" id="classroom_<%= classroom.id %>_radio" />
+                      <label for="course_<%= classroom.id %>_radio" style="padding-left:7px;"><strong>Classroom <%= classroom.name %></strong></label>
+                    </div>
+                  </li>
+                <% end %>
+              </ul>
+            </div>
           </div>
           <div class="col-md-6">
             <blockquote class="blockquote-reverse">
@@ -41,10 +43,26 @@
               </strong>
             </blockquote>
             <br />
-            <div class="panel panel-default">
-              <div class="panel-body">
-                
-              </div>
+            <div class="scrollable">
+              <% @teacher_allocations.each do |allocation| %>
+                <div class="panel panel-default">
+                  <div class="panel-heading">
+                    <%= allocation.course.detailed_name %>
+                  </div>
+                  <div class="panel-body">
+                    <ul class="list-group">
+                      <% allocation.sections(allocation).each do |section| %>
+                        <li class="list-group-item text-center" data-section-id="<%= section.id %>">
+                          <div class="radio" style="margin-top:1px;">
+                            <input type="radio" name="section_id" value="<%= section.id %>" id="section_<%= section.id %>_radio" />
+                            <label for="section_<%= section.id %>_radio" style="padding-left:7px;"><strong>Section <%= section.name %></strong></label>
+                          </div>
+                        </li>
+                      <% end %>
+                    </ul>
+                  </div>
+                </div>
+              <% end %>
             </div>
           </div>
         </div>
