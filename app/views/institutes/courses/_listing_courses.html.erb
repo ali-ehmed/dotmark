@@ -18,6 +18,7 @@
 										<th>Name</th>
 										<th>Code</th>
 										<th>Color</th>
+										<th>Credit Hours</th>
 										<th>Type</th>
 										<th></th>
 									</tr>
@@ -35,7 +36,9 @@
 												<%= get_color(course, true) %>
 												<%= render "institutes/color_form", object: course, url: institutes_course_path(course) %>
 											</td>
-											
+											<td>
+												<a href="#"><%= best_in_place course, :credit_hours, :as => :input, :inner_class => "form-control input-sm", placeholder: "---", :url => institutes_course_path(course.id) %></a>
+											</td>
 											<td>
 												<a href="#"><%= best_in_place course, :course_type, :as => :select, :collection => [[false, 'Theroy'], [true, 'Lab']], :inner_class => "form-control input-sm", placeholder: "---", :url => institutes_course_path(course.id) %></a>
 											</td>

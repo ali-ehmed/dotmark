@@ -12,16 +12,17 @@ module ApplicationHelper
 
   def navbar_image(resource)
     if resource.avatar.nil?
-      $redis.del("user_avatar_#{resource.id}")
-    end
-    image = $redis.get("user_avatar_#{resource.id}")
-    if image.nil?
-      if resource.avatar.present? and resource.avatar.image.present?
-        image = resource.avatar.image.url(:thumb).to_json
-      else
-        image = "user-avatar.png".to_json
+      $redis.del("user_avatar_#{resource.avatar.updated_at}")
+    else
+      image = $redis.get("user_avatar_#{resource.avatar.updated_at}")
+      if image.nil?
+        if resource.avatar.present? and resource.avatar.image.present?
+          image = resource.avatar.image.url(:thumb).to_json
+        else
+          image = "user-avatar.png".to_json
+        end
+        $redis.set("user_avatar_#{resource.avatar.updated_at}", image)
       end
-      $redis.set("user_avatar_#{resource.id}", image)
     end
     JSON.load image
   end

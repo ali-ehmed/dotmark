@@ -44,7 +44,7 @@ module Institutes
 		end
 
 		def course_params
-			params.require(:course).permit(:name, :code, :color, :semester_id, :course_type)
+			params.require(:course).permit(:name, :code, :color, :credit_hours, :semester_id, :course_type)
 		end
 	end
 end

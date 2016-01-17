@@ -61,6 +61,7 @@ end
 		start_time = hour
 		end_time = hour + 45.minutes
 
+		# Mid Break in University Timings
 		if Time.zone.at(start_time) >= Time.zone.at("13:00".to_datetime.to_i)
 			hour += (1.hour + 30.minutes)
 			start_time = hour
@@ -75,67 +76,86 @@ end
 
 puts "CREATING COURSES"
 
+def generate_credit_hours!(hours)
+	case hours
+	when "4"
+		"2 2".split(" ")
+	when "3"
+		"2 1".split(" ")
+	when "2"
+		"1 1".split(" ")
+	when "1"
+		"1 0".split(" ")
+	end
+end
+
 def create_by_lab_or_theory!(course_name, code, semester, lab_names = [])
-	if lab_names.include?(course_name)
-		# Creating Lab or Theory
-		lab_names.each do |lab_name|
-			if lab_name == course_name
-				Course.find_or_create_by!(:name => course_name.split("_").join(" ")) do |course|
-					course.code = "#{course_name.slice(0,2)}-#{'%03d' % code}"
+	if lab_names.include?(course_name[0])
+		for lab_name in lab_names
+			if lab_name == course_name[0]
+				# Creating Lab
+				Course.find_or_create_by!(:name => course_name[0].split("_").join(" ")) do |course|
+					course.code = "#{course_name[0].slice(0,2)}-#{'%03d' % code}"
 					course.semester_id = semester.id
 					course.lab = true
-					Course.create(:name => course_name.split("_").join(" ")) do |course|
-						course.code = "#{course_name.slice(0,2)}-#{'%03d' % (code + 1)}"
+					course.credit_hours = generate_credit_hours!(course_name[1]).second
+
+					# Creating Theory
+					Course.create(:name => course_name[0].split("_").join(" ")) do |course|
+						course.code = "#{course_name[0].slice(0,2)}-#{'%03d' % (code + 1)}"
 						course.semester_id = semester.id
+						course.credit_hours = generate_credit_hours!(course_name[1]).first
 					end
 				end
 			end
 		end
 	else
 		# Creating Theory
-		Course.find_or_create_by!(:name => course_name.split("_").join(" ")) do |course|
-			course.code = "#{course_name.slice(0,2)}-#{'%03d' % code}"
+		Course.find_or_create_by!(:name => course_name[0].split("_").join(" ")) do |course|
+			course.code = "#{course_name[0].slice(0,2)}-#{'%03d' % code}"
 			course.semester_id = semester.id
+			course.credit_hours = course_name[1]
 		end
 	end
 end
 
 puts "First semester"
-%w(Physics Calculas Communication_Skills ITCS).each_with_index do |course_name, code|
+%w(Physics 2 Calculas 3 Communication_Skills 3 ITCS 4).in_groups(4).each_with_index do |course_name, code|
 	code += 1
-	create_by_lab_or_theory!(course_name, code, Semester.first_semester, ["ITCS"])
+	labs = ["Physics", "ITCS"]
+	create_by_lab_or_theory!(course_name, code, Semester.first_semester, labs)
 end
 
 puts "Second semester"
-%w(Web_Engineering Islamiat Programming_Fundamentals).each_with_index do |course_name, code|
+%w(Web_Engineering 4 Islamiat 1 Programming_Fundamentals 3).in_groups(3).each_with_index do |course_name, code|
 	code += 1
 	labs = ["Programming_Fundamentals", "Web_Engineering"]
 	create_by_lab_or_theory!(course_name, code, Semester.second_semester, labs)
 end
 
 puts "Third semester"
-%w(OOP LDST Data_Structures Stats).each_with_index do |course_name, code|
+%w(OOP 3 LDST 2 Data_Structures 3 Stats 2).in_groups(4).each_with_index do |course_name, code|
 	code += 1
 	labs = ["OOP", "LDST", "Data_Structures"]
 	create_by_lab_or_theory!(course_name, code, Semester.third_semester, labs)
 end
 
 puts "Fourth semester"
-%w(Operating_System Auto_Meta Computer_Archietecture).each_with_index do |course_name, code|
+%w(Operating_System 3 Auto_Meta 2 Computer_Archietecture 2).in_groups(3).each_with_index do |course_name, code|
 	code += 1
 	labs = ["Operating_System", "LDST"]
 	create_by_lab_or_theory!(course_name, code, Semester.fourth_semester, labs)
 end
 
 puts "Fifth semester"
-%w(MIPS Computer_Networking Compiler_Construction RDBMS).each_with_index do |course_name, code|
+%w(MIPS 3 Computer_Networking 3 Compiler_Construction 2 RDBMS 4).in_groups(4).each_with_index do |course_name, code|
 	code += 1
 	labs = ["Computer_Networking"]
 	create_by_lab_or_theory!(course_name, code, Semester.fifth_semester, labs)
 end
 
 puts "Sixth semester"
-%w(OR SW Computer_Security).each_with_index do |course_name, code|
+%w(OR 3 SW 4 Computer_Security 3).in_groups(3).each_with_index do |course_name, code|
 	code += 1
 	labs = ["Computer_Security"]
 	create_by_lab_or_theory!(course_name, code, Semester.sixth_semester, labs)

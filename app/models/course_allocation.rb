@@ -22,8 +22,6 @@ class CourseAllocation < ActiveRecord::Base
 	belongs_to :batch
 	belongs_to :section
 	belongs_to :semester
-	belongs_to :time_slot
-	belongs_to :classroom
 
 	validates :course_id, :teacher_id, :section_id, :batch_id, presence: true, on: :create
 	validate :perform_restrictions!

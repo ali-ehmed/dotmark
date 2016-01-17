@@ -7,7 +7,7 @@
 	<% end %>
 	<div class="form-inputs">
 		<div class="panel panel-danger">
-			<div class="panel-heading">Student Profile URL</div>
+			<div class="panel-heading"><%= current_resource.class.to_s %> Profile URL</div>
 			<div class="panel-body">
 				<div class="form-group">
 					<%= f.fields_for @resource.account do |account_f| %>

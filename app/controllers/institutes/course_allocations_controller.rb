@@ -15,7 +15,7 @@ module Institutes
 			attributes = Array.new
 			@teacher_allocations.each do |allocation|
 
-				sections = allocation.sections(allocation).collect {|m| m.try(:name) }
+				sections = allocation.sections(allocation).order("name").collect {|m| m.try(:name) }
 
 				attributes << {
 					teacher: allocation.teacher.full_name,

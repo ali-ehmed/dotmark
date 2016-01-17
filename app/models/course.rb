@@ -12,7 +12,6 @@
 #  updated_at   :datetime         not null
 #  credit_hours :string
 #  lab          :boolean
-#  course_type  :string
 #
 
 class Course < ActiveRecord::Base
@@ -48,5 +47,6 @@ class Course < ActiveRecord::Base
 
 	def default_values
 		self.lab ||= false
+		self.credit_hours ||= "0"
 	end
 end

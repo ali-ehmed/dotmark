@@ -6,7 +6,7 @@ class TimeTableController < ApplicationController
   end
 
   def search_allocations
-  	allocations = $redis.get("teacher_allocations")
+  	allocations = $redis.get("teacher_allocations_#{current_resource}")
 
   	if allocations.blank?
   		@teacher_allocations = current_resource.under_approval_allocations #Only Under Approval
@@ -14,7 +14,7 @@ class TimeTableController < ApplicationController
   		allocations = []
 			@teacher_allocations.each do |allocation|
 
-				sections = allocation.sections(allocation).collect {|m| m.try(:name) }
+				sections = allocation.sections(allocation).order("name").collect {|m| m.try(:name) }
 
 				allocations << {
 					course: allocation.course.name,
@@ -28,8 +28,8 @@ class TimeTableController < ApplicationController
 			end
 
 			allocations = allocations.to_json
-			$redis.set("teacher_allocations", allocations)
-			$redis.expire("teacher_allocations", 2.minutes.to_i)
+			$redis.set("teacher_allocations_#{current_resource}", allocations)
+			$redis.expire("teacher_allocations_#{current_resource}", 2.minutes.to_i)
 		end
 
 		@allocs = JSON.load allocations
@@ -49,7 +49,7 @@ class TimeTableController < ApplicationController
   def schedule_time_cell
   	@batch = Batch.find(params[:batch_id])
 
-  	@week_day = TimeSlot.find_by_week_day_and_start_time(params[:week_day], params[:time])
+  	@timeslot = TimeSlot.find_by_week_day_and_start_time(params[:week_day], params[:time])
   	@count_allocations = $redis.get("count_teacher_allocations_#{@batch.id}")
 
   	if @count_allocations.blank?
@@ -62,6 +62,8 @@ class TimeTableController < ApplicationController
 
     @teacher_allocations = current_resource.under_approval_allocations(@batch.id)
 
+    @available_classrooms = @timeslot.available_classrooms
+    
   	respond_to do |format|
   		format.js {}
 		end

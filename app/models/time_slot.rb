@@ -11,7 +11,19 @@
 #
 
 class TimeSlot < ActiveRecord::Base
-	has_many :course_allocations
+	has_many :time_tables
+
+	has_many :course_allocations, through: :time_tables
+	has_many :classrooms, through: :time_tables
+
+	def available_classrooms
+		if classrooms.blank?
+			Classroom.all
+		else
+			Classroom.where.not("id in (?)", classrooms.map(&:id))
+		end
+	end
+
 	scope :non_fridays, -> { select("start_time, end_time").where.not(week_day: "Friday").group("start_time, end_time").order("start_time") }
 
 	scope :fridays, -> { select("start_time, end_time").where(week_day: "Friday").group("start_time, end_time").order("start_time") }

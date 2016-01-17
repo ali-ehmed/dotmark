@@ -5,13 +5,13 @@
       <div class="modal-body">
         <p class="text-center">
           <span class="week_day">
-            <strong><%= @week_day.week_day %></strong>
+            <strong><%= @timeslot.week_day %></strong>
           </span>
         </p>
         <p class="text-center"><i class="fa fa-clock-o fa-3x"></i></p>
         <p class="text-center">
           <span class="timings">
-            <%= @week_day.timings %>
+            <%= @timeslot.timings %>
           </span>
         </p>
         <div class="row">
@@ -19,13 +19,13 @@
             <blockquote>
               <strong>
                 Available Classrooms:
-                <small></small>
+                <small>Total: <%= @available_classrooms.length %></small>
               </strong>
             </blockquote>
             <br />
             <div class="scrollable">
               <ul class="list-group">
-                <% Classroom.all.each do |classroom| %>
+                <% @available_classrooms.each do |classroom| %>
                   <li class="list-group-item text-center" data-classroom-id="<%= classroom.id %>">
                     <div class="radio" style="margin-top:1px;">
                       <input type="radio" name="classroom_id" value="<%= classroom.id %>" id="classroom_<%= classroom.id %>_radio" />
