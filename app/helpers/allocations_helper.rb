@@ -12,6 +12,10 @@ module AllocationsHelper
 																		 					   class: "btn btn-danger btn-sm pull-right"
 	end
 
+	def assigned_allocation(allocation)
+		CourseAllocation.find_by_batch_id_and_course_id_and_section_id_and_teacher_id(allocation.batch_id, allocation.course_id, section.id, allocation.teacher_id)
+	end
+
 	def notification_link(teacher, batch, course)
 		content_tag(:a, "Send For Approval", :href => "javascript:void(0)", 
 								onclick: "sendApprovalInstructions(this, #{teacher}, #{batch}, #{course})", 

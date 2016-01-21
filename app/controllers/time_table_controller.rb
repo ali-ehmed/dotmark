@@ -1,6 +1,7 @@
 class TimeTableController < ApplicationController
 	prepend_before_action :time_table_slots, only: [:teacher_allocations]
 	include AllocationsHelper
+  respond_to :json
 
   def index
   end
@@ -40,7 +41,8 @@ class TimeTableController < ApplicationController
   end
 
   def teacher_allocations
-  	@teacher_allocations = current_resource.under_approval_allocations(params[:batch_id])
+    @batch_id = params[:batch_id]
+  	@teacher_allocations = current_resource.under_approval_allocations(@batch_id)
   	respond_to do |format|
   		format.js {}
 		end
@@ -63,10 +65,21 @@ class TimeTableController < ApplicationController
     @teacher_allocations = current_resource.under_approval_allocations(@batch.id)
 
     @available_classrooms = @timeslot.available_classrooms
-    
+
   	respond_to do |format|
   		format.js {}
 		end
+  end
+
+  def book_room
+    logger.debug "Params are :-> #{params}"
+
+    @course_allocations = CourseAllocation.where(teacher_id: params[:teacher_id]).where(batch_id: params[:batch_id])
+
+    TimeTable.build_by_allocations @course_allocations, params
+
+    course = Course.find(params["course_id_#{params[:section_id]}"])
+    render json: {course: course}
   end
 
   def time_table_slots

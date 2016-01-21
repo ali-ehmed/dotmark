@@ -27,16 +27,68 @@ window.getTeacherAllocationsByBatch = (elem) ->
     error: (response) ->
       swal 'oops', 'Something went wrong'
 
-getAllocationsOfTeacher = ->
-    $input = $('ul.allocations_current_batches li').find("input[type='radio']:checked")
-    window.current_batch = $input.val()
-    url = "/time_table/#{$input.val()}/teacher_allocations.js"
-    $.get url, (response) ->
-      return
+$timetable = {
+	getAllocationsOfTeacher: ->
+	    $input = $('ul.allocations_current_batches li').find("input[type='radio']:checked")
+	    window.current_batch = $input.val()
+	    url = "/time_table/#{$input.val()}/teacher_allocations.js"
+	    $.get url, (response) ->
+	      return
+
+	bookingClassroom: ->
+		$(document).on "submit", "form#scheduleForm", (e) ->
+			e.preventDefault()
+			console.log("Booking Now")
+
+			$form = $(@)
+
+			params = [ $form.serializeArray()[0].name ]
+
+			$.each $form.serializeArray(), (i) ->
+			  param = $(this)
+			  if i > 0
+				  params.push param[0].name
+				  return
+
+			console.log params
+
+			if jQuery.inArray('section_id', params) == -1
+				error = true
+			else if jQuery.inArray('classroom_id', params) == -1
+				error = true
+
+			if error is true
+			  $.notify {
+			    icon: 'glyphicon glyphicon-warning-sign'
+			    title: '<strong>Instructions:</strong><br />'
+			    message: 'Please select the required entities to book a classroom.'
+			  }, type: 'danger'
+				
+			  return false
+
+			$.post($form.attr('action'), $form.serialize(), (data) ->
+			  console.log 'Booked'
+			  
+			  $("#scheduleTeacherTimeModal").modal('hide')
+
+			  time_slot_id = $("#time_slot_id").val()
+			  $("table#time_table tr [data-time-slot-id='#{time_slot_id}']").html("
+				  <span class='label' style='cursor: help;background-color: #{data.course.color};'>
+				  #{data.course.code}
+				  </span>
+				")
+			  
+			).done(->
+			).fail ->
+			  swal 'Something went wrong'
+			  return
+
+}
 
 $(document).on 'page:change', ->
 
-	getAllocationsOfTeacher() if current_teacher() == current_resource #if teacher_signed_in?
+	$timetable.getAllocationsOfTeacher() if current_teacher() == current_resource #if teacher_signed_in?
+	$timetable.bookingClassroom()
 
 	$('table.teacher_allocations').DataTable
 	  responsive: true

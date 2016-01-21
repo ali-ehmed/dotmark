@@ -60,6 +60,8 @@ $(document).on 'page:change', ->
 
   $('[data-toggle="tooltip"]').tooltip()
 
+  $('[data-toggle="popover"]').popover()
+
 
   
 

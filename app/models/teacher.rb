@@ -67,6 +67,10 @@ class Teacher < ActiveRecord::Base
 		self.employee_number = "%03d" % initialize_emp_number.to_s
 	end
 
+	def has_room_scheduled?(batch_id, slot_id)
+		course_allocations.where(batch_id: batch_id).joins(:time_tables).where("time_tables.time_slot_id = ?", slot_id)
+	end
+
 	def full_name
 		"#{first_name} #{last_name}"
 	end

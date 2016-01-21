@@ -17,10 +17,10 @@ class TimeSlot < ActiveRecord::Base
 	has_many :classrooms, through: :time_tables
 
 	def available_classrooms
-		if classrooms.blank?
+		if self.classrooms.blank?
 			Classroom.all
 		else
-			Classroom.where.not("id in (?)", classrooms.map(&:id))
+			Classroom.where.not("id in (?)", classrooms.first.id)
 		end
 	end
 

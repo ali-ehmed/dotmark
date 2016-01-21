@@ -1,2 +1,4 @@
 $(".time_table_for_teacher").empty().html("<%= escape_javascript(render partial: 'timetable') %>")
 $(".teacher_allocation_for_batch").find("small").html($("input[type='radio']:checked").next().html())
+
+$('[data-toggle="popover"]').popover()

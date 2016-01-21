@@ -23,6 +23,8 @@ class CourseAllocation < ActiveRecord::Base
 	belongs_to :section
 	belongs_to :semester
 
+	has_many :time_tables
+
 	validates :course_id, :teacher_id, :section_id, :batch_id, presence: true, on: :create
 	validate :perform_restrictions!
 
@@ -39,6 +41,19 @@ class CourseAllocation < ActiveRecord::Base
 			CourseAllocation.transaction do 
 				yield
 			end
+		end
+
+		# check on the same slot if batch's section has been already assigned to another teacher
+		def reserved_allocation?(allocation, section)
+			reservation = TimeTable.joins(:course_allocation)
+														 .where("course_allocations.course_id = ? and course_allocations.teacher_id = ? and course_allocations.batch_id = ? and course_allocations.section_id = ?", 
+														 	       allocation.course_id, allocation.teacher_id, allocation.batch_id, section.id)
+			unless reservation.blank?
+				return reservation.first.reserved?						 
+			end
+
+			return true
+			# find_by_batch_id_and_course_id_and_section_id_and_teacher_id(allocation.batch_id, allocation.course_id, section.id, allocation.teacher_id)
 		end
 
 		def send_for_approval(teacher, batch_id, course_id)

@@ -1,7 +1,7 @@
 <% if @teacher_allocations.present? %>
 	<div class="row">
 		<div class="col-md-12">
-			<table class="table table-bordered">
+			<table class="table table-bordered" id="time_table">
 				<tr>
 					<td align="center" rowspan="2">
 						<strong>Fridays</strong>
@@ -28,7 +28,23 @@
 						<td align="center"><strong><%= days.week_day %></strong></td>
 						<% TimeSlot.for(days.week_day).each do |time_slot| %>
 							<td align="center" class="loader-cell-<%= time_slot.id %>" data-time-slot-id="<%= time_slot.id %>">
-								<%= link_to "Available", "javascript:void(0);", id: "time_cell", onclick: "openTimeScheduleCell(this);", data: { url: schedule_a_time_path(week_day: time_slot.week_day, time: time_slot.start_time, format: :js) } %>
+								<% if time_slot.available_classrooms.length == 0 %>
+									<span class="label label-danger">
+										N/A
+									</span>
+								<% else %>
+									<% if current_resource.has_room_scheduled?(@batch_id, time_slot.id).present? %>
+
+										<% course = current_resource.has_room_scheduled?(@batch_id, time_slot.id).first.course %>
+										<% section = current_resource.has_room_scheduled?(@batch_id, time_slot.id).first.section %>
+
+										<span class="label" style="cursor: help;background-color:<%= course.color %>;" data-container="body" data-html="true" title="<%= course.detailed_name %>" data-toggle="popover" data-placement="top" data-content="<%= reservation_detail(course, section) %>" data-trigger="hover">
+											<%= course.code %>
+										</span>
+									<% else %>
+										<%= link_to "Available", "javascript:void(0);", id: "time_cell", onclick: "openTimeScheduleCell(this);", data: { url: schedule_a_time_path(week_day: time_slot.week_day, time: time_slot.start_time, format: :js) } %>
+									<% end %>
+								<% end %>
 							</td>
 						<% end %>
 					</tr>

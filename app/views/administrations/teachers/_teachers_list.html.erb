@@ -5,6 +5,7 @@
 				<tr>
 					<th>Employee #</th>
 					<th>Name</th>
+					<th>Username</th>
 					<th>Birth Date</th>
 					<th>Joining Date</th>
 					<th>Present</th>
@@ -20,6 +21,7 @@
 							<%#= teacher.full_name %>
 							<a href="#"><%= best_in_place teacher, :full_name, :as => :input, :inner_class => "form-control input-sm", placeholder: "---", :url => teacher_path(teacher.id) %></a>
 						</td>
+						<td><%= teacher.username %></td>
 						<td><%= teacher.date_of_birth %></td>
 						<td><%= teacher.joining_date %></td>
 						<td><%= teacher.is_present? %></td>
