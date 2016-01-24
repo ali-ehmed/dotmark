@@ -195,6 +195,12 @@ puts "Creating Teachers"
     teacher.gender = attribute[:gender]
     teacher.date_of_birth = attribute[:date_of_birth]
     teacher.joining_date = attribute[:joining_date]
+		teacher.confirm!
   end
+
+	teacher = Teacher.find_by(email: attribute[:email])
+  teacher.password = "aliahmed"
+	teacher.password_confirmation = "aliahmed"
+	teacher.save!
 end
 
