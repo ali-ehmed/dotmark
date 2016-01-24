@@ -1,14 +1,18 @@
+div.divider-cell {
+  border-top: 1px solid #ddd;
+  padding-bottom: 6px;
+  margin-top: 9px;
+}
+tr.period_days {
+  font-size: 17px;
+  font-weight: bold;
+}
+.generate_btn {
+  font-size: 30px;
+  font-weight: 900;
+  padding: 3px 0px;
+}
 #timetable {
-	div.divider-cell {
-    border-top: 1px solid #ddd;
-    padding-bottom: 6px;
-    margin-top: 9px;
-	}
-	tr.period_days {
-    font-size: 17px;
-    font-weight: bold;
-	}
-
   .btn-view-allocations {
     margin-bottom: 27px;
   }

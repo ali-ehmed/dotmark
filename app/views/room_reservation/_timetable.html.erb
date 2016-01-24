@@ -29,12 +29,19 @@
 						<% TimeSlot.for(days.week_day).each do |time_slot| %>
 							<td align="center" class="loader-cell-<%= time_slot.id %>" data-time-slot-id="<%= time_slot.id %>">
                 <% if current_resource.has_room_scheduled?(@batch_id, time_slot.id).present? %>
+                  <% options =
+                         {
+                             batch_id: @batch_id,
+                             course: current_resource.has_room_scheduled?(@batch_id, time_slot.id).first.course,
+                             section: current_resource.has_room_scheduled?(@batch_id, time_slot.id).first.section,
+                             room: current_resource.has_room_scheduled?(@batch_id, time_slot.id).first.time_tables.first.classroom,
+                             slot_id: time_slot.id,
+                             course_name: current_resource.has_room_scheduled?(@batch_id, time_slot.id).first.course.detailed_name,
+                             teacher_name: current_resource.full_name
+                         }
+                  %>
 
-                  <% course = current_resource.has_room_scheduled?(@batch_id, time_slot.id).first.course %>
-                  <% section = current_resource.has_room_scheduled?(@batch_id, time_slot.id).first.section %>
-                  <% room = current_resource.has_room_scheduled?(@batch_id, time_slot.id).first.time_tables.first.classroom %>
-
-                  <%= marked_cell(@batch_id, time_slot.id, course, section, room) %>
+                  <%= marked_cell(options) %>
                 <% else %>
                   <% if time_slot.available_classrooms.length == 0 %>
                     <span class="label label-danger" data-toggle="tooltip" data-placement="top" title="There are no rooms available in this time.">

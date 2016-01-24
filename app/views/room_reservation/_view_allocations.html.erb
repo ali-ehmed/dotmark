@@ -6,7 +6,7 @@
         <h4 class="modal-title" id="myModalLabel"><%= current_resource.full_name %>'s Allocations</h4>
       </div>
       <div class="modal-body">
-        <table class="table table-striped teacher_allocations" data-source="<%= time_table_search_allocations_path(format: :json) %>">
+        <table class="table table-striped teacher_allocations" data-source="<%= room_reservation_search_allocations_path(format: :json) %>">
           <thead>
             <th>Course</th>
             <th>Course Type</th>

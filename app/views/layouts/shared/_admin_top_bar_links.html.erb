@@ -1,12 +1,17 @@
 <ul class="nav navbar-nav">
   <li>
     <%= link_to students_path do %>
-      <i class="fa fa-users"></i> Enrollments
+      <i class="fa fa-graduation-cap"></i> Enrollments
     <% end %>
   </li>
   <li>
     <%= link_to teachers_path do %>
-      Teachers
+        <i class="fa fa-users"></i> Teachers
+    <% end %>
+  </li>
+  <li>
+    <%= link_to time_table_index_path do %>
+        <i class="glyphicon glyphicon-calendar"></i> Generate Time Table
     <% end %>
   </li>
 </ul>

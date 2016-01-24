@@ -9,7 +9,6 @@ module Institutes
 			else
 				@batch = Batch.find(params[:batch_id])
 				@sections = @batch.sections
-				@admission_sections = @batch.sections
 				@new_admission = Student.enroll_new(session[:admission]) if params[:new_admission] == "true" and session[:admission]
 			end
 			respond_to do |format|

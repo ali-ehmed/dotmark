@@ -1,0 +1,2 @@
+module Administrations::TimeTableHelper
+end

@@ -1,4 +1,4 @@
-class TimeTableController < ApplicationController
+class RoomReservationController < ApplicationController
 	prepend_before_action :time_table_slots, only: [:teacher_allocations]
 	include AllocationsHelper
   respond_to :json
@@ -86,12 +86,14 @@ class TimeTableController < ApplicationController
 		logger.debug "Transaction: -> #{result}"
 
 		@attributes = {
+			batch_id: params[:batch_id],
 			course: course,
 			section: section,
 			room: room,
-			batch: params[:batch_id],
-			time_slot: slot
+			slot_id: slot,
+			course_name: course.detailed_name
 		}
+
 
 		respond_to do |format|
 			format.js {}

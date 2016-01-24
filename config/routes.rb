@@ -1,10 +1,13 @@
 Rails.application.routes.draw do
-  get 'time_table/index'
-  get "time_table/search_allocations" => "time_table#search_allocations"
-  get "time_table/schedule_time_cell/:week_day/:time" => "time_table#schedule_time_cell", as: :schedule_a_time
-  get "time_table/:batch_id/teacher_allocations" => "time_table#teacher_allocations", as: :teacher_allocations
-  post "scheduling_room" => "time_table#book_room", as: :scheduling_room
-  delete "dissmiss_reserved_room" => "time_table#dissmiss_reserved_room", as: :dismiss_room
+
+  # Routes for Room Reservation
+  get 'room_reservation/index'
+  get "room_reservation/search_allocations" => "room_reservation#search_allocations"
+  get "room_reservation/schedule_time_cell/:week_day/:time" => "room_reservation#schedule_time_cell", as: :schedule_a_time
+  get "room_reservation/:batch_id/teacher_allocations" => "room_reservation#teacher_allocations", as: :teacher_allocations
+  post "scheduling_room" => "room_reservation#book_room", as: :scheduling_room
+  delete "dismiss_reserved_room" => "room_reservation#dissmiss_reserved_room", as: :dismiss_room
+
   # Routes for Students and Teachers
   constraints(Subdomain) do
     resources :profiles, :path => ":username", only: [:index] do
@@ -75,6 +78,10 @@ Rails.application.routes.draw do
       # Admin Teachers
       resources :teachers, path: "teachers", only: [:index, :update] do
         get "/search" => "teachers#search", on: :collection, as: :search
+      end
+
+      resources :time_table, path: "time_table", only: [:index] do
+        get "/generate" => "time_table#show", as: :generate, on: :collection
       end
     end
 

@@ -1,0 +1,52 @@
+<div class="row">
+  <div class="col-md-12">
+    <table class="table table-bordered" id="time_table">
+      <tr>
+        <td align="center" rowspan="2">
+          <strong>Fridays</strong>
+          <div class="divider-cell"></div>
+          <strong>Days</strong>
+        </td>
+        <% @fridays.each do |timing| %>
+            <td align="center"><%= timing.timings %></td>
+        <% end %>
+      </tr>
+      <tr>
+        <% @non_fridays.each do |timing| %>
+            <td align="center"><%= timing.timings %></td>
+        <% end %>
+      </tr>
+      <tr class="period_days">
+        <td align="center"><strong>Week Days</strong></td>
+        <% (1..9).each do |period_days| %>
+            <td align="center"><%= period_days %></td>
+        <% end %>
+      </tr>
+      <% @week_days.each_with_index do |days, i| %>
+          <tr>
+            <td align="center"><strong><%= days.week_day %></strong></td>
+            <% TimeSlot.for(days.week_day).each do |time_slot| %>
+                <td align="center" class="loader-cell-<%= time_slot.id %>" data-time-slot-id="<%= time_slot.id %>">
+                  <% if @reservations.for_time_slot(time_slot.id).each do |allocation| %>
+                    <% options =
+                           {
+                               batch_id: allocation.course_allocation.batch_id,
+                               course: allocation.course_allocation.course,
+                               section: allocation.course_allocation.section,
+                               room: allocation.classroom,
+                               slot_id: time_slot.id,
+                               course_name: allocation.course_allocation.course.detailed_name
+                           }
+                    %>
+
+                    <%= marked_cell(options, false, true, allocation.course_allocation.teacher.full_name) %>
+                  <% end.empty? %>
+                    ---
+                  <% end %>
+                </td>
+            <% end %>
+          </tr>
+      <% end %>
+    </table>
+  </div>
+</div>

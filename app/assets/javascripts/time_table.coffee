@@ -21,19 +21,19 @@ window.getTeacherAllocationsByBatch = (elem) ->
 	window.current_batch = $this.val()
 	$.ajax
     type: "Get"
-    url: "/time_table/#{$this.val()}/teacher_allocations.js"
+    url: "/room_reservation/#{$this.val()}/teacher_allocations.js"
     beforeSend: ->
     	$(".loader").addClass("text-center").html("<i style=\"text-align:center;\" class=\"fa fa-spinner fa-spin fa-3x\"></i>")
     error: (response) ->
       swal 'oops', 'Something went wrong'
 
 $timetable = {
-	getAllocationsOfTeacher: ->
-	    $input = $('ul.allocations_current_batches li').find("input[type='radio']:checked")
-	    window.current_batch = $input.val()
-	    url = "/time_table/#{$input.val()}/teacher_allocations.js"
-	    $.get url, (response) ->
-	      return
+  getAllocationsOfTeacher: ->
+    $input = $('ul.allocations_current_batches li').find("input[type='radio']:checked")
+    window.current_batch = $input.val()
+    url = "/room_reservation/#{$input.val()}/teacher_allocations.js"
+    $.get url, (response) ->
+      return
 
   bookingClassroom: ->
     $(document).on 'submit', 'form#scheduleForm', (e) ->
@@ -42,7 +42,7 @@ $timetable = {
       $form = $(this)
 
 
-      params = [ $form.serializeArray()[0].name ]
+      params = [$form.serializeArray()[0].name]
       $.each $form.serializeArray(), (index) ->
         param = undefined
         param = $(this)
@@ -80,13 +80,48 @@ $timetable = {
         console.log 'Booked'
 
         $("#scheduleTeacherTimeModal").modal('hide')
+      ).done(->
+        console.log('Done')
+      ).fail ->
+        swal 'Something went wrong'
+        return
 
-        ).done(->
-          console.log('Done')
-        ).fail ->
-          swal 'Something went wrong'
-          return
+  genrateTimeTable: ->
+    $("#generate_time_table").on "click", ->
+      console.log("Generating")
 
+      section_id = $('input[name="section_id"]:checked').val()
+      batch_id = $('input[name="current_batch_id"]:checked').val()
+
+      if section_id == undefined
+        $.notify {
+          icon: 'glyphicon glyphicon-warning-sign'
+          title: '<strong>Instructions:</strong><br />'
+          message: 'Please Select Batch and Section'
+        }, type: 'danger'
+        return false
+
+      params = {
+        batch_id: batch_id,
+        section_id: section_id
+      }
+      $("#admin_timetable").html("<i style=\"text-align:center;\" class=\"fa fa-spinner fa-spin fa-3x\"></i>")
+
+      $.get(@dataset.url, params, (response) ->
+        if response.status == "empty"
+          $.notify {
+            icon: 'glyphicon glyphicon-warning-sign'
+            title: '<strong>Couldn\'t Generate:</strong><br />'
+            message: "#{response.alert}"
+          }, type: 'warning'
+
+          $("#admin_timetable").empty()
+          return false
+      ).done(->
+        console.log('Done')
+      ).fail ->
+        swal 'Something went wrong'
+        return
 }
 
 window.returnSectionCourse = (elem) ->
@@ -98,7 +133,7 @@ window.removeReservedRoom = (parameters) ->
   console.log parameters
   swal {
     title: 'Are you sure you want to remove?'
-    text: 'You Reserved room will be dismissed.'
+    text: 'Your Reserved room will be dismissed.'
     type: 'warning'
     showCancelButton: true
     confirmButtonColor: '#DD6B55'
@@ -107,7 +142,7 @@ window.removeReservedRoom = (parameters) ->
   }, ->
     $.ajax
       type: "Delete"
-      url: "/dissmiss_reserved_room"
+      url: "/dismiss_reserved_room"
       data: parameters
       dataType: "json"
       beforeSend: ->
@@ -117,12 +152,8 @@ window.removeReservedRoom = (parameters) ->
           html: true
           showConfirmButton: false
       success: (response) ->
-        expire_date = new Date
-        expire_date.setMinutes expire_date.getMinutes() + 1
 
-        window.current_account = response.current_domain
-        $.cookie('current_account', response.current_domain, { expires: 1, path: response.current_domain })
-        $.cookie('dismissed_reserved_seat', 'present', { expires: expire_date, path: current_account })
+        alertDismiss("dismissed_reserved_seat", "present", 1, response)
 
         setTimeout (->
           location.reload()
@@ -134,8 +165,9 @@ window.removeReservedRoom = (parameters) ->
 
 $(document).on 'page:change', ->
 
-	$timetable.getAllocationsOfTeacher() if current_teacher() == current_resource #if teacher_signed_in?
-	$timetable.bookingClassroom()
+  $timetable.getAllocationsOfTeacher() if current_teacher() == current_resource #if teacher_signed_in?
+  $timetable.bookingClassroom()
+  $timetable.genrateTimeTable()
 
 	$('table.teacher_allocations').DataTable
 	  responsive: true

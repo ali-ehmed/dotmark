@@ -95,10 +95,11 @@ class Batch < ActiveRecord::Base
 								end_date: prev_batch.end_date,
 								semester: semester.name,
 								semester_id: semester.id,
-								students: prev_batch.students.count
+								students: prev_batch.students.count,
+								sections: prev_batch.sections
 							}
 							@batches.push(attributes)
-							current_semester += 2 #use to get current semster from semester array
+							current_semester += 2 #use to get current semester from semester array
 						end
 					end
 				end

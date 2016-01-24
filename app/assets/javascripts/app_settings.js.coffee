@@ -34,8 +34,15 @@ window.current_teacher = ->
 
   return subdomain
 
+window.alertDismiss = (name, value, expires_min, domain) ->
+  expire_date = new Date
+  expire_date.setMinutes expire_date.getMinutes() + expires_min
+
+  $.cookie('current_account', domain, { expires: 1, path: domain })
+  $.cookie(name, value, { expires: expire_date, path: domain })
 
 $(document).on 'page:change', ->
+#  Instantiating Plugins and Function
   activeTabs()
 
   currentAppActiveLink $('.navbar-nav')
