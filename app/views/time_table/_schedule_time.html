@@ -17,39 +17,59 @@
             </span>
           </p>
           <div class="row">
-            <div class="col-md-6">
-              <blockquote>
-                <strong>
-                  Available Classrooms:
-                  <small>Total: <%= @available_classrooms.length %></small>
-                </strong>
-              </blockquote>
-              <br />
-              <div class="scrollable">
-                <ul class="list-group">
-                  <% @available_classrooms.each do |classroom| %>
-                    <li class="list-group-item text-center" data-classroom-id="<%= classroom.id %>">
-                      <div class="radio" style="margin-top:1px;">
-                        <%= radio_button_tag :classroom_id, classroom.id, false, id: "classroom_#{classroom.id}" %>
-                        <label for="classroom_<%= classroom.id %>" style="padding-left:7px;"><strong>Classroom <%= classroom.name %></strong></label>
-                      </div>
-                    </li>
-                  <% end %>
-                </ul>
-              </div>
-            </div>
-            <div class="col-md-6">
+            <% unless @count_teacher_allocations.to_i == 0 %>
+              <% if @timeslot.available_classrooms.length == 0 %>
+                <div class="well">
+                  <blockquote>
+                    <strong>There are available classrooms.</strong>
+                  </blockquote>
+                </div>
+              <% else %>
+                <div class="col-md-6">
+                  <blockquote>
+                    <strong>
+                      Available Classrooms:
+                      <small>Total: <%= @available_classrooms.count %></small>
+                    </strong>
+                  </blockquote>
+                  <br />
+                  <div class="scrollable">
+                    <ul class="list-group">
+                      <% @available_classrooms.each do |classroom| %>
+                        <li class="list-group-item text-center" data-classroom-id="<%= classroom.id %>">
+                          <div class="radio" style="margin-top:1px;">
+                            <%= radio_button_tag :classroom_id, classroom.id, false, id: "classroom_#{classroom.id}" %>
+                            <label for="classroom_<%= classroom.id %>" style="padding-left:7px;"><strong>Classroom <%= classroom.name %></strong></label>
+                          </div>
+                        </li>
+                      <% end %>
+                    </ul>
+                  </div>
+                </div>
+              <% end %>
+            <% end %>
+            <div class="col-md-6 <%= @count_teacher_allocations.to_i == 0 ? 'col-lg-12' : '' %>">
               <blockquote class="blockquote-reverse">
-                <strong>Select Your Course: 
-                  <small>(You have <%= pluralize(@count_teacher_allocations.to_i, "Allocation") %> in pending)</small>
+                <% if @count_teacher_allocations.to_i == 0 %>
+                <strong>Allocations Reserved
+                  <small>(Go to your <a href="#">Profile</a> and finalize them)</small>
                 </strong>
+                <% else %>
+                  <strong>Select Your Course:
+                    <small>(You have <%= pluralize(@count_teacher_allocations.to_i, "Allocation") %> in pending)</small>
+                  </strong>
+                <% end %>
               </blockquote>
               <br />
+              <!--Course ID for Selected Section-->
+              <div id="course_id" style="display: none;"></div>
               <div class="scrollable">
-                <% @teacher_allocations.each do |allocation| %>
+                <% @teacher_allocations.each_with_index do |allocation, count| %>
+                  <% count += 1 %>
                   <div class="panel panel-default">
                     <div class="panel-heading">
                       <%= allocation.course.detailed_name %>
+                      <span class="pull-right"><strong>Credit Hours: </strong><%= allocation.course.credit_hours %></span>
                       <!-- Course Allocation Params -->
                       <%= hidden_field_tag :teacher_id, allocation.teacher_id %>
                       <%= hidden_field_tag :batch_id, allocation.batch_id %>
@@ -57,18 +77,28 @@
                     <div class="panel-body">
                       <ul class="list-group">
                         <% allocation.sections(allocation).each do |section| %>
-                          <%= hidden_field_tag "course_id_#{section.id}", allocation.course_id %>
-                          <% if CourseAllocation.reserved_allocation?(allocation, section)  %>
-                            <li class="list-group-item text-center" data-section-id="<%= section.id %>">
-                              <div class="radio" style="margin-top:1px;">
-
-                                <%= radio_button_tag :section_id, section.id, false, id: "section_#{section.id}" %>
-
-                                <label for="section_<%= section.id %>" style="padding-left:7px;"><strong>Section <%= section.name %></strong></label>
-                              </div>
+                          <% if @timeslot.class_going_on?(allocation.batch_id, section) %>
+                            <li class="list-group-item text-center">
+                              <strong>
+                                Section '<%= section.name %>'
+                                <a href="#" data-toggle="tooltip" data-placement="top" title="<%= @timeslot.class_going_on?(allocation.batch_id, section)[:teacher] %> - In Classroom <%= @timeslot.class_going_on?(allocation.batch_id, section)[:classroom] %>">
+                                  (In Progress)
+                                </a>
+                              </strong>
                             </li>
                           <% else %>
-                            <li class="list-group-item text-center"><strong>Section '<%= section.name %>'</strong> (Reserved)</li>
+                            <% if CourseAllocation.reserved_allocation?(allocation, section)  %>
+                              <li class="list-group-item text-center" data-for-course-id="<%= allocation.course_id %>" data-section-id="<%= section.id %>">
+                                <div class="radio" style="margin-top:1px;">
+
+                                  <%= radio_button_tag :section_id, section.id, false, id: "section_#{section.id}_for_#{allocation.course_id}", onclick: "returnSectionCourse(this);" %>
+                                  <label for="section_<%= section.id %>_for_<%= allocation.course_id %>" style="padding-left:7px;"><strong>Section <%= section.name %></strong></label>
+
+                                </div>
+                              </li>
+                            <% else %>
+                              <li class="list-group-item text-center"><strong>Section '<%= section.name %>'</strong> (Reserved)</li>
+                            <% end %>
                           <% end %>
                         <% end %>
                       </ul>

@@ -39,7 +39,8 @@ class Teacher < ActiveRecord::Base
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable, :confirmable
-	has_many :course_allocations
+         
+	has_many :course_allocations, dependent: :destroy
 	has_many :allocated_sections, class_name: "CourseAllocation", foreign_key: :teacher_id
 	
 	has_one :account, as: :resource, dependent: :destroy

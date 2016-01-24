@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   get "time_table/schedule_time_cell/:week_day/:time" => "time_table#schedule_time_cell", as: :schedule_a_time
   get "time_table/:batch_id/teacher_allocations" => "time_table#teacher_allocations", as: :teacher_allocations
   post "scheduling_room" => "time_table#book_room", as: :scheduling_room
+  delete "dissmiss_reserved_room" => "time_table#dissmiss_reserved_room", as: :dismiss_room
   # Routes for Students and Teachers
   constraints(Subdomain) do
     resources :profiles, :path => ":username", only: [:index] do

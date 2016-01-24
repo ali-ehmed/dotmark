@@ -32,6 +32,7 @@
 //= require best_in_place.jquery-ui
 //= require best_in_place.purr
 //= require jquery.cookie.js
+//= require underscore.min.js
 
 //= require_tree .
 

@@ -199,7 +199,7 @@ module Institutes
 
 			@sections = attributes[:section_ids]
 
-			render :json => { status: :error, msg: CourseAllocation::AllocationsValidity  } and return if @sections.blank? or attributes[:course_id].blank?
+			render :json => { status: :error, msg: CourseAllocation::ALLOCATIONS_VALIDITY  } and return if @sections.blank? or attributes[:course_id].blank?
 
 			@batch_id = attributes[:batch_id]
 
@@ -293,7 +293,7 @@ module Institutes
 			@teacher = Teacher.find(params[:teacher_id].to_i)
 			CourseAllocation.send_for_approval(@teacher, params[:batch_id].to_i, params[:course_id].to_i)
 
-			render :json => { status: :ok, msg: CourseAllocation::Approval  } and return
+			render :json => { status: :ok, msg: CourseAllocation::APPROVAL  } and return
 		end
 
 		private

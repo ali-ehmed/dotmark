@@ -35,55 +35,102 @@ $timetable = {
 	    $.get url, (response) ->
 	      return
 
-	bookingClassroom: ->
-		$(document).on "submit", "form#scheduleForm", (e) ->
-			e.preventDefault()
-			console.log("Booking Now")
+  bookingClassroom: ->
+    $(document).on 'submit', 'form#scheduleForm', (e) ->
+      e.preventDefault()
+      console.log 'Booking Now'
+      $form = $(this)
 
-			$form = $(@)
 
-			params = [ $form.serializeArray()[0].name ]
+      params = [ $form.serializeArray()[0].name ]
+      $.each $form.serializeArray(), (index) ->
+        param = undefined
+        param = $(this)
+        if index > 0
+          params.push param[0].name
+        return
 
-			$.each $form.serializeArray(), (i) ->
-			  param = $(this)
-			  if i > 0
-				  params.push param[0].name
-				  return
+      console.log params
 
-			console.log params
+      if jQuery.inArray('section_id', params) == -1
+        error = true
+      else if jQuery.inArray('classroom_id', params) == -1
+        error = true
 
-			if jQuery.inArray('section_id', params) == -1
-				error = true
-			else if jQuery.inArray('classroom_id', params) == -1
-				error = true
 
-			if error is true
-			  $.notify {
-			    icon: 'glyphicon glyphicon-warning-sign'
-			    title: '<strong>Instructions:</strong><br />'
-			    message: 'Please select the required entities to book a classroom.'
-			  }, type: 'danger'
-				
-			  return false
+      if error == true
+        $.notify {
+          icon: 'glyphicon glyphicon-warning-sign'
+          title: '<strong>Instructions:</strong><br />'
+          message: 'Please select the required entities to book a classroom.'
+        }, type: 'danger'
+        return false
 
-			$.post($form.attr('action'), $form.serialize(), (data) ->
-			  console.log 'Booked'
-			  
-			  $("#scheduleTeacherTimeModal").modal('hide')
+      $form_data = $form.serializeArray()
 
-			  time_slot_id = $("#time_slot_id").val()
-			  $("table#time_table tr [data-time-slot-id='#{time_slot_id}']").html("
-				  <span class='label' style='cursor: help;background-color: #{data.course.color};'>
-				  #{data.course.code}
-				  </span>
-				")
-			  
-			).done(->
-			).fail ->
-			  swal 'Something went wrong'
-			  return
+      course_id = document.getElementById('course_id').dataset.course_id
+      console.log course_id
+
+      $form_data.push {
+        name: 'course_id'
+        value: course_id
+      }
+
+      $.post($form.attr('action'), $form_data, (data) ->
+        console.log 'Booked'
+
+        $("#scheduleTeacherTimeModal").modal('hide')
+
+        ).done(->
+          console.log('Done')
+        ).fail ->
+          swal 'Something went wrong'
+          return
 
 }
+
+window.returnSectionCourse = (elem) ->
+  $this = $(elem)
+  course_id = $this.closest("li").data('for-course-id')
+  document.getElementById('course_id').dataset.course_id = course_id
+
+window.removeReservedRoom = (parameters) ->
+  console.log parameters
+  swal {
+    title: 'Are you sure you want to remove?'
+    text: 'You Reserved room will be dismissed.'
+    type: 'warning'
+    showCancelButton: true
+    confirmButtonColor: '#DD6B55'
+    confirmButtonText: 'Yes'
+    closeOnConfirm: true
+  }, ->
+    $.ajax
+      type: "Delete"
+      url: "/dissmiss_reserved_room"
+      data: parameters
+      dataType: "json"
+      beforeSend: ->
+        swal
+          title: "<span class=\"fa fa-spinner fa-spin fa-3x\"></span>"
+          text: "<h2>Removing</h2>"
+          html: true
+          showConfirmButton: false
+      success: (response) ->
+        expire_date = new Date
+        expire_date.setMinutes expire_date.getMinutes() + 1
+
+        window.current_account = response.current_domain
+        $.cookie('current_account', response.current_domain, { expires: 1, path: response.current_domain })
+        $.cookie('dismissed_reserved_seat', 'present', { expires: expire_date, path: current_account })
+
+        setTimeout (->
+          location.reload()
+        ), 1000
+
+      error: (response) ->
+        swal 'oops', 'Something went wrong'
+    return
 
 $(document).on 'page:change', ->
 
@@ -104,3 +151,15 @@ $(document).on 'page:change', ->
 	    { 'data': 'semester' }
 	    { 'data': 'sent_date' }
 	  ]
+
+#  Seat Dismiss Message
+  if $.cookie('dismissed_reserved_seat')
+    $.notify {
+      icon: 'glyphicon glyphicon-ok'
+      title: ''
+      message: 'Your reserved seat has been removed.'
+    }, type: 'success'
+
+    setTimeout (->
+      $.removeCookie 'dismissed_reserved_seat', path: $.cookie('current_account')
+    ), 1000

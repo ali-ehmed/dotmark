@@ -20,7 +20,14 @@ class TimeSlot < ActiveRecord::Base
 		if self.classrooms.blank?
 			Classroom.all
 		else
-			Classroom.where.not("id in (?)", classrooms.first.id)
+			Classroom.where.not("id in (?)", self.classrooms.map(&:id))
+		end
+	end
+
+	def class_going_on?(batch, section)
+		going_on = self.time_tables.joins(:course_allocation).where("course_allocations.batch_id = ? and course_allocations.section_id = ?", batch, section)
+		if going_on.present?
+			{:teacher => going_on.first.course_allocation.teacher.full_name, :classroom => going_on.first.classroom.name }
 		end
 	end
 

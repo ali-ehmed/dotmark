@@ -33,8 +33,10 @@ class CourseAllocation < ActiveRecord::Base
 
 	enum status: { archived: 0, under_approval: 1, approved: 2 }
 
-	AllocationsValidity = "Please Select Course and Sections"
-	Approval = "Notification has been sent successfully."
+	scope :pending_allocations, -> { joins(:time_tables).where("time_tables.status = 1").select("time_tables.status, section_id, course_id").group("time_tables.status, section_id, course_id") }
+
+	ALLOCATIONS_VALIDITY = "Please Select Course and Sections"
+	APPROVAL = "Notification has been sent successfully."
 	
 	class << self
 		def build_transaction(&block)
@@ -46,14 +48,14 @@ class CourseAllocation < ActiveRecord::Base
 		# check on the same slot if batch's section has been already assigned to another teacher
 		def reserved_allocation?(allocation, section)
 			reservation = TimeTable.joins(:course_allocation)
-														 .where("course_allocations.course_id = ? and course_allocations.teacher_id = ? and course_allocations.batch_id = ? and course_allocations.section_id = ?", 
+														 .where("course_allocations.course_id = ? and course_allocations.teacher_id = ? and course_allocations.batch_id = ? and course_allocations.section_id = ?",
 														 	       allocation.course_id, allocation.teacher_id, allocation.batch_id, section.id)
 			unless reservation.blank?
-				return reservation.first.reserved?						 
+				return true if reservation.first.reserved?
+				return false if reservation.first.finalized?
 			end
 
-			return true
-			# find_by_batch_id_and_course_id_and_section_id_and_teacher_id(allocation.batch_id, allocation.course_id, section.id, allocation.teacher_id)
+			true
 		end
 
 		def send_for_approval(teacher, batch_id, course_id)

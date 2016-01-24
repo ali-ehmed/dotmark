@@ -55,12 +55,17 @@ class TimeTableController < ApplicationController
   	@count_allocations = $redis.get("count_teacher_allocations_#{@batch.id}")
 
   	if @count_allocations.blank?
-  		@count_allocations = current_resource.course_allocations.under_approval.where(batch_id: @batch.id).count.to_json
-  		$redis.set("count_teacher_allocations_#{@batch.id}", @count_allocations)
-      $redis.expire("count_teacher_allocations_#{@batch.id}", 1.second.to_i)
+  		@allocations = current_resource.course_allocations.under_approval.where(batch_id: @batch.id)
+
+			pending_allocations = @allocations.pending_allocations
+			logger.debug "------------#{pending_allocations.length}"
+			@count_allocations = @allocations.length - pending_allocations.length
+
+  		$redis.set("count_teacher_allocations_#{@batch.id}", @count_allocations.to_json)
+      $redis.expire("count_teacher_allocations_#{@batch.id}", 30.seconds.to_i)
   	end
 
-		@count_teacher_allocations = JSON.load @count_allocations
+		@count_teacher_allocations = @count_allocations
 
     @teacher_allocations = current_resource.under_approval_allocations(@batch.id)
 
@@ -76,11 +81,35 @@ class TimeTableController < ApplicationController
 
     @course_allocations = CourseAllocation.where(teacher_id: params[:teacher_id]).where(batch_id: params[:batch_id])
 
-    TimeTable.build_by_allocations @course_allocations, params
+    result, course, section, room, slot = TimeTable.build_by_allocations @course_allocations, params
 
-    course = Course.find(params["course_id_#{params[:section_id]}"])
-    render json: {course: course}
-  end
+		logger.debug "Transaction: -> #{result}"
+
+		@attributes = {
+			course: course,
+			section: section,
+			room: room,
+			batch: params[:batch_id],
+			time_slot: slot
+		}
+
+		respond_to do |format|
+			format.js {}
+		end
+	end
+
+	def dissmiss_reserved_room
+		logger.debug "Params are: -> #{params}"
+		allocations = TimeTable.dismiss_reservations(params, current_resource)
+		allocations.update_all("status = 0") if allocations.count > 1
+
+		@reserved_allocation = allocations.where("time_tables.time_slot_id = ?", params[:slot_id])
+		@reserved_allocation.destroy_all
+
+		$redis.del("count_teacher_allocations_#{params[:batch_id]}")
+
+		render :json => { status: :ok, current_domain: request.subdomain }
+	end
 
   def time_table_slots
 		@week_days = TimeSlot.week_days

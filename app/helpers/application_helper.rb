@@ -99,11 +99,14 @@ module ApplicationHelper
     end
   end
 
-  def head_title
+  def title
+    title = ""
     if current_resource_name.to_s == "admin"
-      "Admin Panel"
+      title << "Admin Panel"
     else
-      @account["resource"]["username"]
+      title << @account["resource"]["username"]
     end
+
+    title
   end
 end
