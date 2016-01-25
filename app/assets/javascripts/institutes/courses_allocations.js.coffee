@@ -156,6 +156,7 @@ window.notifyMultiple = (elem) ->
     batch_id: $batch_id,
     course_ids: $course_ids
   }
+  
   if $teacher_ids.length == 0 or $course_ids == 0
     $.notify {
       icon: 'glyphicon glyphicon-warning-sign'
@@ -164,10 +165,23 @@ window.notifyMultiple = (elem) ->
     }, type: 'danger'
     return false
 
+  deliverEmails(_params, $url)
+
+window.sendApprovalInstructions = (elem, teacher_id, batch_id, course_id) ->
+  $url = elem.dataset.url
+  _params = {
+    teacher_ids: [teacher_id],
+    batch_id: batch_id,
+    course_ids: [course_id]
+  }
+  unless teacher_id == "" or batch_id == "" or course_id == ""
+    deliverEmails(_params, $url)
+
+deliverEmails = (params, url) ->
   $.ajax
     type: 'Get'
-    url: $url
-    data: _params
+    url: url
+    data: params
     dataType: 'json'
     success: (response) ->
       if response.status == 'ok'
@@ -179,30 +193,6 @@ window.notifyMultiple = (elem) ->
         }, type: 'success'
     error: (response) ->
       swal 'oops', 'Something went wrong'
-
-window.sendApprovalInstructions = (elem, teacher_id, batch_id, course_id) ->
-  $url = elem.dataset.url
-  _params = {
-    teacher_ids: [teacher_id],
-    batch_id: batch_id,
-    course_ids: [course_id]
-  }
-  unless teacher_id == "" or batch_id == "" or course_id == ""
-    $.ajax
-      type: 'Get'
-      url: $url
-      data: _params
-      dataType: 'json'
-      success: (response) ->
-        if response.status == 'ok'
-          $('table.allocations_table_for_' + _params['batch_id']).DataTable().ajax.url('/institutes/course_allocations/' + _params['batch_id'] + '/get_allocations.json').load()
-          $.notify {
-            icon: 'glyphicon glyphicon-ok'
-            title: ''
-            message: "#{response.msg}"
-          }, type: 'success'
-      error: (response) ->
-        swal 'oops', 'Something went wrong'
 
 $(document).on "page:change", ->
 	allocateTeachers()

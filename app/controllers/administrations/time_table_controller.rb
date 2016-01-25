@@ -1,5 +1,6 @@
 class Administrations::TimeTableController < ApplicationController
   prepend_before_action :time_table_slots, only: [:show]
+  add_breadcrumb "Time Table"
 
   def index
     @batches = Batch.current_batches
