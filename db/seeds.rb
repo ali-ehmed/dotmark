@@ -161,46 +161,68 @@ puts "Sixth semester"
 	create_by_lab_or_theory!(course_name, code, Semester.sixth_semester, labs)
 end
 
-puts "Creating Teachers"
-@teachers = Array.new
-@teachers = [{
-  name: "Uzair Ishaq", email: "uishaq@gmail.com", gender: "Male", date_of_birth: "Jan 15, 2016", joining_date: "Jan 12, 2016"
-}, {
-	name: "Faisal Iqbal", email: "fiqbal@gmail.com", gender: "Male", date_of_birth: "Jan 15, 2016", joining_date: "Jan 12, 2016"
-}, {
-	name: "Waleej Haider", email: "whaider@gmail.com", gender: "Male", date_of_birth: "Jan 15, 2016", joining_date: "Jan 12, 2016"
-}, {
-	name: "Junaid Hasan", email: "jhasan@gmail.com", gender: "Male", date_of_birth: "Jan 15, 2016", joining_date: "Jan 12, 2016"
-}, {
-	name: "Sana Sohail", email: "ssohail@gmail.com", gender: "Female", date_of_birth: "Jan 15, 2016", joining_date: "Jan 12, 2016"
-}, {
-	name: "Aqsa Siddique", email: "asiddique@gmail.com", gender: "Female", date_of_birth: "Jan 15, 2016", joining_date: "Jan 12, 2016"
-}, {
-	name: "Seher Jawaid", email: "sjawaid@gmail.com", gender: "Female", date_of_birth: "Jan 15, 2016", joining_date: "Jan 12, 2016"
-}, {
-	name: "Sallar Khan", email: "skhan@gmail.com", gender: "Male", date_of_birth: "Jan 15, 2016", joining_date: "Jan 12, 2016"
-}, {
-	name: "Sabeen Khan", email: "sabeenkhan@gmail.com", gender: "Female", date_of_birth: "Jan 15, 2016", joining_date: "Jan 12, 2016"
-}, {
-	name: "Asif Ahmed", email: "aahmed@gmail.com", gender: "Male", date_of_birth: "Jan 15, 2016", joining_date: "Jan 12, 2016"
-}, {
-	name: "Kashan Ajmal", email: "kajmal@gmail.com", gender: "Male", date_of_birth: "Jan 15, 2016", joining_date: "Jan 12, 2016"
-}, {
-	name: "Sarmad Sabih", email: "ssabih@gmail.com", gender: "Male", date_of_birth: "Jan 15, 2016", joining_date: "Jan 12, 2016"
-}]
 
-@teachers.each do |attribute|
-	Teacher.find_or_create_by!(:email => attribute[:email]) do |teacher|
-		teacher.full_name = attribute[:name]
-    teacher.gender = attribute[:gender]
-    teacher.date_of_birth = attribute[:date_of_birth]
-    teacher.joining_date = attribute[:joining_date]
-		teacher.confirm!
+
+module UrlSeed
+  if Rails.env.development?
+		Rails.application.routes.default_url_options[:host] = 'lvh.me:3000'
+	end
+end
+
+class TeacherSeed
+  prepend UrlSeed
+  @@teachers = Array.new
+
+  def create
+    puts "Creating Teachers #{dummy_teachers.length}"
+
+    @@teachers.each do |attribute|
+			Teacher.find_or_create_by!(:email => attribute[:email]) do |teacher|
+				teacher.full_name = attribute[:name]
+		    teacher.gender = attribute[:gender]
+		    teacher.date_of_birth = attribute[:date_of_birth]
+		    teacher.joining_date = attribute[:joining_date]
+		  	teacher.username = attribute[:email].split("@").first if teacher.username.blank?
+				teacher.confirm!
+		  end
+
+			teacher = Teacher.find_by(email: attribute[:email])
+		  teacher.password = "aliahmed"
+			teacher.password_confirmation = "aliahmed"
+			teacher.save!
+		end
   end
 
-	teacher = Teacher.find_by(email: attribute[:email])
-  teacher.password = "aliahmed"
-	teacher.password_confirmation = "aliahmed"
-	teacher.save!
+  private
+
+  def dummy_teachers
+		@@teachers = [{
+		  name: "Uzair Ishaq", email: "uishaq@gmail.com", gender: "Male", date_of_birth: "Jan 15, 2016", joining_date: "Jan 12, 2016"
+		}, {
+			name: "Faisal Iqbal", email: "fiqbal@gmail.com", gender: "Male", date_of_birth: "Jan 15, 2016", joining_date: "Jan 12, 2016"
+		}, {
+			name: "Waleej Haider", email: "whaider@gmail.com", gender: "Male", date_of_birth: "Jan 15, 2016", joining_date: "Jan 12, 2016"
+		}, {
+			name: "Junaid Hasan", email: "jhasan@gmail.com", gender: "Male", date_of_birth: "Jan 15, 2016", joining_date: "Jan 12, 2016"
+		}, {
+			name: "Sana Sohail", email: "ssohail@gmail.com", gender: "Female", date_of_birth: "Jan 15, 2016", joining_date: "Jan 12, 2016"
+		}, {
+			name: "Aqsa Siddique", email: "asiddique@gmail.com", gender: "Female", date_of_birth: "Jan 15, 2016", joining_date: "Jan 12, 2016"
+		}, {
+			name: "Seher Jawaid", email: "sjawaid@gmail.com", gender: "Female", date_of_birth: "Jan 15, 2016", joining_date: "Jan 12, 2016"
+		}, {
+			name: "Sallar Khan", email: "skhan@gmail.com", gender: "Male", date_of_birth: "Jan 15, 2016", joining_date: "Jan 12, 2016"
+		}, {
+			name: "Sabeen Khan", email: "sabeenkhan@gmail.com", gender: "Female", date_of_birth: "Jan 15, 2016", joining_date: "Jan 12, 2016"
+		}, {
+			name: "Asif Ahmed", email: "aahmed@gmail.com", gender: "Male", date_of_birth: "Jan 15, 2016", joining_date: "Jan 12, 2016"
+		}, {
+			name: "Kashan Ajmal", email: "kajmal@gmail.com", gender: "Male", date_of_birth: "Jan 15, 2016", joining_date: "Jan 12, 2016"
+		}, {
+			name: "Sarmad Sabih", email: "ssabih@gmail.com", gender: "Male", date_of_birth: "Jan 15, 2016", joining_date: "Jan 12, 2016"
+		}]
+  end
 end
+
+TeacherSeed.new.create()
 

@@ -122,6 +122,22 @@ $timetable = {
       ).fail ->
         swal 'Something went wrong'
         return
+
+  loadTeacherAllocations: ->
+    $('table.teacher_allocations').DataTable
+      responsive: true
+      bSort: true
+      bFilter: true
+      'iDisplayLength': 7
+      ajax: $('table.table.teacher_allocations').data('source')
+      'columns': [
+        { 'data': 'course' }
+        { 'data': 'course_type' }
+        { 'data': 'section' }
+        { 'data': 'batch' }
+        { 'data': 'semester' }
+        { 'data': 'sent_date' }
+      ]
 }
 
 window.returnSectionCourse = (elem) ->
@@ -168,21 +184,7 @@ $(document).on 'page:change', ->
   $timetable.getAllocationsOfTeacher() if current_teacher() == current_resource #if teacher_signed_in?
   $timetable.bookingClassroom()
   $timetable.genrateTimeTable()
-
-	$('table.teacher_allocations').DataTable
-	  responsive: true
-	  bSort: true
-	  bFilter: true
-	  'iDisplayLength': 7
-	  ajax: $('table.table.teacher_allocations').data('source')
-	  'columns': [
-	    { 'data': 'course' }
-	    { 'data': 'course_type' }
-	    { 'data': 'section' }
-	    { 'data': 'batch' }
-	    { 'data': 'semester' }
-	    { 'data': 'sent_date' }
-	  ]
+  $timetable.loadTeacherAllocations()
 
 #  Seat Dismiss Message
   if $.cookie('dismissed_reserved_seat')

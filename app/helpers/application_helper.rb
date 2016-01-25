@@ -18,20 +18,6 @@ module ApplicationHelper
     end
 
     image
-    # if resource.avatar.nil?
-    #   $redis.del("user_avatar_#{resource.avatar.updated_at}")
-    # else
-    #   image = $redis.get("user_avatar_#{resource.avatar.updated_at}")
-    #   if image.nil?
-    #     if resource.avatar.present? and resource.avatar.image.present?
-    #       image = resource.avatar.image.url(:thumb).to_json
-    #     else
-    #       image = "user-avatar.png".to_json
-    #     end
-    #     $redis.set("user_avatar_#{resource.avatar.updated_at}", image)
-    #   end
-    # end
-    # JSON.load image
   end
 
   def semesters_select_tag(semesters)
@@ -99,6 +85,7 @@ module ApplicationHelper
     end
   end
 
+  # Application Head Title
   def title
     title = ""
     if current_resource_name.to_s == "admin"

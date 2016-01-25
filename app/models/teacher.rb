@@ -76,8 +76,8 @@ class Teacher < ActiveRecord::Base
 		"#{first_name} #{last_name}"
 	end
 
-	def allocations(batch_id, course_id)
-		course_allocations.where("batch_id = ? and course_id = ?", batch_id, course_id)
+	def allocations(batch_id, course_ids)
+		course_allocations.where("batch_id = ? and course_id in (?)", batch_id, course_ids)
 	end
 
 	def sections_by_course(course_id, status)

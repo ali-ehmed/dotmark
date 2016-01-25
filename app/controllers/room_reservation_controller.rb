@@ -1,4 +1,7 @@
 class RoomReservationController < ApplicationController
+	# This Controller is used as an api to share data to javascript
+	# To asynchronously change dat on Teacher's Profile
+
 	prepend_before_action :time_table_slots, only: [:teacher_allocations]
 	include AllocationsHelper
   respond_to :json
@@ -58,7 +61,8 @@ class RoomReservationController < ApplicationController
   		@allocations = current_resource.course_allocations.under_approval.where(batch_id: @batch.id)
 
 			pending_allocations = @allocations.pending_allocations
-			logger.debug "------------#{pending_allocations.length}"
+			logger.debug "Counting Pending Allocations: -> #{pending_allocations.length}"
+
 			@count_allocations = @allocations.length - pending_allocations.length
 
   		$redis.set("count_teacher_allocations_#{@batch.id}", @count_allocations.to_json)
@@ -85,6 +89,7 @@ class RoomReservationController < ApplicationController
 
 		logger.debug "Transaction: -> #{result}"
 
+		# Attributes to mark a cell after booking
 		@attributes = {
 			batch_id: params[:batch_id],
 			course: course,
@@ -94,12 +99,12 @@ class RoomReservationController < ApplicationController
 			course_name: course.detailed_name
 		}
 
-
 		respond_to do |format|
 			format.js {}
 		end
 	end
 
+	# Remove Reserved room
 	def dissmiss_reserved_room
 		logger.debug "Params are: -> #{params}"
 		allocations = TimeTable.dismiss_reservations(params, current_resource)
@@ -113,6 +118,8 @@ class RoomReservationController < ApplicationController
 		render :json => { status: :ok, current_domain: request.subdomain }
 	end
 
+	private 
+	
   def time_table_slots
 		@week_days = TimeSlot.week_days
 		@non_fridays = TimeSlot.non_fridays

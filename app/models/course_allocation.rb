@@ -58,11 +58,15 @@ class CourseAllocation < ActiveRecord::Base
 			true
 		end
 
-		def send_for_approval(teacher, batch_id, course_id)
-			allocations = teacher.allocations(batch_id, course_id)
-			allocations.update_all("status = 1")
-			$redis.del("count_teacher_allocations_#{batch_id}")
-			NotificationMailer.send_allocation_instructions(teacher, allocations).deliver_now!
+		def send_for_approval(teacher_ids, batch_id, course_ids)
+			teacher_ids.each_with_index do |teacher, index|
+					@teacher = Teacher.find(teacher.to_i)
+					allocations = @teacher.allocations(batch_id, course_ids[index])
+
+					allocations.update_all("status = 1")
+					$redis.del("count_teacher_allocations_#{batch_id}")
+					NotificationMailer.send_allocation_instructions(@teacher, allocations).deliver_now!
+			end
 		end
 	end
 

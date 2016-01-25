@@ -18,6 +18,8 @@ module Institutes
 				sections = allocation.sections(allocation).order("name").collect {|m| m.try(:name) }
 
 				attributes << {
+					teacher_id: allocation.teacher_id,
+					course_id: allocation.course_id,
 					teacher: allocation.teacher.full_name,
 					course: allocation.course.detailed_name,
 					section: pluralize_sections(sections),
@@ -27,7 +29,7 @@ module Institutes
 			end
 
 			respond_to do |format|
-	  		format.json { render json: { data: attributes } }
+	  		format.json { render json: { data: attributes.sort_by{|e| e[:teacher_id]} } }
 			end
 		end
 
@@ -77,6 +79,7 @@ module Institutes
 					id: course.id,
 					name: course.name,
 					course_code: course.code,
+					credit_hours: course.credit_hours,
 					semester: course.semester.name,
 					batch: @batch.name,
 					course_type: course.type_name,
@@ -290,8 +293,8 @@ module Institutes
 		end
 
 		def notify_teacher_for_approval
-			@teacher = Teacher.find(params[:teacher_id].to_i)
-			CourseAllocation.send_for_approval(@teacher, params[:batch_id].to_i, params[:course_id].to_i)
+			@teacher_ids = params[:teacher_ids].map(&:to_i)
+			CourseAllocation.send_for_approval(@teacher_ids, params[:batch_id].to_i, params[:course_ids].map(&:to_i))
 
 			render :json => { status: :ok, msg: CourseAllocation::APPROVAL  } and return
 		end

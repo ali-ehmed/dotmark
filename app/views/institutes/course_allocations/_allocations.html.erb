@@ -7,9 +7,9 @@
 		</div>
 		<div class="col-md-6">
 			<div id="remove_all_allocations">
-				<% if Batch.allocations(batch["id"]).present? %>
-					<%= raw remove_all_allocations(batch['id'], batch['name']) %>
-				<% end %>
+				<%# if Batch.allocations(batch["id"]).present? %>
+					<%#= raw remove_all_allocations(batch['id'], batch['name']) %>
+				<%# end %>
 			</div>
 		</div>
 	</div>
@@ -31,12 +31,39 @@
 		$(function(){
 			// Destroying Old Data Table and reinitializing
 			// $("table.allocations_table_for_<%#= batch.id %>").DataTable().clear().destroy();
-			$("table.allocations_table_for_<%= batch['id'] %>").DataTable({
+			var $table = "";
+			$table = $("table.allocations_table_for_<%= batch['id'] %>").DataTable({
 			  responsive: true,
 			  bSort: true,
 			  bFilter: true,
+			  "dom": '<"toolbar">frtip',
 			  "iDisplayLength": 7,
 			  ajax: $("table.allocations_table_for_<%= batch['id'] %>").data("source"),
+			  "fnDrawCallback": function (aoData) {
+			  	$loaded_table = $(this)
+			  	
+			  	if(aoData.json === undefined) {
+		  			console.log("Params are Blank")
+			  	} else {
+			  		if(aoData.json.data.length > 0) {
+					  	$data = aoData.json.data.reverse();
+
+					  	$.each($loaded_table.find("tbody tr"), function(index){
+				  			$row = $(this)
+
+				  			if($row.find("td").length > 1) {
+				  				console.log($data[index])
+
+				  				if($data[index].teacher === $row.find("td:first-child").html()) {
+				  					$row.attr("data-teacher-id", aoData.json.data[index].teacher_id);
+				  					$row.attr("data-course-id", aoData.json.data[index].course_id);
+				  				}
+				  			}
+				  		})
+			  		}
+			  	}
+		    },
+		    "bStateSave": true,
 			  "columns": [
 			    {
 			      "data": "teacher"
@@ -51,6 +78,12 @@
 			    }
 			  ]
 			});
+
+			$("table.allocations_table_for_<%= batch['id'] %>").prev().prev().html('<%= escape_javascript( notify_to_all(batch) ) %>');
+
+			$("table.allocations_table_for_<%= batch['id'] %> tbody").on( 'click', 'tr', function () {
+	        $(this).toggleClass('selected');
+	    });
 		});
 	</script>
 <% end %>

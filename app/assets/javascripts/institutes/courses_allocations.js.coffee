@@ -131,13 +131,61 @@ deactivateAllActiveLists = ->
   		$(this).find("input[type='checkbox']").removeAttr("checked")
 	$("#remove_teacher_allocations").empty()
 
-# Sending Email
+# Sending Emails
+
+window.notifyMultiple = (elem) ->
+  $url = elem.dataset.url
+  $this = $(elem)
+  $table_id = $this.data("table-id")
+  $selected_rows = $("table.allocations_table_for_#{$table_id}").find('tr.selected')
+
+  $teacher_ids = []
+  $course_ids = []
+  $batch_id = $table_id #this is a batch Id
+
+  $.each $selected_rows, ->
+    $teacher_ids.push($(@).data("teacher-id"))
+    $course_ids.push($(@).data("course-id"))
+
+  console.log($teacher_ids)
+  console.log($course_ids)
+  console.log($batch_id)
+
+  _params = {
+    teacher_ids: $teacher_ids,
+    batch_id: $batch_id,
+    course_ids: $course_ids
+  }
+  if $teacher_ids.length == 0 or $course_ids == 0
+    $.notify {
+      icon: 'glyphicon glyphicon-warning-sign'
+      title: '<strong>Errors: </strong>'
+      message: "<ul><li>Please select teacher by clicking the row</li></ul>"
+    }, type: 'danger'
+    return false
+
+  $.ajax
+    type: 'Get'
+    url: $url
+    data: _params
+    dataType: 'json'
+    success: (response) ->
+      if response.status == 'ok'
+        $('table.allocations_table_for_' + _params['batch_id']).DataTable().ajax.url('/institutes/course_allocations/' + _params['batch_id'] + '/get_allocations.json').load()
+        $.notify {
+          icon: 'glyphicon glyphicon-ok'
+          title: ''
+          message: "#{response.msg}"
+        }, type: 'success'
+    error: (response) ->
+      swal 'oops', 'Something went wrong'
+
 window.sendApprovalInstructions = (elem, teacher_id, batch_id, course_id) ->
   $url = elem.dataset.url
   _params = {
-    teacher_id: teacher_id,
+    teacher_ids: [teacher_id],
     batch_id: batch_id,
-    course_id: course_id
+    course_ids: [course_id]
   }
   unless teacher_id == "" or batch_id == "" or course_id == ""
     $.ajax
