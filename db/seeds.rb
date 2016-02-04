@@ -173,6 +173,10 @@ class TeacherSeed
   prepend UrlSeed
   @@teachers = Array.new
 
+  def initialize
+  	create	
+  end
+
   def create
     puts "Creating Teachers #{dummy_teachers.length}"
 
@@ -187,8 +191,8 @@ class TeacherSeed
 		  end
 
 			teacher = Teacher.find_by(email: attribute[:email])
-		  teacher.password = "aliahmed"
-			teacher.password_confirmation = "aliahmed"
+		  teacher.password = StringEncryptor::DEFAULT_PASSWORD
+			teacher.password_confirmation = StringEncryptor::DEFAULT_PASSWORD
 			teacher.save!
 		end
   end
@@ -224,5 +228,5 @@ class TeacherSeed
   end
 end
 
-TeacherSeed.new.create()
+TeacherSeed.new
 

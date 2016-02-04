@@ -1,5 +1,6 @@
 class Administrations::TimeTableController < ApplicationController
-  prepend_before_action :time_table_slots, only: [:show]
+  include TimeTableSlots
+  prepend_before_action :slots_data, only: [:show]
   add_breadcrumb "Time Table"
 
   def index
@@ -13,17 +14,10 @@ class Administrations::TimeTableController < ApplicationController
     respond_to do |format|
       unless @reservations.blank?
         format.js {}
+        format.html { render partial: 'administrations/time_table/generated_time_table' }
       else
         format.json { render json: { status: :empty, alert: TimeTable::NULL_RESERVATIONS } }
       end
     end
-  end
-  
-  private
-
-  def time_table_slots
-    @week_days = TimeSlot.week_days
-    @non_fridays = TimeSlot.non_fridays
-    @fridays = TimeSlot.fridays
   end
 end

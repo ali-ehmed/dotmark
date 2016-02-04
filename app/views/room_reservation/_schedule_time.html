@@ -51,9 +51,9 @@
             <div class="col-md-6 <%= @count_teacher_allocations.to_i == 0 ? 'col-lg-12' : '' %>">
               <blockquote class="blockquote-reverse">
                 <% if @count_teacher_allocations.to_i == 0 %>
-                <strong>Allocations Reserved
-                  <small>(Go to your <a href="#">Profile</a> and finalize them)</small>
-                </strong>
+                  <strong>Allocations Reserved
+                    <small>(Go to your <a href="#">Profile</a> and finalize them)</small>
+                  </strong>
                 <% else %>
                   <strong>Select Your Course:
                     <small>(You have <%= pluralize(@count_teacher_allocations.to_i, "Allocation") %> in pending)</small>

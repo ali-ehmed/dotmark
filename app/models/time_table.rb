@@ -23,9 +23,10 @@ class TimeTable < ActiveRecord::Base
 	after_save :mark_all_as_final
 
 	scope :dismiss_reservations, -> (params, teacher) {
-			joins(:course_allocation)
-			.where("course_allocations.course_id = ? and course_allocations.teacher_id = ? and course_allocations.batch_id = ? and course_allocations.section_id = ?",
-						 params[:course_id], teacher.id, params[:batch_id], params[:section_id])
+		joins(:course_allocation)
+		.where("course_allocations.course_id = ? and course_allocations.teacher_id = ? and course_allocations.batch_id = ? and course_allocations.section_id = ?",
+					 params[:course_id], teacher.id, params[:batch_id], params[:section_id])
+		.preload(:course_allocation)
 	}
 
 	scope :generate, -> (params) {

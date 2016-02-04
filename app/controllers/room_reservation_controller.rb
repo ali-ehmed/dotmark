@@ -1,9 +1,9 @@
 class RoomReservationController < ApplicationController
 	# This Controller is used as an api to share data to javascript
-	# To asynchronously change dat on Teacher's Profile
-
-	prepend_before_action :time_table_slots, only: [:teacher_allocations]
-	include AllocationsHelper
+	# To asynchronously load data on Teacher's Dashboard
+	
+	include TimeTableSlots, AllocationsHelper
+	prepend_before_action :slots_data, only: [:teacher_allocations]
   respond_to :json
 
   def index
@@ -117,12 +117,4 @@ class RoomReservationController < ApplicationController
 
 		render :json => { status: :ok, current_domain: request.subdomain }
 	end
-
-	private 
-	
-  def time_table_slots
-		@week_days = TimeSlot.week_days
-		@non_fridays = TimeSlot.non_fridays
-		@fridays = TimeSlot.fridays
-  end
 end

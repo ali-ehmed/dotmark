@@ -183,7 +183,7 @@ module Institutes
 					@teacher_allocations.destroy_all
 	  			format.json { render json: { status: :ok, msg: message } }
 	  		else
-	  			format.json { render json: { status: :error, msg: "Course or Batch cannot be blank." } }
+	  			format.json { render json: { status: :error, msg: "Course and Batch cannot be blank." } }
 	  		end
 			end
 		end

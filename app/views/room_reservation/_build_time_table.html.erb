@@ -1,0 +1,31 @@
+<% if @teacher_allocations.present? %>
+	<%= render layout: "layouts/shared/time_table" do |time_table| %>
+    <% if current_resource.has_room_scheduled?(@batch_id, time_table.time_slot.id).present? %>
+      <% options =
+        {
+          batch_id: @batch_id,
+          course: current_resource.has_room_scheduled?(@batch_id, time_table.time_slot.id).first.course,
+          section: current_resource.has_room_scheduled?(@batch_id, time_table.time_slot.id).first.section,
+          room: current_resource.has_room_scheduled?(@batch_id, time_table.time_slot.id).first.time_tables.first.classroom,
+          slot_id: time_table.time_slot.id,
+          course_name: current_resource.has_room_scheduled?(@batch_id, time_table.time_slot.id).first.course.detailed_name,
+          teacher_name: current_resource.full_name
+        }
+      %>
+
+      <%= marked_cell(options) %>
+    <% else %>
+      <% if time_table.time_slot.available_classrooms.length == 0 %>
+        <span class="label label-danger" data-toggle="tooltip" data-placement="top" title="There are no rooms available in this time.">
+          N/A
+        </span>
+      <% else %>
+        <%= link_to "Available", "javascript:void(0);", id: "time_cell", onclick: "openTimeScheduleCell(this);", data: { url: schedule_a_time_path(week_day: time_table.time_slot.week_day, time: time_table.time_slot.start_time, format: :js) } %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% else %>
+	<div class="well">
+		<strong>No Allocations present in this batch to Schedule.</strong>
+	</div>
+<% end %>
