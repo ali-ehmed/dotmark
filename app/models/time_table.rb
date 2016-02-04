@@ -30,9 +30,10 @@ class TimeTable < ActiveRecord::Base
 
 	scope :generate, -> (params) {
 		joins(:course_allocation).where("time_tables.status = 1 and course_allocations.batch_id = ? and course_allocations.section_id = ?", params[:batch_id], params[:section_id])
+		.preload(:course_alllocation)
 	}
 
-	NULL_RESERVATIONS = "There are no reservations approved yet for this batch."
+	NULL_RESERVATIONS = "There are no reservations approved yet for this section."
 
 	class << TimeTable
 		def build_by_allocations(allocations, params)
@@ -50,10 +51,6 @@ class TimeTable < ActiveRecord::Base
 			end
 
 			return true, allocations.first.course, allocations.first.section, @timetable.classroom, @timetable.time_slot_id
-		end
-
-		def for_time_slot(slot)
-			where("time_tables.time_slot_id = ?", slot)
 		end
 	end
 

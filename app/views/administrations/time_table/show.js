@@ -1,6 +1,6 @@
 console.log("success")
 
-$("#admin_timetable").hide().html("<%= escape_javascript(render partial: 'administrations/time_table/generated_time_table').html_safe %>").fadeIn(300);
+$("#admin_timetable").hide().html("<%= escape_javascript(rendering_time_table(@params)).html_safe %>").fadeIn(300);
 
 $('html, body').animate({
     scrollTop: $("#admin_timetable").offset().top - 50

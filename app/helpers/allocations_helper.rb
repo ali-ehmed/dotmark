@@ -9,13 +9,13 @@ module AllocationsHelper
 
 	def notification_link(teacher, batch, course)
 		content_tag(:a, "Send For Approval", :href => "javascript:void(0)", 
-								onclick: "sendApprovalInstructions(this, #{teacher}, #{batch}, #{course})", 
+								onclick: "CourseAllocation.sendApprovalInstructions(this, #{teacher}, #{batch}, #{course})", 
 								"data-url" => notify_teacher_institutes_course_allocations_path(format: :json), 
 								class: "btn btn-info btn-sm")
 	end
 
 	def remove_all_allocations(batch_id, batch_name)
-		link_to "Remove All", "javascript:void(0);", onclick: "removeAllocations(this);", 
+		link_to "Remove All", "javascript:void(0);", onclick: "CourseAllocation.removeAllocations(this);", 
 																								 data:  { batch_id: "#{batch_id}", 
 																							 					  url: remove_allocations_institutes_course_allocations_path(batch_id, format: :json),
 																							 					  batch_name: "#{batch_name}"
@@ -23,7 +23,7 @@ module AllocationsHelper
 	end
 
 	def send_all(batch)
-		link_to "Send to Selected", "javascript:void(0);", onclick: "notifyMultiple(this);", data: { table_id: batch["id"], url: notify_teacher_institutes_course_allocations_path(format: :json) }
+		link_to "Send to Selected", "javascript:void(0);", onclick: "CourseAllocation.notifyMultiple(this);", data: { table_id: batch["id"], url: notify_teacher_institutes_course_allocations_path(format: :json) }
 	end
 
 	def notify_to_all(batch)
@@ -61,8 +61,8 @@ module AllocationsHelper
 						    <span class='sr-only'>Toggle Dropdown</span>
 						  </button>
 						  <ul class='dropdown-menu dropdown-animated'>
-						    <li><a href='javascript:void(0)' onclick='removeTeacherAllocations(#{options[:course_id]}, \"not_all\")'>Remove All from this course</a></li>
-						    <li><a href='javascript:void(0)' onclick='removeTeacherAllocations(#{options[:course_id]}, \"all\")'>Remove All from #{options[:semester]}</a></li>
+						    <li><a href='javascript:void(0)' onclick='CourseAllocation.removeTeacherAllocations(#{options[:course_id]}, \"not_all\")'>Remove All from this course</a></li>
+						    <li><a href='javascript:void(0)' onclick='CourseAllocation.removeTeacherAllocations(#{options[:course_id]}, \"all\")'>Remove All from #{options[:semester]}</a></li>
 						  </ul>
 						</div>"
 

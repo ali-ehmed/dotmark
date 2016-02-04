@@ -9,6 +9,7 @@ class Administrations::TimeTableController < ApplicationController
 
   def show
     @reservations = TimeTable.generate(params)
+    @params = params
     respond_to do |format|
       unless @reservations.blank?
         format.js {}

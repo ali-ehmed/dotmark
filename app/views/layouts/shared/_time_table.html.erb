@@ -27,22 +27,7 @@
             <td align="center"><strong><%= days.week_day %></strong></td>
             <% TimeSlot.for(days.week_day).each do |time_slot| %>
                 <td align="center" class="loader-cell-<%= time_slot.id %>" data-time-slot-id="<%= time_slot.id %>">
-                  <% if @reservations.for_time_slot(time_slot.id).each do |allocation| %>
-                    <% options =
-                           {
-                               batch_id: allocation.course_allocation.batch_id,
-                               course: allocation.course_allocation.course,
-                               section: allocation.course_allocation.section,
-                               room: allocation.classroom,
-                               slot_id: time_slot.id,
-                               course_name: allocation.course_allocation.course.detailed_name
-                           }
-                    %>
-
-                    <%= marked_cell(options, false, true, allocation.course_allocation.teacher.full_name) %>
-                  <% end.empty? %>
-                    ---
-                  <% end %>
+                  <%= yield(Struct(:time_slot).new(time_slot)) %>
                 </td>
             <% end %>
           </tr>

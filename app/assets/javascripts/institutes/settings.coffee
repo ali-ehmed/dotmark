@@ -17,27 +17,34 @@ class window.Institute
 	      cache: false
 	      success: (response, data) ->
 	      	if response.status == 'error'
-	          $.notify {
-	            icon: 'glyphicon glyphicon-warning-sign'
-	            title: '<strong>Couldn\'t save: </strong>'
-	            message: "#{response.errors}"
-	          }, {
-	            type: "danger"
-	          }
+	          AlertNotification.notify("danger", "Couldn\'t save:", response.errors)
 	          console.log 'Couldn\'t save'
 	        else
-	          $.notify {
-	            icon: 'glyphicon glyphicon-ok'
-	            title: '<strong>Created</strong>'
-	            message: "#{entity_name}"
-	          }, {
-	            type: "success"
-	          }
+	          AlertNotification.notify("success", "Created", entity_name)
 	          $elem.closest(".modal").modal 'hide'
 	          $form.find(':input').val ''
 	      error: (response) ->
 	        swal 'oops', 'Something went wrong'
 	    false
+
+class window.AlertNotification
+	@notify: (_type, title, msg) ->
+    $icon = ""
+    switch _type
+      when "danger"
+        $icon = "glyphicon-warning-sign"
+      when "success"
+        $icon = "glyphicon-ok"
+
+    $.notify {
+        icon: 'glyphicon ' + $icon
+        title: "<strong>#{title} </strong>"
+        message: "#{msg}"
+      }, {
+        type: _type,
+        allow_dismiss: true,
+        z_index: 10000
+      }
 
 window.confirmation = (text, elem) ->
 	$elem = $(elem)
