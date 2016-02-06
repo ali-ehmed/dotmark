@@ -1,17 +1,17 @@
 <div class="row">
 	<% @semesters.each do |semester| %>
-		<div class="col-md-6">
-			<div class="panel panel-default">
+		<div class="col-md-6 resizeable">
+			<div class="panel panel-default resize-section">
 				<div class="panel-heading"><strong><%= semester.name %></strong></div>
 				<div class="panel-body">
 					<% if semester.courses.blank? %>
-						<div class="courses_scrollable">
+						<div class="">
 							<div class="alert alert-warning" role="alert">
 								No Courses Present
 							</div>
 						</div>
 					<% else %>
-						<div class="courses_scrollable">
+						<div class="">
 							<table class="table table-striped">
 								<thead>
 									<tr>

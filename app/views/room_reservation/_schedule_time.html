@@ -92,7 +92,7 @@
                               <li class="list-group-item text-center" data-for-course-id="<%= allocation.course_id %>" data-section-id="<%= section.id %>">
                                 <div class="radio" style="margin-top:1px;">
 
-                                  <%= radio_button_tag :section_id, section.id, false, id: "section_#{section.id}_for_#{allocation.course_id}", onclick: "returnSectionCourse(this);" %>
+                                  <%= radio_button_tag :section_id, section.id, false, id: "section_#{section.id}_for_#{allocation.course_id}", onclick: "window.$timetable.returnSectionCourse(this);" %>
                                   <label for="section_<%= section.id %>_for_<%= allocation.course_id %>" style="padding-left:7px;"><strong>Section <%= section.name %></strong></label>
 
                                 </div>
@@ -111,7 +111,7 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-default" data-dismiss-schedule-cell data-dismiss="modal">Cancel</button>
           <%= submit_tag "Book This Room!", class: "btn btn-success" %>
         </div>
       </div>

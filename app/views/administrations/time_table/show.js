@@ -7,3 +7,5 @@ $('html, body').animate({
 }, 2000);
 
 $('[data-toggle="popover"]').popover()
+
+window.$timetable.loadReservedDetail()

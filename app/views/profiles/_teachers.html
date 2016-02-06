@@ -3,7 +3,7 @@
   	<a href="#my_courses" aria-controls="my_courses" role="tab" data-toggle="tab" onclick="activeTabs(this);">Qualification & Experience</a>
 	</li>
   <li role="presentation">
-  	<a href="#time_table" aria-controls="time_table" role="tab" data-toggle="tab" onclick="activeTabs(this);">Time Table</a>
+  	<a href="#time_table_tab" aria-controls="time_table_tab" role="tab" data-toggle="tab" onclick="activeTabs(this);" data-url="<%= time_table_path(current_resource.username) %>">Time Table</a>
 	</li>
   <li role="presentation">
   	<a href="#reports" aria-controls="reports" role="tab" data-toggle="tab" onclick="activeTabs(this);">Allocations</a>
@@ -37,10 +37,15 @@
     </p>
     
   </div>
-  <div role="tabpanel" class="tab-pane" id="time_table">
+  <div role="tabpanel" class="tab-pane" id="time_table_tab">
   	<blockquote>
   		<h3>Time Table</h3>
   	</blockquote>
+    <br />
+    <p>
+      <div id="teacher_time_table"></div>
+    </p>
+    
   </div>
   <div role="tabpanel" class="tab-pane" id="reports">
   	<blockquote>

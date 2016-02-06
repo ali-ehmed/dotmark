@@ -10,9 +10,10 @@
 <%= csrf_meta_tags %>
 
 <%= javascript_tag do %>
-	window.current_resource = "N/A"
+	window.current_resource_account = "N/A"
 
 	<% if @account["resource_type"] == "Teacher" %>
-  	window.current_resource = "<%= @account["subdomain"] %>"
+  	window.current_resource_account = "<%= @account["subdomain"] %>"
+  	window.signed_in_teacher = "<%= @account["resource"]["id"] %>"
 	<% end %>
 <% end %>

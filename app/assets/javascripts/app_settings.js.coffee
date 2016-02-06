@@ -1,3 +1,31 @@
+class window.AlertNotification
+  @notify: (_type, title, msg) ->
+    $icon = ""
+    switch _type
+      when "danger"
+        $icon = "glyphicon-warning-sign"
+      when "success"
+        $icon = "glyphicon-ok"
+
+    $.notify {
+        icon: 'glyphicon ' + $icon
+        title: "<strong>#{title} </strong>"
+        message: "#{msg}"
+      }, {
+        type: _type,
+        allow_dismiss: true,
+        z_index: 10000
+      }
+
+  @startLoaderIn: (elem = "", size = "fa-3x") ->
+    loader = "<i id=\"spinner\" class=\"fa fa-spinner fa-spin #{size}\"></i>"
+    if elem.length > 0
+      text = $(elem).html(loader)
+    else
+      text = loader
+
+    return text
+
 window.pluralize = (obj_array, text) ->
   if obj_array.length > 1
     "#{text}s"
@@ -26,13 +54,15 @@ $.urlParam = (name) ->
     results[1] or 0
 
 # find the account whose resource is teacher
-window.current_teacher = ->
+window.account = ->
   resource_name = window.location["hostname"].split(".")[0]
   resource_type = window.location["hostname"].split(".")[1]
   subdomain = ""
   subdomain = "#{resource_name}.#{resource_type}" if resource_type == "teacher"
 
   return subdomain
+
+window.resource_account = account()
 
 window.alertDismiss = (name, value, expires_min, domain) ->
   expire_date = new Date

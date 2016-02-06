@@ -12,7 +12,7 @@ class window.CourseAllocation
         url: $url
         data: _params
         beforeSend: ->
-          $self.startLoaderIn(".loader")
+          AlertNotification.startLoaderIn(".loader")
         error: (response) ->
           swal 'oops', 'Something went wrong'
     
@@ -28,7 +28,7 @@ class window.CourseAllocation
       url: $url
       data: _params
       beforeSend: ->
-        $self.startLoaderIn(".loader_1")
+        AlertNotification.startLoaderIn(".loader_1")
       error: (response) ->
         swal 'oops', 'Something went wrong'
 
@@ -161,9 +161,6 @@ class window.CourseAllocation
     }
     
     Mailer.send_for_approval(_params, $url) unless teacher_id == "" or batch_id == "" or course_id == ""
-
-  @startLoaderIn: (elem) ->
-    $(elem).html("<i style=\"text-align:center;\" class=\"fa fa-spinner fa-spin fa-3x\"></i>")
 
   @parameters: () ->
     $teacher_id = $(".teacher_ID").val()

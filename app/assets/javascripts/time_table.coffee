@@ -1,46 +1,39 @@
-window.getCurrentTeacherAllocationsForTimeTable = ->
-	$("#myAllocations").modal
-		keyboard: false,
-		show: true,
-		backdrop: 'static'
+window.$timetable = {
+  # Time Tables Coffee
+  initFunctions: ->
+    $timetable.getAllocationsOfTeacher() if resource_account == current_resource_account #if teacher_signed_in?
+    $timetable.bookingClassroom()
+    $timetable.genrateTimeTable()
+    $timetable.loadTeacherAllocations()
+    $timetable.loadReservedDetail()
 
-window.openTimeScheduleCell = (elem) ->
-	$url = $(elem).data("url")
-	$slot_id = $(elem).closest('td').data('time-slot-id')
-	$.ajax
-    type: "Get"
-    url: $url
-    data: { batch_id: current_batch }
-    beforeSend: ->
-    	# $(".loader-cell-#{$slot_id}").html("<i style=\"text-align:center;\" class=\"fa fa-spinner fa-spin fa-3x\"></i>")
-    error: (response) ->
-      swal 'oops', 'Something went wrong'
-
-window.getTeacherAllocationsByBatch = (elem) ->
-	$this = $(elem)
-	window.current_batch = $this.val()
-	$.ajax
-    type: "Get"
-    url: "/room_reservation/#{$this.val()}/teacher_allocations.js"
-    beforeSend: ->
-    	$(".loader").addClass("text-center").html("<i style=\"text-align:center;\" class=\"fa fa-spinner fa-spin fa-3x\"></i>")
-    error: (response) ->
-      swal 'oops', 'Something went wrong'
-
-$timetable = {
   getAllocationsOfTeacher: ->
     $input = $('ul.allocations_current_batches li').find("input[type='radio']:checked")
     window.current_batch = $input.val()
     url = "/room_reservation/#{$input.val()}/teacher_allocations.js"
-    $.get url, (response) ->
-      return
+
+    $("blockquote.teacher_allocation_for_batch").find("small").html(AlertNotification.startLoaderIn("", "fa-1x"))
+
+    AlertNotification.startLoaderIn(".loader", "fa-3x")
+
+    if $input.val()
+      $.get(url, (response) ->
+        return
+      )
+      .done((data)->
+        if data.status == "401"
+          console.log(data.responseText)
+          return
+      ).fail((response)->
+        console.log(response)
+      )
 
   bookingClassroom: ->
     $(document).on 'submit', 'form#scheduleForm', (e) ->
       e.preventDefault()
       console.log 'Booking Now'
-      $form = $(this)
 
+      $form = $(this)
 
       params = [$form.serializeArray()[0].name]
       $.each $form.serializeArray(), (index) ->
@@ -89,6 +82,7 @@ $timetable = {
   genrateTimeTable: ->
     $("#generate_time_table").on "click", ->
       console.log("Generating")
+      $(".book-reserved-detail").popover('destroy')
 
       section_id = $('input[name="section_id"]:checked').val()
       batch_id = $('input[name="current_batch_id"]:checked').val()
@@ -138,53 +132,124 @@ $timetable = {
         { 'data': 'semester' }
         { 'data': 'sent_date' }
       ]
-}
 
-window.returnSectionCourse = (elem) ->
-  $this = $(elem)
-  course_id = $this.closest("li").data('for-course-id')
-  document.getElementById('course_id').dataset.course_id = course_id
+  dismissScheduleForm: ->
+    $('#scheduleTeacherTimeModal').on 'hidden.bs.modal', ->
+      $(".schedule_timings").empty()
 
-window.removeReservedRoom = (parameters) ->
-  console.log parameters
-  swal {
-    title: 'Are you sure you want to remove?'
-    text: 'Your Reserved room will be dismissed.'
-    type: 'warning'
-    showCancelButton: true
-    confirmButtonColor: '#DD6B55'
-    confirmButtonText: 'Yes'
-    closeOnConfirm: true
-  }, ->
+  loadReservedDetail: ->
+    $marked_cell = $(".book-reserved-detail")
+    $marked_cell.attr("data-clicked",  false)
+
+    $is_clicked = $marked_cell.data("clicked")
+
+    $marked_cell.click ->
+      if $is_clicked == false
+        $(@).attr("data-clicked",  true)
+      else
+        $(@).attr("data-clicked",  false)
+
+    $marked_cell.mouseleave ->
+      if $is_clicked = false
+        $(this).popover('destroy')
+
+    $marked_cell.mouseenter ->
+      $popover = $(this)
+      $behavior = $popover.data("behavior")
+
+      _params = jQuery.parseJSON($behavior)
+
+      section_id = $('input[name="section_id"]:checked').val()
+
+      if section_id
+        _params["section_id"] = section_id
+
+      console.log _params
+
+      $.get(@dataset.url, _params, (response) ->
+
+        $popover.attr("data-original-title", response.title)
+        $popover.attr 'data-content', response.content
+
+      ).done( ->
+        $popover.popover('toggle')
+      ).fail ->
+        swal 'Something went wrong'
+        return
+
+  getCurrentTeacherAllocationsForTimeTable: ->
+    $("#myAllocations").modal
+      keyboard: false,
+      show: true,
+      backdrop: 'static'
+
+  openTimeScheduleCell: (elem) ->
+    $url = $(elem).data("url")
+    $slot_id = $(elem).closest('td').data('time-slot-id')
     $.ajax
-      type: "Delete"
-      url: "/dismiss_reserved_room"
-      data: parameters
-      dataType: "json"
+      type: "Get"
+      url: $url
+      data: { batch_id: current_batch }
       beforeSend: ->
-        swal
-          title: "<span class=\"fa fa-spinner fa-spin fa-3x\"></span>"
-          text: "<h2>Removing</h2>"
-          html: true
-          showConfirmButton: false
-      success: (response) ->
-
-        alertDismiss("dismissed_reserved_seat", "present", 1, response)
-
-        setTimeout (->
-          location.reload()
-        ), 1000
-
+        # $(".loader-cell-#{$slot_id}").html("<i style=\"text-align:center;\" class=\"fa fa-spinner fa-spin fa-3x\"></i>")
       error: (response) ->
         swal 'oops', 'Something went wrong'
-    return
+
+  getTeacherAllocationsByBatch: (elem) ->
+    $this = $(elem)
+    window.current_batch = $this.val()
+    $(".book-reserved-detail").popover('destroy')
+
+    $.ajax
+      type: "Get"
+      url: "/room_reservation/#{$this.val()}/teacher_allocations.js"
+      beforeSend: ->
+        $(".loader").addClass("text-center").html("<i style=\"text-align:center;\" class=\"fa fa-spinner fa-spin fa-3x\"></i>")
+      error: (response) ->
+        swal 'oops', 'Something went wrong'
+
+  returnSectionCourse: (elem) ->
+    $this = $(elem)
+    course_id = $this.closest("li").data('for-course-id')
+    document.getElementById('course_id').dataset.course_id = course_id
+
+  removeReservedRoom: (elem) ->
+    parameters = jQuery.parseJSON(elem.dataset.params)[0]
+    swal {
+      title: 'Are you sure you want to remove?'
+      text: 'Your Reserved room will be dismissed.'
+      type: 'warning'
+      showCancelButton: true
+      confirmButtonColor: '#DD6B55'
+      confirmButtonText: 'Yes'
+      closeOnConfirm: true
+    }, ->
+      $.ajax
+        type: "Delete"
+        url: "/dismiss_reserved_room"
+        data: jQuery.parseJSON(parameters)
+        dataType: "json"
+        beforeSend: ->
+          swal
+            title: "<span class=\"fa fa-spinner fa-spin fa-3x\"></span>"
+            text: "<h2>Removing</h2>"
+            html: true
+            showConfirmButton: false
+        success: (response) ->
+
+          alertDismiss("dismissed_reserved_seat", "present", 1, response)
+
+          setTimeout (->
+            location.reload()
+          ), 1000
+
+        error: (response) ->
+          swal 'oops', 'Something went wrong'
+      return
+}
 
 $(document).on 'page:change', ->
-
-  $timetable.getAllocationsOfTeacher() if current_teacher() == current_resource #if teacher_signed_in?
-  $timetable.bookingClassroom()
-  $timetable.genrateTimeTable()
-  $timetable.loadTeacherAllocations()
+  $timetable.initFunctions()
 
 #  Seat Dismiss Message
   if $.cookie('dismissed_reserved_seat')

@@ -31,7 +31,12 @@ class TimeTable < ActiveRecord::Base
 
 	scope :generate, -> (params) {
 		joins(:course_allocation).where("time_tables.status = 1 and course_allocations.batch_id = ? and course_allocations.section_id = ?", params[:batch_id], params[:section_id])
-		.preload(:course_alllocation)
+		.preload(:course_allocation)
+
+	}
+
+	scope :load_reserved_details, -> (slot_id) {
+		joins(:course_allocation).where(time_slot_id: slot_id)
 	}
 
 	NULL_RESERVATIONS = "There are no reservations approved yet for this section."
@@ -51,7 +56,7 @@ class TimeTable < ActiveRecord::Base
         $redis.del("count_teacher_allocations_#{params[:batch_id]}")
 			end
 
-			return true, allocations.first.course, allocations.first.section, @timetable.classroom, @timetable.time_slot_id
+			return true, @timetable
 		end
 	end
 

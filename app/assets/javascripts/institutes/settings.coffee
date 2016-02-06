@@ -27,25 +27,6 @@ class window.Institute
 	        swal 'oops', 'Something went wrong'
 	    false
 
-class window.AlertNotification
-	@notify: (_type, title, msg) ->
-    $icon = ""
-    switch _type
-      when "danger"
-        $icon = "glyphicon-warning-sign"
-      when "success"
-        $icon = "glyphicon-ok"
-
-    $.notify {
-        icon: 'glyphicon ' + $icon
-        title: "<strong>#{title} </strong>"
-        message: "#{msg}"
-      }, {
-        type: _type,
-        allow_dismiss: true,
-        z_index: 10000
-      }
-
 window.confirmation = (text, elem) ->
 	$elem = $(elem)
 	url = $elem.data('url')

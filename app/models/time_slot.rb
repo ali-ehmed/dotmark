@@ -66,9 +66,9 @@ class TimeSlot < ActiveRecord::Base
 	}
 
 	scope :for, -> (week_day) {
-		Rails.cache.fetch("week_days_#{week_day}", expires_in: 1.hour) do
+		# Rails.cache.fetch("week_days_#{week_day}", expires_in: 1.hour) do
 			where(week_day: week_day)
-		end
+		# end
 	}
 
 	def timings

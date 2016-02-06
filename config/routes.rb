@@ -8,6 +8,11 @@ Rails.application.routes.draw do
   post "scheduling_room" => "room_reservation#book_room", as: :scheduling_room
   delete "dismiss_reserved_room" => "room_reservation#dissmiss_reserved_room", as: :dismiss_room
 
+  # Routes for Dashboard
+  get "/load_reserved_details" => "dashboard#load_reserved_details", as: :load_details
+  get ":username/time_table" => "dashboard#time_table", as: :time_table
+  
+
   # Routes for Students and Teachers
   constraints(Subdomain) do
     resources :profiles, :path => ":username", only: [:index] do
@@ -89,7 +94,6 @@ Rails.application.routes.draw do
       root 'dashboard#index', as: :admin_authenticated_root
     end
   end
-
 
   namespace :institutes do
     resources :batches, except: [:show, :edit, :new] do

@@ -85,19 +85,11 @@ class RoomReservationController < ApplicationController
 
     @course_allocations = CourseAllocation.where(teacher_id: params[:teacher_id]).where(batch_id: params[:batch_id])
 
-    result, course, section, room, slot = TimeTable.build_by_allocations @course_allocations, params
+    result, time_table = TimeTable.build_by_allocations @course_allocations, params
 
 		logger.debug "Transaction: -> #{result}"
 
-		# Attributes to mark a cell after booking
-		@attributes = {
-			batch_id: params[:batch_id],
-			course: course,
-			section: section,
-			room: room,
-			slot_id: slot,
-			course_name: course.detailed_name
-		}
+		@time_table = time_table
 
 		respond_to do |format|
 			format.js {}
@@ -106,7 +98,7 @@ class RoomReservationController < ApplicationController
 
 	# Remove Reserved room
 	def dissmiss_reserved_room
-		logger.debug "Params are: -> #{params}"
+		logger.debug "Params are: -> #{ActiveSupport::JSON.decode(params.to_json)}"
 		allocations = TimeTable.dismiss_reservations(params, current_resource)
 		allocations.update_all("status = 0") if allocations.count > 1
 

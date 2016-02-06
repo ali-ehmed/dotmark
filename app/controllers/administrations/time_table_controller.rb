@@ -1,5 +1,6 @@
 class Administrations::TimeTableController < ApplicationController
   include TimeTableSlots
+
   prepend_before_action :slots_data, only: [:show]
   add_breadcrumb "Time Table"
 

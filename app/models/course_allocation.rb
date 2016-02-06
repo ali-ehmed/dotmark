@@ -79,6 +79,10 @@ class CourseAllocation < ActiveRecord::Base
 		editable_status(self)
 	end
 
+	def reserved_detail(slot_id)
+		time_tables.find_by(time_slot_id: slot_id)
+	end
+
 	# performing validations
 
 	def perform_restrictions!

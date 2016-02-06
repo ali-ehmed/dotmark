@@ -21,6 +21,20 @@
   border-radius: 4px;
 }
 
+.loader {
+	text-align: center;
+}
+
+.resizeable {
+	z-index: 1;
+	.resize-section {
+		height: 300px;
+		resize: both;
+    overflow: auto;
+    overflow-x: scroll;
+	}
+}
+
 #app-nav {
 	.navbar-brand {
 		padding: 15px 7px 0px 7px !important;

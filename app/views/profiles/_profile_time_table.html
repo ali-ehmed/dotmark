@@ -1,0 +1,9 @@
+<%= render layout: "layouts/shared/time_table" do |time_table| %>
+  <% reserved_seat = current_resource.has_room_scheduled?(time_table.time_slot.id) %>
+  <% if reserved_seat.present? %>
+    <% time_table = reserved_seat.first.reserved_detail(time_table.time_slot.id) %>
+    <%= marked_cell(time_table, false) %>
+  <% else %>
+    ---
+  <% end %>
+<% end %>

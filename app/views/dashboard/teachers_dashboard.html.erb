@@ -8,7 +8,7 @@
 						<% @batches.each do |current_batch| %>
 							<li>
 								<div class="radio" style="margin-top:1px;">
-						      <%= radio_button_tag :current_batch_id, current_batch['id'], false, checked: @batches.first == current_batch, id: "current_batch_#{current_batch['id']}_radio", onchange: "getTeacherAllocationsByBatch(this);" %>
+						      <%= radio_button_tag :current_batch_id, current_batch['id'], false, checked: @batches.first == current_batch, id: "current_batch_#{current_batch['id']}_radio", onchange: "window.$timetable.getTeacherAllocationsByBatch(this);" %>
 						      <label for="current_batch_<%= current_batch['id'] %>_radio" style="padding-left:7px;"><strong><%= current_batch["name"] %></strong></label>
 						    </div>
 							</li>
@@ -36,7 +36,7 @@
 				<br />
 				<div class="display_teacher_allocations">
 					<blockquote class="blockquote-reverse blockquote-view-allocations">
-						<button class="btn-block btn btn-info btn-view-allocations" onclick="getCurrentTeacherAllocationsForTimeTable();">View All Allocations</button>
+						<button class="btn-block btn btn-info btn-view-allocations" onclick="window.$timetable.getCurrentTeacherAllocationsForTimeTable();">View All Allocations</button>
 					</blockquote>
 				</div>
 			</div>
