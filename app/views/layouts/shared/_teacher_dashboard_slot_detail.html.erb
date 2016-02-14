@@ -1,0 +1,19 @@
+<table class='table table-striped teacher_slot_detail_dashboard'>
+  <tr>
+    <th>#</th>
+    <th>Room</th>
+    <th>Sec</th>
+    <th>Batch</th>
+    <th>Course</th>
+  </tr>
+  <% teacher.teacher_time_slots(slot).each_with_index do |reservation, count| %>
+    <% count += 1 %>
+    <tr>
+      <td><%=count %></td>
+      <td><%=reservation.classroom.name %></td>
+      <td><%=reservation.course_allocation.section.name %></td>
+      <td><%=reservation.course_allocation.batch.batch_name %></td>
+      <td><%=reservation.course_allocation.course.detailed_name %></td>
+    </tr>
+  <% end %>
+</table>

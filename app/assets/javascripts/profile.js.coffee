@@ -5,17 +5,17 @@ class Profile
   teacherTimeTable: ->
     $("a[href='#time_table_tab']").on "click", (e) ->
       e.preventDefault()
-
       unless $("#teacher_time_table").html().length > 0
         $.get(@dataset.url, (response) ->
 
           $("#teacher_time_table").html(response)
-          $timetable.loadReservedDetail()
-          $(".book-reserved-detail").popover('destroy')
+          # $timetable.loadReservedDetail()
+          # $(".book-reserved-detail").popover('destroy')
 
           col = $("#teacher_time_table").find("table tbody tr:first-child td:first-child")
           col.css("padding-top", "27px")
         ).done(->
+          $('[data-toggle="popover"]').popover()
           console.log('Rendered')
         ).fail ->
           swal 'Something went wrong'

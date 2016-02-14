@@ -45,6 +45,15 @@ class RoomReservationController < ApplicationController
 
   def teacher_allocations
     @batch_id = params[:batch_id]
+
+		@allocations = current_resource.course_allocations.under_approval.where(batch_id: @batch_id)
+
+		pending_allocations = @allocations.pending_allocations
+
+		@count_allocations = @allocations.length - pending_allocations.length
+
+    @count_teacher_allocations = @count_allocations
+
   	@teacher_allocations = current_resource.under_approval_allocations(@batch_id)
   	respond_to do |format|
   		format.js {}
@@ -55,21 +64,9 @@ class RoomReservationController < ApplicationController
   	@batch = Batch.find(params[:batch_id])
 
   	@timeslot = TimeSlot.find_by_week_day_and_start_time(params[:week_day], params[:time])
-  	@count_allocations = $redis.get("count_teacher_allocations_#{@batch.id}")
+  	
 
-  	if @count_allocations.blank?
-  		@allocations = current_resource.course_allocations.under_approval.where(batch_id: @batch.id)
-
-			pending_allocations = @allocations.pending_allocations
-			logger.debug "Counting Pending Allocations: -> #{pending_allocations.length}"
-
-			@count_allocations = @allocations.length - pending_allocations.length
-
-  		$redis.set("count_teacher_allocations_#{@batch.id}", @count_allocations.to_json)
-      $redis.expire("count_teacher_allocations_#{@batch.id}", 30.seconds.to_i)
-  	end
-
-		@count_teacher_allocations = @count_allocations
+		@count_teacher_allocations = count_teacher_reservations(@batch.id)
 
     @teacher_allocations = current_resource.under_approval_allocations(@batch.id)
 
@@ -108,5 +105,25 @@ class RoomReservationController < ApplicationController
 		$redis.del("count_teacher_allocations_#{params[:batch_id]}")
 
 		render :json => { status: :ok, current_domain: request.subdomain }
+	end
+
+	private
+
+	def count_teacher_reservations(batch_id)
+		@count_allocations = $redis.get("count_teacher_allocations_#{batch_id}")
+
+  	if @count_allocations.blank?
+  		@allocations = current_resource.course_allocations.under_approval.where(batch_id: batch_id)
+
+			pending_allocations = @allocations.pending_allocations
+			logger.debug "Counting Pending Allocations: -> #{pending_allocations.length}"
+
+			@count_allocations = @allocations.length - pending_allocations.length
+
+  		$redis.set("count_teacher_allocations_#{batch_id}", @count_allocations.to_json)
+      $redis.expire("count_teacher_allocations_#{batch_id}", 30.seconds.to_i)
+  	end
+
+  	return @count_allocations
 	end
 end

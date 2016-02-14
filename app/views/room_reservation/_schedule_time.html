@@ -1,6 +1,6 @@
 <%= form_tag scheduling_room_path, method: :post, id: "scheduleForm" do %>
   <div class="modal fade" id="scheduleTeacherTimeModal" tabindex="-1" role="dialog">
-    <div class="modal-dialog <%= @count_teacher_allocations.to_i != 0 ? 'modal-lg' : 'modal-sm' %>">
+    <div class="modal-dialog <%= @count_teacher_allocations.to_i != 0 ? 'modal-lg' : '' %>">
       <div class="modal-content">
         <hr />
         <div class="modal-body">

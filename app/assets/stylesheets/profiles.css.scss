@@ -2,6 +2,14 @@
   background-color: #EAEAEA;
   padding: 10px;
 }
+.marked-cross {
+	color: rgba(255, 0, 0, 0.5);
+	font-size: 1.5em !important;
+	cursor: help;
+}
+table.teacher_slot_detail_dashboard {
+	font-size: 12px;
+}
 .edit-avatar {
 	// width: 100px;
  //  height: 100px;

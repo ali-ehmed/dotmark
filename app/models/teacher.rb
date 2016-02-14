@@ -42,6 +42,8 @@ class Teacher < ActiveRecord::Base
          
 	has_many :course_allocations, dependent: :destroy
 	has_many :allocated_sections, class_name: "CourseAllocation", foreign_key: :teacher_id
+
+	has_many :reservations, class_name: "TimeTable", through: :course_allocations, source: :time_tables
 	
 	has_one :account, as: :resource, dependent: :destroy
 	has_one :avatar, as: :resource, class_name: "ResourceAvatar", foreign_key: :resource_id
@@ -83,6 +85,10 @@ class Teacher < ActiveRecord::Base
 
 	def allocations(batch_id, course_ids)
 		course_allocations.where("batch_id = ? and course_id in (?)", batch_id, course_ids)
+	end
+
+	def teacher_time_slots(slot)
+		self.reservations.where(time_slot_id: slot.id)
 	end
 
 	def sections_by_course(course_id, status)
