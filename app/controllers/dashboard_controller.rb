@@ -47,6 +47,10 @@ class DashboardController < ApplicationController
       time_table = time_table.where(course_allocations: { teacher_id: attributes["teacher_id"] })
     end
 
+    if attributes["batch_id"]
+      time_table = time_table.where(course_allocations: { batch_id: attributes["batch_id"] })
+    end
+
     time_table = time_table.first
     
     title = ""

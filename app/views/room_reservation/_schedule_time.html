@@ -1,6 +1,6 @@
 <%= form_tag scheduling_room_path, method: :post, id: "scheduleForm" do %>
   <div class="modal fade" id="scheduleTeacherTimeModal" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog <%= @count_teacher_allocations.to_i != 0 ? 'modal-lg' : 'modal-sm' %>">
       <div class="modal-content">
         <hr />
         <div class="modal-body">
@@ -52,7 +52,7 @@
               <blockquote class="blockquote-reverse">
                 <% if @count_teacher_allocations.to_i == 0 %>
                   <strong>Allocations Reserved
-                    <small>(Go to your <a href="#">Profile</a> and finalize them)</small>
+                    <!-- <small>(Go to your <a href="#">Profile</a> and finalize them)</small> -->
                   </strong>
                 <% else %>
                   <strong>Select Your Course:
@@ -111,8 +111,12 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss-schedule-cell data-dismiss="modal">Cancel</button>
-          <%= submit_tag "Book This Room!", class: "btn btn-success" %>
+          <% unless @count_teacher_allocations.to_i == 0 %>
+            <button type="button" class="btn btn-default" data-dismiss-schedule-cell data-dismiss="modal">Cancel</button>
+            <%= button_tag "Book This Room!", type: "submit", class: "btn btn-success" %>
+          <% else %>
+            <button type="button" class="btn btn-danger" data-dismiss-schedule-cell data-dismiss="modal">Close</button>
+          <% end %>
         </div>
       </div>
     </div>

@@ -3,7 +3,7 @@ window.$timetable = {
   initFunctions: ->
     $timetable.getAllocationsOfTeacher() if resource_account == current_resource_account #if teacher_signed_in?
     $timetable.bookingClassroom()
-    $timetable.genrateTimeTable()
+    $timetable.generateTimeTable()
     $timetable.loadTeacherAllocations()
     $timetable.loadReservedDetail()
 
@@ -29,7 +29,7 @@ window.$timetable = {
       )
 
   bookingClassroom: ->
-    $(document).on 'submit', 'form#scheduleForm', (e) ->
+    $('form#scheduleForm').submit (e) ->
       e.preventDefault()
       console.log 'Booking Now'
 
@@ -69,17 +69,23 @@ window.$timetable = {
         value: course_id
       }
 
-      $.post($form.attr('action'), $form_data, (data) ->
-        console.log 'Booked'
+      $.ajax
+        type: "post"
+        url: $form.attr('action')
+        data: $form_data
+        cache: false
+        beforeSend: ->
+          $form.find("button[type='submit']").prop("disabled", "disabled")
+          $form.find("button[type='submit']").html("Processing... <i class='fa fa-spinner fa-spin fa-1x'></i>")
+        success: (response, data) ->
+          $("#scheduleTeacherTimeModal").modal('hide')
+        error: (response) ->
+          swal 'oops', 'Something went wrong'
+        complete: ->
+          console.log 'Done'
+      false
 
-        $("#scheduleTeacherTimeModal").modal('hide')
-      ).done(->
-        console.log('Done')
-      ).fail ->
-        swal 'Something went wrong'
-        return
-
-  genrateTimeTable: ->
+  generateTimeTable: ->
     $("#generate_time_table").on "click", ->
       console.log("Generating")
       $(".book-reserved-detail").popover('destroy')
@@ -160,9 +166,13 @@ window.$timetable = {
       _params = jQuery.parseJSON($behavior)
 
       section_id = $('input[name="section_id"]:checked').val()
+      batch_id = $('input[name="current_batch_id"]:checked').val()
 
       if section_id
         _params["section_id"] = section_id
+
+      if batch_id
+        _params["batch_id"] = batch_id
 
       console.log _params
 

@@ -74,7 +74,7 @@ class TimeTable < ActiveRecord::Base
 																		 
 		@credit_hours = self.course_allocation.course.credit_hours.to_i
 
-		logger.debug "--------#{@reserved_allocations.length}--------"
+		logger.debug "--------#{@total_reserved.length}--------"
 
 		if @total_reserved.count == @credit_hours
       logger.debug "Finalizing"
