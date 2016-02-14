@@ -6,11 +6,12 @@ class Profile
     $("a[href='#time_table_tab']").on "click", (e) ->
       e.preventDefault()
       unless $("#teacher_time_table").html().length > 0
+        $("#teacher_time_table").css("text-align", "center")
+        AlertNotification.startLoaderIn $("#teacher_time_table")
+
         $.get(@dataset.url, (response) ->
 
           $("#teacher_time_table").html(response)
-          # $timetable.loadReservedDetail()
-          # $(".book-reserved-detail").popover('destroy')
 
           col = $("#teacher_time_table").find("table tbody tr:first-child td:first-child")
           col.css("padding-top", "27px")
