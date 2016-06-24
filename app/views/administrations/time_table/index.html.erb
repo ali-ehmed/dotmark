@@ -1,0 +1,31 @@
+<div class="page-header">
+  <h1>Generate Time Table</h1>
+  <p class="lead">Select Batch to generate Time Table:</p>
+  <ul class="list-inline allocations_current_batches">
+    <% @batches.each do |current_batch| %>
+        <li>
+          <div class="radio" style="margin-top:1px;">
+            <%= radio_button_tag :current_batch_id, current_batch['id'], false, checked: @batches.first == current_batch, id: "current_batch_#{current_batch['id']}_radio", onchange: "gettingSections(this);" %>
+            <label for="current_batch_<%= current_batch['id'] %>_radio" style="padding-left:7px;"><strong><%= current_batch["name"] %></strong></label>
+          </div>
+        </li>
+    <% end %>
+  </ul>
+  <div class="row">
+    <div class="col-md-3">
+      <blockquote class="blockquote-reverse">
+        <div class="time_table_sections">
+          <%= render partial: "time_table_sections", collection: @sections, :as => :section %>
+        </div>
+      </blockquote>
+    </div>
+    <div class="col-md-4 center-block">
+      <h2>
+        <%= button_tag "View Approved Results", class: "generate_btn btn-block btn btn-lg btn-default", id: "generate_time_table", data: { url: generate_time_table_index_path } %>
+      </h2>
+    </div>
+  </div>
+  <hr />
+  <div id="admin_timetable" class="text-center">
+  </div>
+</div>

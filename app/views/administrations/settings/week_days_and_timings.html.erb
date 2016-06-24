@@ -1,0 +1,36 @@
+<% content_for :admin_settings do %>
+	<blockquote>
+		<h3>Week Days & Timings</h3>
+	</blockquote>
+	<br	/>
+	<div class="panel panel-default">
+    <div class="panel-body">
+    	<div class="row">
+    		<div class="col-md-4">
+    			<p class="lead">Week Days:-</p>
+    			<ul class="list-group">
+		      	<% @week_days.each do |day| %>
+						  <li class="list-group-item"><strong><%= day.week_day %></strong></li>
+					  <% end %>
+					</ul>
+    		</div>
+    		<div class="col-md-4">
+    			<p class="lead">Mon - Thurs Timings:-</p>
+    			<ul class="list-group">
+		      	<% @normal_timings.each do |time| %>
+						  <li class="list-group-item"><strong><%= l time.start_time, format: :timings %> - <%= l time.end_time, format: :timings %></strong></li>
+					  <% end %>
+					</ul>
+    		</div>
+    		<div class="col-md-4">
+    			<p class="lead">Friday Timings:-</p>
+    			<ul class="list-group">
+		      	<% @friday_timings.each do |time| %>
+						  <li class="list-group-item"><strong><%= l time.start_time, format: :timings %> - <%= l time.end_time, format: :timings %></strong></li>
+					  <% end %>
+					</ul>
+    		</div>
+    	</div>
+    </div>
+  </div>
+<% end %>

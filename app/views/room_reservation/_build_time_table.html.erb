@@ -1,0 +1,31 @@
+<% if @teacher_allocations.present? %>
+	<%= render layout: "layouts/shared/time_table" do |time_table| %>
+    <% reserved_seat = current_resource.has_room_scheduled?(time_table.time_slot.id, @batch_id) %>
+    <% if reserved_seat.present? %>
+      <% time_table = reserved_seat.first.reserved_detail(time_table.time_slot.id) %>
+      <%= marked_cell(time_table) %>
+    <% else %>
+      <% if @count_teacher_allocations == 0 %>
+        <span data-toggle="tooltip" data-placement="top" data-html="true" title="All Allocations Reserved For This Batch">
+          <i class="fa fa-calendar-check-o fa-2x"></i>
+        </span>
+      <% else %>
+        <% if time_table.time_slot.available_classrooms.length == 0 %>
+          <span class="label label-danger" data-toggle="tooltip" data-placement="top" title="There are no rooms available in this time.">
+            N/A
+          </span>
+        <% elsif current_resource.teacher_time_slots(time_table.time_slot).count > 0 and @count_teacher_allocations != 0 %>
+          <span data-toggle="tooltip" data-placement="top" data-html="true" title="You have already assigned a classroom on this time slot for batch <strong><%= current_resource.teacher_time_slots(time_table.time_slot).first.course_allocation.batch.name %></strong>">
+            <i class="fa fa-times fa-2x"></i>
+          </span>
+        <% else %>
+          <%= link_to "Available", "javascript:void(0);", id: "time_cell", onclick: "window.$timetable.openTimeScheduleCell(this);", data: { url: schedule_a_time_path(week_day: time_table.time_slot.week_day, time: time_table.time_slot.start_time, format: :js) } %>
+        <% end %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% else %>
+	<div class="well">
+		<strong>No Allocations present in this batch to Schedule.</strong>
+	</div>
+<% end %>

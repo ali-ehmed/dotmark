@@ -1,0 +1,73 @@
+// Best in place Purr css 
+.purr {  
+  position: fixed;  
+  top: 70px;  
+  right: 150px;  
+  width: 300px;  
+  padding: 15px; 
+  color: #a94442;
+  background-color: #f2dede;
+  border-radius: 4px;  
+  border: solid 2px #ebccd1;  
+  &:first-letter { text-transform: uppercase };  
+}
+
+// Settings
+.settings-list-group {
+  .list-group-item {
+    font-size: 15.5px;
+  }
+  .active-list {
+    border-left: 4px solid #CF9451;
+    font-weight: bold;
+  }
+}
+
+.page-heading-admin-settings {
+  font-size: 34px;
+  border-bottom: 1px solid #D5D0D0;
+  margin-bottom: 23px;
+  padding-bottom: 7px;
+}
+
+.panel-app {
+  border: 0px;
+  .panel-body {
+    border-left: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+  }
+}
+
+@mixin scrollable-height($height) {
+  height: $height;
+}
+
+.courses_scrollable{ float: left; width: 100%; position: relative; overflow-X: scroll; @include scrollable-height(200px); }
+
+// Radio Button Error CSS
+.has-error-radio {  border: 2px solid #A94442; padding: 6px; border-radius: 7px;  }
+
+.typeahead-dropdown {
+  min-width: 100% !important;
+}
+
+.parent_search_validator, .parent_search_validator:focus { border-color: rgb(239, 84, 84); }
+
+// Allocations 
+.allocations {
+  .allocate_timings {
+    text-align: center;
+  }
+
+  .listing_for_allocations {
+    max-height: 300px;
+    overflow: auto;
+  }
+  .no-record {
+    padding:15px;
+  }
+  .select2 {
+    width: 100% !important;
+  }
+}

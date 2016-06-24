@@ -1,0 +1,30 @@
+<%# Rails flash messages styled for Bootstrap 3.0 %>
+<script type="text/javascript">
+	$(document).ready(function(){
+		<% flash.each do |name, msg| %>
+  		<% if msg.is_a?(String) %>
+  			$.notify({
+					// options
+					icon: "glyphicon <%= name.to_s == 'notice' ? 'glyphicon-ok' : 'glyphicon-warning-sign'%>",
+					title: "<strong><%= name.to_s == 'notice' ? 'Success' : 'Error'%>: </strong>",	
+					message: '<%= msg.html_safe %>'
+				},{
+					element: 'body',
+					position: null,
+					type: "<%= name.to_s == 'notice' ? 'success' : name.to_s == 'warning' ? 'warning' : 'danger' %>",
+					allow_dismiss: true,
+					newest_on_top: false,
+					showProgressbar: false,
+					offset: {
+						y: 50,
+						x: 33
+					},
+					placement: {
+						from: "top",
+						align: "right"
+					}
+				});
+  		<% end %>
+		<% end %>
+	});
+</script>

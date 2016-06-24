@@ -1,0 +1,52 @@
+<%= form_tag allocate_institutes_course_allocations_path, method: "post" do %>
+	<div class="row">
+		<div class="col-md-6">
+      <blockquote>
+        <strong>Teachers</strong>
+      </blockquote>
+      <br />
+			<%= select_tag :teacher_id, options_for_select(Teacher.all.map{|m| [m.full_name, m.id]}), class: "form-control teacher_allocation teacher_ID", prompt: "--Select Teacher--", onchange: "CourseAllocation.getAllCoursesAndSections();" %>
+		</div>
+		<div class="col-md-6">
+      <blockquote>
+        <strong>Batch</strong>
+      </blockquote>
+      <br >
+      <%= select_tag :batch_id, grouped_options_for_select(grouped_batches_options(@batches)), class: "form-control input-sm batch_ID", id: "courses_and_sections", prompt: "--Choose Batch--", onchange: "CourseAllocation.getAllCoursesAndSections();" %>
+		</div>
+	</div>
+  <hr />
+	<div class="row">
+		<div class="col-md-6">
+      <blockquote>
+        <strong id="allocation_semester_name">Courses</strong>
+      </blockquote>
+      <br />
+      <div class="well allocation_courses listing_for_allocations loader" style="text-align:center;">
+        <strong>Please Select Batch</strong>
+      </div>
+		</div>
+		<div class="col-md-6">
+      <blockquote>
+        <strong id="allocation_batch_name">Sections</strong>
+      </blockquote>
+      <br />
+      <div class="well allocation_sections loader loader_1" style="text-align:center;">
+        <strong>Please Select Batch</strong>
+      </div>
+		</div>
+	</div>
+  <div class="row">
+    <div class="col-md-12">
+      <ul class="list-inline pull-right">
+        <li class="pull-right">
+          <span id="remove_teacher_allocations"></span>
+        </li>
+        <li>
+          <%= button_tag "<i class=\"glyphicon glyphicon-send\"></i> Allocate Teacher".html_safe, class: "btn btn-success pull-right", id: "allocate_btn" %>
+        </li>
+      </ul>
+    </div>
+  </div>
+  
+<% end %>

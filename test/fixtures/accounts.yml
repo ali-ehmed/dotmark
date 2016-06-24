@@ -1,0 +1,22 @@
+# == Schema Information
+#
+# Table name: accounts
+#
+#  id            :integer          not null, primary key
+#  subdomain     :string
+#  resource_type :string
+#  resource_id   :integer
+#  created_at    :datetime         not null
+#  updated_at    :datetime         not null
+#  is_active     :boolean          default(FALSE)
+#
+
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  subdomain: MyString
+  resource_id: 1
+
+two:
+  subdomain: MyString
+  resource_id: 1

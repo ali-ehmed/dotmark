@@ -1,0 +1,21 @@
+<% content_for :admin_settings do %>
+	<blockquote>
+		<h3>Current Batches</h3>
+	</blockquote>
+	<br />
+	<div class="panel panel-default">
+		<div class="panel-body">
+      <ul class="list-group">
+      	<% if @current_batches.count > 1 %>
+	        <% @current_batches.each do |batch| %>
+	        	<li class="list-group-item">
+	        		<strong><%= "#{batch["name"]} - #{batch["semester"]}" %></strong>
+	      		</li>
+	        <% end %>
+        <% else %>
+        	<%= @current_batches.first %>
+        <% end %>
+      </ul>
+		</div>
+	</div>
+<% end %>

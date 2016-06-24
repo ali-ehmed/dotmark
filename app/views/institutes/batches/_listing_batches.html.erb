@@ -1,0 +1,47 @@
+<% if @batches.count > 0 %>
+	<table class="table table-striped batches_table">
+		<thead>
+		  <tr>
+		    <th>#</th>
+		    <th>Name</th>
+		    <th>From </th>
+		    <th>To</th>
+		    <th>Sections</th>
+    		<th>Add Sections</th>
+		  </tr>
+		</thead>
+		<tbody>
+		  <% @batches.each_with_index do |batch, counter| %>
+		  	<% count = counter + 1 %>
+		    <tr>
+		      <td>
+		        <%= count %>
+		      </td>
+		      <td>
+		        <a href="#"><%= best_in_place batch, :name, :as => :input, :inner_class => "form-control", placeholder: "---", :url => institutes_batch_path(batch.id) %></a>
+		      </td>
+		      <td>
+		        <a href="#"><%= best_in_place batch, :start_date, :as => :date, :inner_class => "form-control", placeholder: "---", :url => institutes_batch_path(batch.id) %></a>
+		      </td>
+		      <td>
+		        <a href="#"><%= best_in_place batch, :end_date, :as => :date, :inner_class => "form-control", placeholder: "---", :url => institutes_batch_path(batch.id) %></a>
+		      </td>
+		      <td id="batch_sections_<%= batch.id %>">
+		        <% if batch.sections.blank? %>
+		        	<strong>No Sections</strong>
+		        <% else %>
+							<%= batch.sections.select("id").count %>
+						<% end %>
+		      </td>
+		      <td>
+					  <%= select_tag :sections, options_for_select([[1, '1'], [2, '2'], [3, '3'], [4, '4'], [5, '5'], [6, '6']]), class: "form-control adding-sections", prompt: "--Choose Sections?--", "data-batch-id" => "#{batch.id}", id: "create_sections", onChange: "creatingSections(this);" %>
+		      </td>
+		    </tr>
+		  <% end %>
+		</tbody>
+	</table>
+<% else %>
+	<div class="alert alert-warning" role="alert">
+		No Batches Present
+	</div>
+<% end %>

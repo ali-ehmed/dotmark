@@ -1,0 +1,43 @@
+<ul class="nav navbar-nav">
+  <li>
+    <%= link_to students_path do %>
+      <i class="fa fa-graduation-cap"></i> Enrollments
+    <% end %>
+  </li>
+  <li>
+    <%= link_to teachers_path do %>
+        <i class="fa fa-users"></i> Teachers
+    <% end %>
+  </li>
+  <li>
+    <%= link_to time_table_index_path do %>
+        <i class="glyphicon glyphicon-calendar"></i> Generate Time Table
+    <% end %>
+  </li>
+</ul>
+
+<ul class="nav navbar-nav navbar-top-links navbar-right">
+  <li>
+    <%= link_to institutes_batches_path do%>
+      <i class="fa fa-university"></i> Institute
+    <% end %>
+  </li>
+  <li class="dropdown">
+    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+        <i class="fa fa-user fa-fw"></i>  <i class="fa fa-caret-down"></i>
+    </a>
+    <ul class="dropdown-menu dropdown-animated dropdown-user">
+        <li>
+          <%= link_to admin_account_settings_path do %>
+            <i class="fa fa-user fa-fw"></i> Settings
+          <% end %>
+        </li>
+        <li class="divider"></li>
+        <li>
+          <%= link_to destroy_admin_session_path, method: "delete" do %>
+            <i class="fa fa-sign-out fa-fw"></i> Logout
+          <% end %>
+        </li>
+    </ul>
+  </li>
+</ul>

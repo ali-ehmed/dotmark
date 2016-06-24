@@ -1,0 +1,23 @@
+# == Schema Information
+#
+# Table name: batches
+#
+#  id         :integer          not null, primary key
+#  name       :string
+#  start_date :date
+#  end_date   :date
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#
+
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  start_date: 2015-10-24
+  end_date: 2015-10-24
+
+two:
+  name: MyString
+  start_date: 2015-10-24
+  end_date: 2015-10-24

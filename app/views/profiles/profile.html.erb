@@ -1,0 +1,84 @@
+<div class="profile">
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="panel panel-default">
+					<div class="panel-body">
+						<div class="row">
+							<div class="col-md-3">
+								<a href="<%= edit_profiles_path(params[:username]) %>" class="thumbnail" data-toggle="tooltip" data-placement="top" title="Update your profile picture">
+									<img src="<%= image_path(@resource.avatar.image.url(:profile)) %>" alt="..." class="avatar profile-avatar img-rounded img-responsive">
+								</a>
+								<div class="info">
+									<span class="full_name"><%= current_resource.full_name %></span> <br /> <small><%= current_resource.username %></small>
+									<hr />
+									<ul>
+										<li><i class="fa fa-users"></i> Dotmark</li>
+										<li><i class="fa fa-envelope-o"></i> <a href="#"><%= current_resource.email %></a></li>
+										<li><i class="fa fa-map-marker"></i> <%= current_resource.address %></li>
+										<li><i class="fa fa-clock-o"></i> Joined On <%= current_resource.joining_date %></li>
+										<li><i class="fa fa-calendar"></i> Birth Date <%= current_resource.date_of_birth %></li>
+									</ul>
+									<hr />
+									<div class="institute_details">
+										<ul class="list-inline">
+											<% if current_resource.is_a?(:teacher) %>
+												<li>
+													<a href="#">
+														<strong><%= current_resource.employee_number %></strong>
+														<br />
+														<span>Roll Number</span>
+													</a>
+												</li>
+												<li>
+													<a href="#">
+														<strong><%= current_resource.skills %></strong>
+														<br />
+														<span>Position</span>
+													</a>
+												</li>
+											<% else %>
+												<li>
+													<a href="#">
+														<strong><%= current_resource.roll_number %></strong>
+														<br />
+														<span>Roll Number</span>
+													</a>
+												</li>
+												<li>
+													<a href="#">
+														<strong><%= current_resource.section.name %></strong>
+														<br />
+														<span>Section</span>
+													</a>
+												</li>
+												<li>
+													<a href="#">
+														<strong><%= current_resource.batch.name %></strong>
+														<br />
+														<span>Batch</span>
+													</a>
+												</li>
+											<% end %>
+										</ul>
+									</div>
+									<hr />
+									<strong class="url">Profile URL</strong>
+									<ul>
+										<li><i class="fa fa-steam"></i> <%= current_resource.account.subdomain %>.dotmark.com</li>
+									</ul>
+								</div>
+							</div>
+							<div class="col-md-9">
+								<%= link_to edit_profiles_path(params[:username]), class: "btn btn-default pull-right" do %>
+									<i class="fa fa-pencil"></i> Edit Profile
+								<% end %>
+							  <%= render partial: "#{current_resource.class.to_s.pluralize.downcase}" %>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

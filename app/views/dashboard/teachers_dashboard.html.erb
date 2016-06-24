@@ -1,0 +1,50 @@
+<div id="timetable">
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-md-6">
+				<blockquote>
+					<p class="lead">Select Batch to View your Time Table:</p>
+					<ul class="list-inline allocations_current_batches">
+						<% @batches.each do |current_batch| %>
+							<li>
+								<div class="radio" style="margin-top:1px;">
+						      <%= radio_button_tag :current_batch_id, current_batch['id'], false, checked: @batches.first == current_batch, id: "current_batch_#{current_batch['id']}_radio", onchange: "window.$timetable.getTeacherAllocationsByBatch(this);" %>
+						      <label for="current_batch_<%= current_batch['id'] %>_radio" style="padding-left:7px;"><strong><%= current_batch["name"] %></strong></label>
+						    </div>
+							</li>
+						<% end %>
+					</ul>
+				</blockquote>
+			</div>
+			<div class="col-md-4 pull-right">
+				<blockquote class="blockquote-reverse">
+					<h2>
+						Welcome <small><%= current_resource.full_name %></small>
+					</h2>
+				</blockquote>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-6">
+				<blockquote class="teacher_allocation_for_batch">
+					<h1>
+						Allocations <small></small>
+					</h1>
+				</blockquote>
+			</div>
+			<div class="col-md-4 pull-right">
+				<br />
+				<div class="display_teacher_allocations">
+					<blockquote class="blockquote-reverse blockquote-view-allocations">
+						<button class="btn-block btn btn-info btn-view-allocations" onclick="window.$timetable.getCurrentTeacherAllocationsForTimeTable();">View All Allocations</button>
+					</blockquote>
+				</div>
+			</div>
+		</div>
+		<br />
+		<div class="time_table_for_teacher loader">	
+		</div>
+	</div>
+</div>
+<%= render partial: "room_reservation/view_allocations" %>
+<div class="schedule_timings"></div>

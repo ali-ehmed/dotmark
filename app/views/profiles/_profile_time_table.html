@@ -1,0 +1,8 @@
+<%= render layout: "layouts/shared/time_table" do |time_table| %>
+  <% reserved_seat = current_resource.has_room_scheduled?(time_table.time_slot.id) %>
+  <% if reserved_seat.present? %>
+    <a tabindex="0" placement="top" role="button" data-container="body" data-toggle="popover" data-trigger="focus hover" title="<%= profile_time_popover_title(time_table.time_slot) %>" data-content="<%= profile_time_popover_content(current_resource, time_table.time_slot) %>" data-html="true"><i class="fa fa-times fa-2x marked-cross"></i></a>
+  <% else %>
+    ---
+  <% end %>
+<% end %>

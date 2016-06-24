@@ -1,0 +1,24 @@
+/* CSS REQUIRED */
+.state-icon {
+    left: -5px;
+}
+.list-group-item-primary {
+    color: rgb(255, 255, 255);
+    background-color: rgb(66, 139, 202);
+}
+
+/* DEMO ONLY - REMOVES UNWANTED MARGIN */
+.well .list-group {
+    margin-bottom: 0px;
+}
+.list-active { 
+	background-color: #6EA5D4;
+  border-color: #4583B9;
+}
+
+.list-already-active {
+  background-color: rgba(27,16,16,0.6);
+  border-color: #564D4D;
+  color: #fff;
+  cursor: no-drop !important;
+}

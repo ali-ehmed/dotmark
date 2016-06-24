@@ -1,0 +1,22 @@
+<div class="row">
+	<div class="col-md-6">
+		<div class="page-header">
+		  <h1>Guardians <small>Relation</small></h1>
+		</div>
+		<label>Enter Guardian Name:</label>
+		<div class='form-group search_g_form'>
+			<div class="input-group">
+	      <input type="text" autocomplete="off" name="parent_name" id="query" placeholder="Parent Name" class="form-control" data-provide="typeahead"/>
+	      <div class="input-group-addon query-loader"><i class="fa fa-bars"></i></div>
+	    </div>
+			<p id='parent_search_validator' class="hidden_name" style='color: rgb(128, 117, 117); display:none;'>	Please Enter Name</p>
+			<br />
+			<button class="btn btn-default" id="search_guardian" data-parent-id="">Search Guardian</button>
+		</div>
+	</div>
+</div>
+
+<div class="searched_guardians" style="display:none;"></div>
+<div class="choose_guardians">
+	<div class="alert alert-success" role="alert">Search Guardian with their Nic</div>
+</div>

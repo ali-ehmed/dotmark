@@ -1,0 +1,37 @@
+<% if students.present? %>
+	<div class="table-responsive">
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th>Roll #</th>
+					<th>Name</th>
+					<th>Joining Date</th>
+					<th>Passed Out</th>
+					<th>Semester</th>
+					<th>Section</th>
+					<th>Gender</th>
+				</tr>
+			</thead>
+			<tbody>
+				<% students.each do |student| %>
+					<tr>
+						<td><%= student.roll_number %></td>
+						<td><%= student.full_name %></td>
+						<td><%= student.joining_date %></td>
+						<td><%= student.passed_out %></td>
+						<td><%= student.semester.try(:name) %></td>
+						<td><%= student.section.try(:name) %></td>
+						<td><%= student.gender %></td>
+					</tr>
+				<% end %>
+			</tbody>
+		</table>
+	</div>
+<% else %>
+	<br />
+	<div class="alert alert-info">
+		<blockquote>
+			No Students availble in <strong><%= batch_name %></strong>
+		</blockquote>
+	</div>
+<% end %>

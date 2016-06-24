@@ -1,0 +1,26 @@
+# == Schema Information
+#
+# Table name: notifications
+#
+#  id            :integer          not null, primary key
+#  body          :string
+#  resource_type :string
+#  resource_id   :integer
+#  sent_at       :datetime
+#  created_at    :datetime         not null
+#  updated_at    :datetime         not null
+#
+
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  body: MyString
+  resource_type: MyString
+  resource_id: 1
+  sent_at: 2015-11-11 03:24:45
+
+two:
+  body: MyString
+  resource_type: MyString
+  resource_id: 1
+  sent_at: 2015-11-11 03:24:45

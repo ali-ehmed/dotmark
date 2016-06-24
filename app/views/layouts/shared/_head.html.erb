@@ -1,0 +1,19 @@
+<title><%= "Dotmark - " + title %></title>
+<% cache "head_cache_v=1" do %>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="<%= content_for?(:description) ? yield(:description) : "Dotmark" %>">
+	<%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track' => true %>
+	<%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+	<link href="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/css/select2.min.css" rel="stylesheet" />
+	<script src="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/js/select2.min.js"></script>
+<% end %>
+<%= csrf_meta_tags %>
+
+<%= javascript_tag do %>
+	window.current_resource_account = "N/A"
+
+	<% if @account["resource_type"] == "Teacher" %>
+  	window.current_resource_account = "<%= @account["subdomain"] %>"
+  	window.signed_in_teacher = "<%= @account["resource"]["id"] %>"
+	<% end %>
+<% end %>

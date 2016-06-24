@@ -1,0 +1,13 @@
+<% content_for :institute_settings do %>
+	<h2>
+	  Classrooms
+	  <button class="btn btn-info pull-right" onclick="$('#classroom_modal').modal('show')">
+	    Add New
+	  </button>
+	</h2>
+	<%= render "form" %>
+	<hr />
+	<div class="classrooms">
+	  <%= render "listing_classrooms" %>
+	</div>
+<% end %>

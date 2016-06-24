@@ -1,0 +1,27 @@
+<% content_for :admin_settings do %>
+	<div class="col-md-4">
+		<blockquote>
+			<h3>Account Settings</h3>
+		</blockquote>
+	</div>
+	<div class="col-md-7">
+		<%= validation_errors_notifications(@admin) %>
+		<%= simple_form_for @admin, url: update_account_settings_path, method: :put do |f| %>
+			<div class="form-group">
+				<%= f.input :email %>
+			</div>
+			<div class="form-group">
+				<%= f.input :username %>
+			</div>
+			<div class="form-group">
+				<%= f.input :password %>
+			</div>
+			<div class="form-group">
+				<%= f.input :password_confirmation %>
+			</div>
+			<div class="form-group">
+				<%= f.submit "Save", class: "btn btn-primary" %>
+			</div>
+		<% end %>
+	</div>
+<% end %>

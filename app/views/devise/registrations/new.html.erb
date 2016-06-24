@@ -1,0 +1,18 @@
+<div class="page-header">
+	<h1>Register New <%= resource_name.to_s.humanize %></h1>
+</div>
+
+<%= simple_form_for(resource, as: resource_name, url: registration_path(resource_name), html: { :multipart => true }, :html => { :novalidate => false }) do |form| %>
+  <%#= validation_errors_notifications(resource) %>
+	<%= form.error_notification %>
+  <%= render partial: "#{resource_name.to_s.pluralize}_form", locals: { f: form } %>
+
+  <div class="form-actions">
+    <% unless resource.class == Student %>
+      <%= form.button :button, 'Enroll Now', :class => 'btn btn-success nextBtn btn-lg pull-right', data: { disable_with: "<i class='fa fa-spinner fa-spin'></i> Registering"} %>
+      <%= link_to "Cancel", send("#{resource_name.to_s.pluralize}_path"), class: "btn btn-default" %>
+    <% end %>
+  </div>
+<% end %>
+
+

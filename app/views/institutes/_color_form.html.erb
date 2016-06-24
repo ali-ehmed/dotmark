@@ -1,0 +1,19 @@
+<div class="modal fade" id="edit-color_<%= object.id %>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-content">
+    	<%= simple_form_for object, url: url, method: "put", html: { id: "color_form_#{object.id}", onsubmit: "saveColor(event);", "data-object-id" => object.id } do |f| %>
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	        <h4 class="modal-title" id="myModalLabel">Change Color</h4>
+	      </div>
+	      <div class="modal-body">
+        	<%= f.input :color, label: false, placeholder: "Pick Color", input_html: { class: "color_picker", value: object.color.present? ? object.color : '' }  %>
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+	        <%= f.submit "Save", class: "btn btn-primary" %>
+	      </div>
+      <% end %>
+    </div>
+  </div>
+</div>

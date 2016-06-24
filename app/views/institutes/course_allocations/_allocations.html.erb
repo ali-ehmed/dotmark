@@ -1,0 +1,89 @@
+<% Batch.current_batches.each do |batch| %>
+	<div class="row">
+		<div class="col-md-6">
+			<blockquote>
+				<small><strong><%= batch["name"] %> (<%= batch["semester"] %>)</strong></small>
+			</blockquote>
+		</div>
+		<div class="col-md-6">
+			<div id="remove_all_allocations">
+				<%# if Batch.allocations(batch["id"]).present? %>
+					<%#= raw remove_all_allocations(batch['id'], batch['name']) %>
+				<%# end %>
+			</div>
+		</div>
+	</div>
+	
+	<br />
+	<table class="table table-striped allocations_table allocations_table_for_<%= batch["id"] %> display responsive" data-source="<%= get_allocations_institutes_course_allocations_path(batch["id"], format: :json) %>" width="100%">
+		<thead>
+	    <tr>
+	      <th>Teacher</th>
+				<th>Course</th>
+				<th>Section</th>
+				<th>Status</th>
+				<th>---</th>
+	    </tr>
+	  </thead>
+	</table>
+	<hr />
+	<script type="text/javascript">
+		$(function(){
+			// Destroying Old Data Table and reinitializing
+			// $("table.allocations_table_for_<%#= batch.id %>").DataTable().clear().destroy();
+			var $table = "";
+			$table = $("table.allocations_table_for_<%= batch['id'] %>").DataTable({
+			  responsive: true,
+			  bSort: true,
+			  bFilter: true,
+			  "dom": '<"toolbar">frtip',
+			  "iDisplayLength": 7,
+			  ajax: $("table.allocations_table_for_<%= batch['id'] %>").data("source"),
+			  "fnDrawCallback": function (aoData) {
+			  	$loaded_table = $(this)
+			  	
+			  	if(aoData.json === undefined) {
+		  			console.log("Params are Blank")
+			  	} else {
+			  		if(aoData.json.data.length > 0) {
+					  	$data = aoData.json.data.reverse();
+
+					  	$.each($loaded_table.find("tbody tr"), function(index){
+				  			$row = $(this)
+
+				  			if($row.find("td").length > 1) {
+				  				console.log($data[index])
+
+				  				if($data[index].teacher === $row.find("td:first-child").html()) {
+				  					$row.attr("data-teacher-id", aoData.json.data[index].teacher_id);
+				  					$row.attr("data-course-id", aoData.json.data[index].course_id);
+				  				}
+				  			}
+				  		})
+			  		}
+			  	}
+		    },
+		    "bStateSave": true,
+			  "columns": [
+			    {
+			      "data": "teacher"
+			    }, {
+			      "data": "course"
+			    }, {
+			      "data": "section"
+			    }, {
+			      "data": "status"
+			    }, {
+			      "data": "send_instructions"
+			    }
+			  ]
+			});
+
+			$("table.allocations_table_for_<%= batch['id'] %>").prev().prev().html('<%= escape_javascript( notify_to_all(batch) ) %>');
+
+			$("table.allocations_table_for_<%= batch['id'] %> tbody").on( 'click', 'tr', function () {
+	        $(this).toggleClass('selected');
+	    });
+		});
+	</script>
+<% end %>

@@ -1,0 +1,55 @@
+<ul class="nav nav-tabs" role="tablist">
+  <li role="presentation" class="active">
+  	<a href="#my_courses" aria-controls="my_courses" role="tab" data-toggle="tab" onclick="activeTabs(this);">Qualification & Experience</a>
+	</li>
+  <li role="presentation">
+  	<a href="#time_table_tab" aria-controls="time_table_tab" role="tab" data-toggle="tab" onclick="activeTabs(this);" data-url="<%= time_table_path(current_resource.username) %>">Time Table</a>
+	</li>
+  <li role="presentation">
+  	<a href="#reports" aria-controls="reports" role="tab" data-toggle="tab" onclick="activeTabs(this);">Allocations</a>
+	</li>
+</ul>
+<div class="tab-content profile-views">
+  <div role="tabpanel" class="tab-pane in active" id="my_courses">
+  	<blockquote>
+  		<h3>Qualification & Experience</h3>
+  	</blockquote>
+    <br />
+
+    <p class="lead">My Qualification</p>
+
+    <p>
+      <%= best_in_place current_resource, "qualification", :as => :textarea, :inner_class => "form-control", placeholder: "---", nil: "---", :url => profile_profiles_path(params[:username]), activator: '#edit-teacher-qualification', :display_with => lambda { |v| v.html_safe if v.present? } %>
+      <br />
+      <%= link_to "javscript:void(0);", class: "btn btn-warning btn-sm pull-right", id: 'edit-teacher-qualification' do %>
+        <strong>Edit</strong> <i class="glyphicon glyphicon-pencil"> </i>
+      <% end %>
+    </p>
+
+    <p class="lead">My Experience</p>
+
+    <p>
+      <%= best_in_place current_resource, "past_experience", :as => :textarea, :inner_class => "form-control", placeholder: "---", nil: "---", :url => profile_profiles_path(params[:username]), activator: '#edit-teacher-experience', :display_with => lambda { |v| v.html_safe if v.present? } %>
+      <br />
+      <%= link_to "javscript:void(0);", class: "btn btn-warning btn-sm pull-right", id: 'edit-teacher-experience' do %>
+        <strong>Edit</strong> <i class="glyphicon glyphicon-pencil"> </i>
+      <% end %>
+    </p>
+    
+  </div>
+  <div role="tabpanel" class="tab-pane" id="time_table_tab">
+  	<blockquote>
+  		<h3>Time Table</h3>
+  	</blockquote>
+    <br />
+    <p>
+      <div id="teacher_time_table"></div>
+    </p>
+    
+  </div>
+  <div role="tabpanel" class="tab-pane" id="reports">
+  	<blockquote>
+  		<h3>Allocations</h3>
+  	</blockquote>
+  </div>
+</div>

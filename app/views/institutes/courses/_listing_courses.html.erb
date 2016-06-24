@@ -1,0 +1,60 @@
+<div class="row">
+	<% @semesters.each do |semester| %>
+		<div class="col-md-6 resizeable">
+			<div class="panel panel-default resize-section">
+				<div class="panel-heading"><strong><%= semester.name %></strong></div>
+				<div class="panel-body">
+					<% if semester.courses.blank? %>
+						<div class="">
+							<div class="alert alert-warning" role="alert">
+								No Courses Present
+							</div>
+						</div>
+					<% else %>
+						<div class="">
+							<table class="table table-striped">
+								<thead>
+									<tr>
+										<th>Name</th>
+										<th>Code</th>
+										<th>Color</th>
+										<th>Credit Hours</th>
+										<th>Type</th>
+										<th></th>
+									</tr>
+								</thead>
+								<tbody>
+									<% semester.courses.each do |course| %>
+										<tr>
+											<td>
+												<a href="#"><%= best_in_place course, :name, :as => :input, :inner_class => "form-control input-sm", placeholder: "---", :url => institutes_course_path(course.id) %></a>
+											</td>
+											<td>
+												<a href="#"><%= best_in_place course, :code, :as => :input, :inner_class => "form-control input-sm", placeholder: "---", :url => institutes_course_path(course.id) %></a>
+											</td>
+											<td>
+												<%= get_color(course, true) %>
+												<%= render "institutes/color_form", object: course, url: institutes_course_path(course) %>
+											</td>
+											<td>
+												<a href="#"><%= best_in_place course, :credit_hours, :as => :input, :inner_class => "form-control input-sm", placeholder: "---", :url => institutes_course_path(course.id) %></a>
+											</td>
+											<td>
+												<a href="#"><%= best_in_place course, :course_type, :as => :select, :collection => [[false, 'Theroy'], [true, 'Lab']], :inner_class => "form-control input-sm", placeholder: "---", :url => institutes_course_path(course.id) %></a>
+											</td>
+								      <td>
+								        <%= link_to "javascript:void(0)", "data-url" => institutes_course_path(course), method: "delete", :onClick => "confirmation('Remove this course?', this);"  do %>
+								        	<i class="glyphicon glyphicon-trash"></i>
+								        <% end %>
+								      </td>
+										</tr>
+									<% end %>
+								</tbody>
+							</table>
+						</div>
+					<% end %>
+				</div>
+			</div>
+		</div>
+	<% end %>
+</div>

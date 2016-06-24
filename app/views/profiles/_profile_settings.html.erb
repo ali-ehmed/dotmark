@@ -1,0 +1,51 @@
+<h2><small>Profile Settings</small></h2>
+
+<%= simple_form_for(@resource, url: profile_profiles_path(params[:username], tab: "profile"), html: { method: :put }) do |f| %>
+  <%#= f.error_notification if @profile_error %>
+
+  <div class="form-inputs">
+    <div class="form-group">
+      <label>Profile Picture</label>
+      <div class="row">
+        <div class="col-md-3">
+          <img src="<%= image_path(@resource.avatar.image.url(:thumb)) %>" alt="..." class="img-rounded avatar edit-avatar">
+        </div>
+        <div class="col-md-6">
+          <p>You can upload your picture from here.</p>
+          
+          <div class="fileinput fileinput-new" data-provides="fileinput">
+            <span class="btn btn-default btn-file">
+              <span class="fileinput-new">Upload Picture</span><span class="fileinput-exists">Change</span>
+              <%= f.fields_for :avatar do |avatar_f| %>
+                <%= avatar_f.file_field :image %>
+              <% end %>
+            </span>
+            <span class="fileinput-filename"></span>
+            <a href="#" class="close fileinput-exists" data-dismiss="fileinput" style="float: none">&times;</a>
+          </div>
+
+        </div> 
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="row">
+        <div class="col-md-6">
+          <%= f.input :first_name %>
+        </div>
+        <div class="col-md-6">
+          <%= f.input :last_name %>
+        </div>
+      </div>
+    </div> 
+  	<div class="form-group">
+      <div class="row">
+        <div class="col-md-8">
+          <%= f.input :address %>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="form-actions">
+    <%= f.button :submit, "Save", class: "btn btn-warning" %>
+  </div>
+<% end %>

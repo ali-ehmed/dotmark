@@ -1,0 +1,16 @@
+$(".schedule_timings").html("<%= escape_javascript(render 'schedule_time') %>")
+
+$("#scheduleTeacherTimeModal").modal({
+  keyboard: false,
+  show: true,
+  backdrop: 'static'
+});
+
+check_box_list();
+
+$('[data-toggle="popover"]').popover()
+$('[data-toggle="tooltip"]').tooltip()
+
+$(".book-reserved-detail").popover('destroy')
+$timetable.dismissScheduleForm()
+$timetable.bookingClassroom()

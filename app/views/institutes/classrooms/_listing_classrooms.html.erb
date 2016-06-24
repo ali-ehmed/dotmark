@@ -1,0 +1,45 @@
+<% if @classrooms.count > 0 %>
+	<table class="table table-striped classrooms_table">
+		<thead>
+		  <tr>
+		    <th>#</th>
+		    <th>Name</th>
+		    <th>Strength</th>
+		    <th>Type of Room</th>
+		    <th>Color</th>
+		    <!-- <th></th> -->
+		    <th></th>
+		  </tr>
+		</thead>
+		<tbody>
+		  <% @classrooms.each_with_index do |classroom, counter| %>
+		  	<% count = counter + 1 %>
+		    <tr>
+		      <td>
+		        <%= count %>
+		      </td>
+		      <td>
+		        <a href="#"><%= best_in_place classroom, :name, :as => :input, :inner_class => "form-control input-sm", placeholder: "---", :url => institutes_classroom_path(classroom.id) %></a>
+		      </td>
+		      <td>
+		        <a href="#"><%= best_in_place classroom, :strength, :as => :input, :inner_class => "form-control input-sm", placeholder: "---", :url => institutes_classroom_path(classroom.id) %></a>
+		      </td>
+		      <td>
+		        <a href="#"><%= best_in_place classroom, :type_of_room, :as => :input, :inner_class => "form-control input-sm", placeholder: "---", :url => institutes_classroom_path(classroom.id) %></a>
+		      </td>
+		      <td>
+		        <%= get_color(classroom, true) %>
+		        <%= render "institutes/color_form", object: classroom, url: institutes_classroom_path(classroom) %>
+		      </td>
+		      <td>
+		        <%= link_to "Remove", "javascript:void(0)", "data-url" => institutes_classroom_path(classroom), class: "label label-danger", method: "delete", :onClick => "confirmation('Remove this class?', this);" %>
+		      </td>
+		    </tr>
+		  <% end %>
+		</tbody>
+	</table>
+<% else %>
+	<div class="alert alert-warning" role="alert">
+		No Classrooms Present
+	</div>
+<% end %>

@@ -1,0 +1,20 @@
+# == Schema Information
+#
+# Table name: guardian_relations
+#
+#  id         :integer          not null, primary key
+#  parent_id  :integer
+#  student_id :integer
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#
+
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  parent_id: 1
+  student_id: 1
+
+two:
+  parent_id: 1
+  student_id: 1

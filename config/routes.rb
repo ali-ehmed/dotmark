@@ -1,56 +1,125 @@
 Rails.application.routes.draw do
-  # The priority is based upon order of creation: first created -> highest priority.
-  # See how all your routes lay out with "rake routes".
 
-  # You can have the root of your site routed with "root"
-  # root 'welcome#index'
+  # Routes for Room Reservation
+  get 'room_reservation/index'
+  get "room_reservation/search_allocations" => "room_reservation#search_allocations"
+  get "room_reservation/schedule_time_cell/:week_day/:time" => "room_reservation#schedule_time_cell", as: :schedule_a_time
+  get "room_reservation/:batch_id/teacher_allocations" => "room_reservation#teacher_allocations", as: :teacher_allocations
+  post "scheduling_room" => "room_reservation#book_room", as: :scheduling_room
+  delete "dismiss_reserved_room" => "room_reservation#dissmiss_reserved_room", as: :dismiss_room
 
-  # Example of regular route:
-  #   get 'products/:id' => 'catalog#view'
+  # Routes for Dashboard
+  get "/load_reserved_details" => "dashboard#load_reserved_details", as: :load_details
+  get ":username/time_table" => "dashboard#time_table", as: :time_table
+  
 
-  # Example of named route that can be invoked with purchase_url(id: product.id)
-  #   get 'products/:id/purchase' => 'catalog#purchase', as: :purchase
+  # Routes for Students and Teachers
+  constraints(Subdomain) do
+    resources :profiles, :path => ":username", only: [:index] do
+      collection do
+        get "/settings" => "profiles#edit", as: :edit
+        put "settings/security" => "profiles#security", as: :security
+        put "settings/profile" => "profiles#update", as: :profile
+      end
+    end
 
-  # Example resource route (maps HTTP verbs to controller actions automatically):
-  #   resources :products
+    %w(student teacher).each do |resource|
+      resource_name = resource.pluralize
+      devise_for resource_name.to_sym, :skip => [:passwords, :registrations], controllers: { confirmations: "resources/confirmations", sessions: "resources/sessions" }
+      devise_scope resource.to_sym do
+        get "#{resource_name}/login" => "resources/sessions#new", as: "#{resource_name}_login".to_sym
+        get "#{resource_name}/login_after_confirmation" => "resources/sessions#login_after_confirmation", as: "#{resource_name}_login_after_confirmation".to_sym
+      end
 
-  # Example resource route with options:
-  #   resources :products do
-  #     member do
-  #       get 'short'
-  #       post 'toggle'
-  #     end
-  #
-  #     collection do
-  #       get 'sold'
-  #     end
-  #   end
+      authenticated resource.to_sym do
+        root 'dashboard#index', as: "#{resource}_authenticated_root".to_sym
+      end
+    end
+  end
 
-  # Example resource route with sub-resources:
-  #   resources :products do
-  #     resources :comments, :sales
-  #     resource :seller
-  #   end
+  # Routes for Admin
+  constraints :subdomain => "admin" do 
+    devise_for :admins, :skip => [:passwords, :registrations, :confirmations], controllers: { sessions: "resources/sessions" }
+    devise_scope :admin do
+      get "admin/login" => "resources/sessions#new", as: :admins_login
+    end
 
-  # Example resource route with more complex sub-resources:
-  #   resources :products do
-  #     resources :comments
-  #     resources :sales do
-  #       get 'recent', on: :collection
-  #     end
-  #   end
+    %w(student teacher).each do |resource|
+      devise_for resource.pluralize.to_sym, :skip => [:passwords, :confirmations, :sessions], controllers: { registrations: "resources/registrations" }
+      devise_scope resource.to_sym do
+        if resource == "student"
+          get "#{resource.pluralize}/admissions/:batch_name" => "resources/registrations#new", as: "new_#{resource}".to_sym
+        else
+          get "#{resource.pluralize}/new" => "resources/registrations#new", as: "new_#{resource}".to_sym
+        end
+      end
+    end
+    
+    scope :module => 'administrations' do
+      # Admin Settings
+      resources :settings, :path => "admin/settings", only: [:index] do 
+        collection do
+          get "/account" => "settings#admin_account", as: :admin_account
+          put "/" => "settings#update", as: :update_account
+          get "/week_days" => "settings#week_days_and_timings", as: :set_week_days
+          get "/current_batches" => "settings#current_batches", as: :current_batches
+        end
+      end
 
-  # Example resource route with concerns:
-  #   concern :toggleable do
-  #     post 'toggle'
-  #   end
-  #   resources :posts, concerns: :toggleable
-  #   resources :photos, concerns: :toggleable
+      resources :admissions, only: [:index] do
+        collection do 
+          post "/cancel_admission" => "admissions#cancel_admission", as: :cancel
+          post "/setup_admission" => "admissions#setup_admission", as: :setup
+          get "/autocomplete_guardians_search" => "admissions#autocomplete_guardians_search", as: :autocomplete_guardians
+          get "/get_parent/:parent_id" => "admissions#get_parent"
+        end
+      end
 
-  # Example resource route within a namespace:
-  #   namespace :admin do
-  #     # Directs /admin/products/* to Admin::ProductsController
-  #     # (app/controllers/admin/products_controller.rb)
-  #     resources :products
-  #   end
+      # Admin Students
+      resources :students, path: "students", only: [:index] do
+        get "/search" => "students#search", on: :collection, as: :search
+      end
+
+      # Admin Teachers
+      resources :teachers, path: "teachers", only: [:index, :update] do
+        get "/search" => "teachers#search", on: :collection, as: :search
+      end
+
+      resources :time_table, path: "time_table", only: [:index] do
+        get "/generate" => "time_table#show", as: :generate, on: :collection
+      end
+    end
+
+    authenticated :admin do
+      root 'dashboard#index', as: :admin_authenticated_root
+    end
+  end
+
+  namespace :institutes do
+    resources :batches, except: [:show, :edit, :new] do
+      put "/add_sections" => "batches#add_sections", as: :add_sections
+    end
+
+    get "/get_sections" => "base#get_sections", as: :get_sections
+
+    resources :classrooms, except: [:edit]
+    resources :courses do 
+      get "get_course/:semester_name" => "courses#get_course_by_section", on: :collection
+    end
+    resources :course_allocations, only: [:index, :create, :update] do
+      collection do
+        post "allocate"
+        get ":batch_id/get_allocations" => "course_allocations#get_allocations", as: :get_allocations
+        delete ":batch_id/remove_allocations" => "course_allocations#remove_allocations", as: :remove_allocations
+        get ":batch_id/courses_and_sections"=> "course_allocations#courses_and_sections", as: :courses_and_sections
+        delete ":teacher_id/remove_teacher_allocations"=> "course_allocations#remove_teacher_allocations", as: :remove_teacher_allocations
+        get "/notify_teacher_for_approval" => "course_allocations#notify_teacher_for_approval", as: :notify_teacher
+      end
+    end
+  end
+
+  resources :dashboard, only: [:index]
+
+  get "/about_us" => "landings#about"
+  root to: "landings#home"
 end

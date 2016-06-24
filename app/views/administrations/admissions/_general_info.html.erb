@@ -1,0 +1,105 @@
+<div class="row">
+  <div class="col-md-6">
+    <div class="page-header">
+      <h1>
+      	Enroll new <small>Admission</small>
+      </h1>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-6 col-lg-6">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <div class="panel-title">General Details</div>
+      </div>
+      <div class="panel-body">
+      	<div class="form-group">
+	        <div class="form-inputs">
+	          <%= f.label :roll_number, "Roll Number:" %>
+	          <%= f.input :roll_number, label: false, placeholder: "Roll Number" %>
+	        </div>
+        </div>
+        <div class="form-group">
+	        <div class="form-inputs">
+	          <%= f.input :first_name, label: false, placeholder: "First Name", required: true %>
+	        </div>
+        </div>
+        <div class="form-group">
+	        <div class="form-inputs">
+	          <%= f.input :last_name, label: false, placeholder: "Last Name" %>
+	        </div>
+        </div>
+        <div class="form-group">
+	        <div class="input-group date" id="form_student_dob">
+	          <%= f.input :date_of_birth, label: false, placeholder: "Date of Birth", :as => :string, input_html: { id: "" } %>
+	          <span class="input-group-addon">
+	            <span class="fa fa-calendar"></span>
+	          </span>
+	        </div>
+        </div>
+        <div class="form-group">
+	        <div class="form-inputs">
+	          <%= f.input :gender, collection: ["Male", "Female"], as: :select, prompt: "--Select Gender--", label: false %>
+	        </div>
+        </div>
+      </div>
+    </div>
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <div class="panel-title">Contact Details</div>
+      </div>
+      <div class="panel-body">
+      	<div class="form-group">
+	        <div class="form-inputs">
+        		<%= f.input :address, label: false, placeholder: "Address" %>
+      		</div>
+    		</div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6 col-lg-6">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <div class="panel-title">Other Details</div>
+      </div>
+      <div class="panel-body">
+      	<div class="form-group">
+	        <div class="form-inputs">
+	          <%= f.input :nationality, label: false, placeholder: "Nationality" %>
+	        </div>
+        </div>
+      </div>
+    </div>
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <div class="panel-title">Academic Details</div>
+      </div>
+      <div class="panel-body">
+      	<div class="form-group">
+	        <div class="form-inputs">
+	          <%= f.label :batch, "Batch:" %>
+	          <%= f.association :batch, as: :select, collection: Batch.current_batches.map{|m| [m["name"], m["id"]]}, label: false, include_blank: "--Choose Batch--", :input_html => { onchange: "gettingSections(this, 'true');" } %>
+	        </div>
+        </div>
+        <div class="form-group">
+	        <div class="form-inputs">
+	          <br/>
+				  	<div class="form-group">
+              <label>*Sections</label>
+              <div class="admission_sections">
+					  		<%= render "administrations/admissions/batches_sections", sections: resource.batch.sections, new_admission: resource %>
+					  	</div>
+					  </div>
+	        </div>
+        </div>
+        <div class="form-group">
+	        <div class="form-inputs">
+	          <%= f.label :semester, "Semester:" %>
+	          <%= f.association :semester, as: :select, label: false, include_blank: "--Choose Semester--" %>
+	        </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

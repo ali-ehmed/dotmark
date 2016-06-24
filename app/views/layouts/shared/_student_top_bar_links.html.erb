@@ -1,0 +1,15 @@
+<ul class="nav navbar-nav navbar-top-links navbar-right">
+  <li class="navbar-image">
+    <img src="<%= image_path(navbar_image(current_resource)) %>", class="img-rounded img-responsive">
+  </li>
+  <li>
+    <%= link_to profiles_url(subdomain: @account["subdomain"], username: current_resource.username) do %>
+      <i class="fa fa-user fa-fw"></i> My Profile
+    <% end %>
+  </li>
+  <li>
+    <%= link_to destroy_student_session_path, method: "delete" do %>
+      <i class="fa fa-sign-out fa-fw"></i> Logout
+    <% end %>
+  </li>
+</ul>

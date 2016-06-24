@@ -1,0 +1,105 @@
+// .application-footer {
+// 	font-size: 18px;
+//   // position: fixed;
+//   width: 99.9%;
+//   bottom: -20px;
+//   margin-left: -15px;
+//   text-align: center;
+//   margin-top: 53px;
+// }
+
+.container-body {
+  margin-top: 88px;
+  min-height: 398px;
+}
+
+.scrollable {
+	max-height: 300px;
+	overflow: auto;
+  padding: 10px;
+  border: 2px solid #D4D4D4;
+  border-radius: 4px;
+}
+
+.loader {
+	text-align: center;
+}
+
+.resizeable {
+	// z-index: 1;
+	.resize-section {
+		height: 300px;
+		resize: both;
+    overflow: auto;
+    overflow-x: scroll;
+	}
+}
+
+#app-nav {
+	.navbar-brand {
+		padding: 15px 7px 0px 7px !important;
+	  font-size: 26px;
+	  border-left: 3px solid;
+	  border-right: 3px solid;
+	  margin-top: 7px;
+	  margin-bottom: 7px;
+	}
+	ul.navbar-right {
+		padding: 7px;
+		li.app-active-li {
+			font-size: 19px;
+		}
+	}
+}
+.user-settings {
+  @media(max-width: 480px) {
+    display: none;
+  }
+  @media(min-width: 480px) {
+    margin-top: 47px;
+    h3 {
+      margin-top: 350px;
+    }
+  }
+}
+blockquote { 
+	margin:0;
+	border-left-color: #777777;
+}
+blockquote.blockquote-reverse { border-right-color: #777777; } 
+
+.breadcrumb { 
+	background-color: #D4D4D4; 
+	li + li:before { color: #1F1E1E; }
+}
+
+.panel-default > .panel-heading {
+		color: #FFFFFF;
+    background-color: #777777;
+    border-color: #ddd;
+}
+
+$background-img: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAaCAYAAACpSkzOAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAALEgAACxIB0t1+/AAAABZ0RVh0Q3JlYXRpb24gVGltZQAxMC8yOS8xMiKqq3kAAAAcdEVYdFNvZnR3YXJlAEFkb2JlIEZpcmV3b3JrcyBDUzVxteM2AAABHklEQVRIib2Vyw6EIAxFW5idr///Qx9sfG3pLEyJ3tAwi5EmBqRo7vHawiEEERHS6x7MTMxMVv6+z3tPMUYSkfTM/R0fEaG2bbMv+Gc4nZzn+dN4HAcREa3r+hi3bcuu68jLskhVIlW073tWaYlQ9+F9IpqmSfq+fwskhdO/AwmUTJXrOuaRQNeRkOd5lq7rXmS5InmERKoER/QMvUAPlZDHcZRhGN4CSeGY+aHMqgcks5RrHv/eeh455x5KrMq2yHQdibDO6ncG/KZWL7M8xDyS1/MIO0NJqdULLS81X6/X6aR0nqBSJcPeZnlZrzN477NKURn2Nus8sjzmEII0TfMiyxUuxphVWjpJkbx0btUnshRihVv70Bv8ItXq6Asoi/ZiCbU6YgAAAABJRU5ErkJggg==);
+
+@function set-bg-color($color) {
+  @if ($color == #ffffff) {
+  	@return rgba(0, 0, 0, 0.1);
+    // Lighter backgorund, return dark color
+  }
+}
+
+body { 
+	background-image: $background-img;
+	.settings-list-group a{
+		background-image: $background-img;
+	}
+	div {
+		// background-color: set-bg-color(#ffffff);
+		// background-image: $background-img;
+	}
+}
+
+// Profile
+.profile_tabs > li.active > a, .profile_tabs > li.active > a:hover, .profile_tabs > li.active > a:focus {
+	background-color: rgba(46, 181, 232, 0.5);
+}

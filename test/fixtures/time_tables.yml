@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  time_slot_id: 1
+  classroom_id: 1
+  course_allocation_id: 1
+
+two:
+  time_slot_id: 1
+  classroom_id: 1
+  course_allocation_id: 1

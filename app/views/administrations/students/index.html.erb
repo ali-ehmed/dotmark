@@ -1,0 +1,66 @@
+<div class="page-header">
+	<h2>
+		Students <small>Enrolled</small>
+    <a href="#" class="pull-right btn btn-info" data-target="#admission_modal" data-toggle="modal"><i class="fa fa-graduation-cap"></i> New Student</a>
+	</h2>
+</div>
+<%= form_tag search_students_path(format: :js), remote: true, method: :get, id: "search_students_form" do %>
+	<%= hidden_field_tag :batch_id_param %>
+	<div class="row">
+		<div class="col-md-12">
+			<div class="row">
+				<div class="col-md-3">
+					<label>Roll No:</label>
+					<%= text_field_tag :roll_no, params[:roll_no], class: "form-control", placeholder: "Enter Roll Number" %>
+				</div>
+				<div class="col-md-3">
+					<label>Name:</label>
+					<%= text_field_tag :student_name, params[:student_name], class: "form-control", placeholder: "Enter Name" %>
+				</div>
+				<div class="col-md-3">
+					<label>Section:</label>
+					<div id="students_sections">
+						<%= students_sections_list(@sections) %>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<br />
+	<div class="row">
+		<div class="col-md-6">
+			<%= submit_tag "Search", class: "btn btn-danger" %>
+			<%= link_to "Clear", students_path, class: "btn btn-default" %>
+		</div>
+	</div>
+<% end %>
+<br />
+<div class="row">
+	<div class="col-md-12 col-sm-12 col-xs-12">
+	  <ul class="nav nav-tabs students_search_index" role="tablist">
+	  	<% @batches.each_with_index do |batch, count| %>
+	  		<% count += 1 %>
+	    	<li role="presentation" class="student_batch_name_count_<%= batch['id'] %>">
+	    		<%= link_to search_students_path(batch_id_param: batch['id'], format: :js), remote: true, "data-target" => "##{batch['name']}_#{count}", "data-toggle" => "tab", onclick: "getBatchid(this, #{batch['id']});", id: "tab_student_#{batch['id']}" do %>
+	    			<%= "#{batch['name']} (#{batch['students']})" %>
+	    		<% end %>
+    		</li>
+    	<% end %>
+	  </ul>
+
+	  <div class="tab-content students_search_index">
+	  	<% @batches.each_with_index do |batch, count| %>
+	  		<% count += 1 %>
+		    <div role="tabpanel" class="tab-pane fade in" data-batch-id="<%= batch['id'] %>" id="<%= batch['name'] %>_<%= count %>">
+		    	<div id="students_in_<%= batch['id'] %>">
+		    		<% if batch['id'] == @batches.first['id'] %>
+		    			<%= render "students_list", students: Student.where(batch_id: batch["id"]), batch_name: batch['name'] %>
+	    			<% end %>
+	    		</div>
+		    </div>
+	    <% end %>
+	  </div>
+	</div>
+</div>
+
+<%= render partial: "administrations/admissions/enroll_form" %>

@@ -1,0 +1,32 @@
+<% content_for :institute_settings do %>
+  <div class="allocations">
+    <ul class="nav nav-tabs" role="tablist">
+      <li role="presentation" class="active">
+        <a href="#allocations" aria-controls="allocations" role="tab" data-toggle="tab" onclick="activeTabs(this);">Allocations</a>
+      </li>
+      <li role="presentation">
+        <a href="#allocate_course" aria-controls="allocate_course" role="tab" data-toggle="tab" onclick="activeTabs(this);">Allocate Course</a>
+      </li>
+    </ul>
+    <div class="tab-content">
+      <div role="tabpanel" class="tab-pane active" id="allocations">
+        <div class="panel panel-default panel-app">
+          <div class="panel-body">
+            <h3>View Allocations</h3>
+            <hr />
+            <%= render "allocations" %>
+          </div>
+        </div>
+      </div>
+      <div role="tabpanel" class="tab-pane" id="allocate_course">
+        <div class="panel panel-default panel-app">
+          <div class="panel-body">
+            <h3>Allocate Courses to Teachers</h3>
+            <hr />
+            <%= render "form" %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>

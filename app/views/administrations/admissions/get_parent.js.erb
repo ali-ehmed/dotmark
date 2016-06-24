@@ -1,0 +1,7 @@
+<% if @parent.present? %>
+	console.log("<%= @parent %>")
+	$(".choose_guardians").hide()
+	$(".searched_guardians").hide().html("<%= escape_javascript(render 'shared/list_parent') %>").fadeIn(500)
+<% else %>
+	swal("Sorry", "There is no such Parent available", "error")
+<% end %>

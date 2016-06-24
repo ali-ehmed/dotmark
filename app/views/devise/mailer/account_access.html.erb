@@ -1,0 +1,21 @@
+<%= stylesheet_link_tag 'landings', media: 'all' %>
+
+<div class="container">
+	<div class="page-header">
+		<h1>Hello <small><%= @full_name %>!</small></h1>	
+	</div>
+	<blockquote>
+	  <p>As you have been successfully registered to <strong>Dot Mark.</strong></p>
+	  <p>You can access to your account by following credentials</p>
+	  <ul>
+	  	<li><strong>Username:</strong> <%= @login_username %></li>
+	  	<li><strong>Email:</strong> <%= @login_email %></li>
+	  	<li><strong>Passoword:</strong> <%= @login_password %></li>
+	  </ul>
+	  <em>Note: You can change your password anytime you want.</em>
+	</blockquote>
+	<div class="alert alert-success">
+		<p><%= link_to 'Login to your account', @login_url, class: "btn btn-danger btn-lg", method: :post, target: "_blank" %></p>
+	</div>
+	
+</div>

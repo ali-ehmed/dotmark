@@ -1,0 +1,11 @@
+<div style="max-height: 300px;overflow: auto;">
+	<% if @sections.present? %>
+	  <ul class="list-group checked-list-box" data-type="sections">
+	    <% @sections.each do |section| %>
+	      <li class="list-group-item" data-section-id="<%= section[:id] %>"><strong>Section <%= section[:name] %></strong></li>
+	    <% end %>
+	  </ul>
+  <% else %>
+  	<strong><%= @batch.sections.blank? ? "No Sections Available" : "Please Select Batch" %></strong>
+  <% end %>
+</div>

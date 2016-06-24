@@ -1,0 +1,6 @@
+$(".classrooms").hide().html("<%= escape_javascript(render 'listing_classrooms').html_safe %>").fadeIn(500)
+
+$('.best_in_place').best_in_place();
+$('.best_in_place').bind().on('ajax:error', function(){
+	$('.purr').prepend('<span class=\'glyphicon glyphicon-exclamation-sign\'></span> ');
+});

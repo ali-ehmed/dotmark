@@ -1,0 +1,8 @@
+//Mark Time SLot Cell
+$("table#time_table tr [data-time-slot-id='" + $("#time_slot_id").val() + "']").html("<%= escape_javascript(marked_cell(@time_table)) %>");
+$('[data-toggle="popover"]').popover()
+
+window.$timetable.loadReservedDetail()
+window.$timetable.dismissScheduleForm()
+
+$(".book-reserved-detail").popover('destroy')

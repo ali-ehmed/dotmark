@@ -1,0 +1,30 @@
+<h2><small>Security Settings</small></h2>
+<%= simple_form_for(@resource, url: security_profiles_path(params[:username], tab: "security"), html: { method: :put }) do |f| %>
+  <%#= f.error_notification if @security_error %>
+
+  <div class="form-inputs">
+    <%= f.input :email, required: true %>
+    <%= f.input :username, autocomplete: "off", input_html: { id: "profile_username", disabled: true } %>
+
+    <%# if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
+      <!-- <p>Currently waiting confirmation for: <%#= resource.unconfirmed_email %></p> -->
+    <%# end %>
+    <hr />
+    <%= f.input :current_password, label: "Old password", hint: "we need your old password to confirm your changes", required: true %>
+    <%= f.input :password, autocomplete: "off", hint: "leave it blank if you don't want to change it", required: false %>
+    <%= f.input :password_confirmation, required: false %>
+  </div>
+  <div class="form-actions">
+    <%= f.button :submit, "Save", class: "btn btn-warning" %>
+  </div>
+<% end %>
+<hr />
+<div class="panel panel-danger">
+  <div class="panel-heading">
+    <strong>Cancel my account</strong>
+  </div>
+  <div class="panel-body">
+    <p>Once you delete your account, there is no going back. Please be certain.</p>
+    <%= link_to "Cancel my account", registration_path(@resource.class.to_s.underscore.to_sym), data: { confirm: "Are you sure?" }, class: "btn btn-danger", method: :delete %>
+  </div>
+</div>

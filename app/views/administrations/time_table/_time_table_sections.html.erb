@@ -1,0 +1,6 @@
+<li class="list-group-item text-center" data-section-id="<%= section["id"] %>">
+  <div class="radio" style="margin-top:1px;">
+    <%= radio_button_tag :section_id, section["id"], false, id: "section_#{section["id"]}" %>
+    <label for="section_<%= section["id"] %>" style="padding-left:7px;"><strong>Section <%= section["name"] %></strong></label>
+  </div>
+</li>

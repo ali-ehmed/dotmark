@@ -1,0 +1,33 @@
+<% if @courses.present? %>
+	<table class="table table-striped table-hover table-checked-list-box">
+		<thead>
+			<tr>
+				<th>Name</th>
+				<th>Code</th>
+				<th>Credit Hours</th>
+				<th>Type</th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+			<% @courses.each_with_index do |course, i| %>
+				<% count = i + 1 %>
+				<tr>
+					<td><%= course[:name] %></td>
+					<td><%= course[:course_code] %></td>
+					<td><%= course[:credit_hours] %></td>
+					<td><%= course[:course_type] %></td>
+					<td>
+						<div class="radio" style="margin-top:1px;">
+							<input type="radio" onchange="CourseAllocation.getSectionsByCourse(this);" name="course_id" value="<%= course[:id] %>" <%= has_courses(course) %> id="course_<%= course[:id] %>_radio" />
+							<label for="course_<%= course[:id] %>_radio"></label>
+						</div>
+					</td>
+				</tr>
+			<% end %>
+		</tbody>
+	</table>						
+<% else %>
+	<strong>No courses assigned</strong>
+<% end %>
+
