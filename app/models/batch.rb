@@ -38,7 +38,7 @@ class Batch < ActiveRecord::Base
 			current_batches = Batch.batches_running_currently.to_json
 		end
 
-		@batches = JSON.load current_batches 
+		@batches = JSON.load current_batches
 	end
 
 	def grouped_teacher_allocation
@@ -72,7 +72,7 @@ class Batch < ActiveRecord::Base
 			@batches << "Please create '#{Date.today.year}' batch."
 			return @batches
 		end
-		
+
 		attributes = {}
 		for current_year in current_batch_year
 			if current_year.batch_name.include?(Date.today.year.to_s)
@@ -107,7 +107,7 @@ class Batch < ActiveRecord::Base
 		end
 
 		logger.debug "#{@batches}"
- 
+
 		$redis.set("current_batches", @batches.to_json)
 		$redis.expire("current_batches", 15.minutes.to_i)
 		return @batches

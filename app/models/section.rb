@@ -16,4 +16,8 @@ class Section < ActiveRecord::Base
 	has_many :course_allocations
 
 	scope :allocated, -> { joins(:course_allocations) }
+
+	after_save do
+		$redis.del("current_batches")
+	end
 end
