@@ -21,8 +21,8 @@ table.teacher_slot_detail_dashboard {
 .navbar-image {
   padding: 10px 0px 0px 0px;
   img {
-    width: 30px;
-    height: 30px;
+    height: 40px;
+    margin-top: -4px;
   }
 }
 .profile {
@@ -50,7 +50,7 @@ table.teacher_slot_detail_dashboard {
 		.institute_details {
 			text-align: center;
 
-			a { 
+			a {
 				text-decoration: none;
 				strong { font-size: 16px; }
 				span { font-size: 11px; }

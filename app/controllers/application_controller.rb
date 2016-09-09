@@ -13,11 +13,25 @@ class ApplicationController < ActionController::Base
   helper_method :set_account, :current_resource, :current_resource_name
 
   add_breadcrumb "Dashboard"
-  
+
   before_action :set_account, :require_account!, :make_action_mailer_use_request_host_and_protocol
   before_action :configure_permitted_parameters, :devise_breadcrumbs, if: :devise_controller?
 
+  before_action :sidebar
+
   devise_group :user, contains: [:student, :teacher, :admin]
+
+  def sidebar(flag = false)
+    @sidebar = flag
+  end
+
+  %w(admin_institute_settings_aside admin_settings_aside).each do |sidebar|
+    self.class_eval <<-METHOD, __FILE__, __LINE__ + 1
+      def #{sidebar}(flag = false)
+        instance_variable_set(:@#{sidebar}, flag)
+      end
+    METHOD
+  end
 
   def pjax_layout
     'pjax'
@@ -40,7 +54,7 @@ class ApplicationController < ActionController::Base
       add_breadcrumb "Teachers"
     end
   end
-  
+
   def layout_by_resource
     if request.subdomain.blank?
       "application"
@@ -69,7 +83,7 @@ class ApplicationController < ActionController::Base
     end
     @account = JSON.load(account)
   end
-  
+
   def require_account!
     if request.subdomain.present?
       unless @account.blank?
@@ -108,7 +122,7 @@ class ApplicationController < ActionController::Base
         if login_path and current_controller?("landings")
           cookies[:login_path] = nil
           students_domain = k.underscore.pluralize if k.constantize == Student
-          # resource_name = students_domain || k.underscore 
+          # resource_name = students_domain || k.underscore
           redirect_to send("#{k.underscore.pluralize}_login_path", subdomain: @account["subdomain"])
         else
           send("authenticate_#{k.underscore}!")
@@ -152,21 +166,21 @@ class ApplicationController < ActionController::Base
     case resource
     when "student".to_sym
       params.require(:student).permit(:email, :username,
-                                      :first_name, :last_name, :date_of_birth, :roll_number, :address, :phone, 
-                                      :section_id, :batch_id, :semester_id, :gender, 
-                                      :avatar_attributes => [ :id, :image ], 
+                                      :first_name, :last_name, :date_of_birth, :roll_number, :address, :phone,
+                                      :section_id, :batch_id, :semester_id, :gender,
+                                      :avatar_attributes => [ :id, :image ],
                                       :account_attributes => [:id, :subdomain])
     when "teacher".to_sym
       params.require(:teacher).permit(:email, :username,
-                                      :first_name, :last_name, :address, :qualification, :past_experience, 
+                                      :first_name, :last_name, :address, :qualification, :past_experience,
                                       :avatar_attributes => [ :id, :image ])
-    end 
+    end
   end
 
   def current_resource
     current_admin || current_student || current_teacher || current_parent
   end
-  
+
   private
 
   def make_action_mailer_use_request_host_and_protocol
@@ -184,7 +198,7 @@ class ApplicationController < ActionController::Base
                                                               :phone, :skills) }
     elsif resource_class == Student
       devise_parameter_sanitizer.for(:student) {|u| u.permit(:email, :password, :password_confirmation, :username,
-                                                            :first_name, :last_name, :date_of_birth, :roll_number, :address, :phone, 
+                                                            :first_name, :last_name, :date_of_birth, :roll_number, :address, :phone,
                                                             :section_id, :batch_id, :semester_id, :gender) }
     end
   end

@@ -1,7 +1,9 @@
 module Administrations
 	class	SettingsController < ApplicationController
 		before_action :authenticate_admin!
-		
+		before_action -> { sidebar(true) }
+		before_action -> { admin_settings_aside(true) }
+
 		def admin_account
 			@admin = current_admin
 		end

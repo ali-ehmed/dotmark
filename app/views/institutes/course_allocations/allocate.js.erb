@@ -9,7 +9,7 @@ $.notify({
   z_index: 10000
 });
 
-$('table.allocations_table_for_<%= @batch_id %>').DataTable().ajax.url('/institutes/course_allocations/<%= @batch_id %>/get_allocations.json').load()
+$('table.allocations_table_for_<%= @batch_id %>').DataTable().ajax.url('/institutes/course_allocations/<%= @batch_id %>/get_allocations.json?semester_id=<%= @semester_id %>').load()
 $("#remove_teacher_allocations").html("<%= escape_javascript(teacher_allocation_options(@options)) %>")
 
 $("table.allocations_table_for_<%= @batch_id %>").prev().prev().html('<%= escape_javascript( notify_to_all(@batch.as_json) ) %>');

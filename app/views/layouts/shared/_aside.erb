@@ -1,0 +1,40 @@
+<% if @admin_institute_settings_aside %>
+  <div class="container-fluid">
+    <div class="page-heading-admin-settings">
+      Institute Settings
+    </div>
+    <div class="row">
+      <div class="col-md-3">
+        <div class="settings-list-group">
+          <%= link_to "Batches", institutes_batches_path, class: "list-group-item" %>
+          <%= link_to "Classrooms", institutes_classrooms_path, class: "list-group-item" %>
+          <%= link_to "Courses", institutes_courses_path, class: "list-group-item" %>
+          <%= link_to "Course Allocations", institutes_course_allocations_path, class: "list-group-item" %>
+        </div>
+      </div>
+      <div class="col-md-9">
+        <%= yield :institute_settings %>
+      </div>
+    </div>
+  </div>
+<% end %>
+
+<% if @admin_settings_aside %>
+  <div class="container-fluid">
+    <div class="page-heading-admin-settings">
+      Settings
+    </div>
+    <div class="row">
+      <div class="col-md-3">
+        <div class="admin-settings settings-list-group">
+          <%= link_to "Admin Account", admin_account_settings_path, class: "list-group-item" %>
+          <%= link_to "Week Days & Timings", set_week_days_settings_path, class: "list-group-item" %>
+          <%= link_to "Batches", current_batches_settings_path, class: "list-group-item" %>
+        </div>
+      </div>
+      <div class="col-md-9">
+        <%= yield :admin_settings %>
+      </div>
+    </div>
+  </div>
+<% end %>

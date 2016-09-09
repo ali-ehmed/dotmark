@@ -41,8 +41,8 @@ class Batch < ActiveRecord::Base
 		@batches = JSON.load current_batches
 	end
 
-	def grouped_teacher_allocation
-		course_allocations.select("status, teacher_id, course_id").group("status, teacher_id, course_id")
+	def grouped_teacher_allocation semester_id
+		course_allocations.where(semester_id: semester_id).select("status, teacher_id, course_id").group("status, teacher_id, course_id")
 	end
 
 	def set_session_date

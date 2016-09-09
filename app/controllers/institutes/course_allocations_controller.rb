@@ -10,7 +10,7 @@ module Institutes
 		def get_allocations
 			@batch = Batch.find(params[:batch_id])
 
-			@teacher_allocations = @batch.grouped_teacher_allocation #All Allocations
+			@teacher_allocations = @batch.grouped_teacher_allocation(params[:semester_id]) #All Allocations
 
 			attributes = Array.new
 			@teacher_allocations.each do |allocation|
@@ -25,7 +25,7 @@ module Institutes
 					section: pluralize_sections(sections),
 					status: allocation.alloc_statuses,
 					send_instructions: notification_link(allocation.teacher_id, @batch.id, allocation.course_id)
-				}	
+				}
 			end
 
 			respond_to do |format|
@@ -36,18 +36,25 @@ module Institutes
 		def courses_and_sections
 			@teacher = Teacher.find(params[:teacher_id]) unless params[:teacher_id].blank?
 
-			return if params[:batch_id].blank?
+			# return if params[:batch_id].blank?
 
-			@batch = Batch.find(params[:batch_id])
+			if params[:batch_id] == "undefined"
+				params[:batch_id] = Batch.current_batches.first["id"]
+			end
+
+			@batch = Batch.find_by_id(params[:batch_id])
 			@batch_id = @batch.id
-			
+
 			# this is to check if current teacher is new, if new then it is necessary to select course first
 			@is_a_new_teacher = false
 
-			# search by teacher and batch 
+			semester_id = params[:semester_id]
+			semester_id ||= Batch.current_batches.first["id"]
+
+			# search by teacher and batch
 			if @teacher and @batch
 				# current teacher allocations
-				@teacher_allocations = @teacher.course_allocations.where(batch_id: @batch.id).order("course_id")
+				@teacher_allocations = @teacher.course_allocations.where(batch_id: @batch.id).where(semester_id: semester_id).order("course_id")
 				logger.debug "Techer Allocations -> #{@teacher_allocations.inspect}"
 
 				# assigned allocations
@@ -109,7 +116,7 @@ module Institutes
 				unless @course
 					@teacher_allocations = @teacher_allocations.where(course_id: @teacher_allocations.first.course_id)
 				end
-				
+
 				for teacher_allocation in @teacher_allocations
 					@sections.each do |section|
 						section[:has_section] = true if teacher_allocation.section_id == section[:id]
@@ -149,7 +156,7 @@ module Institutes
 			logger.debug "Courses -> #{@courses.inspect}"
 
 			get_removal_options()
-			
+
 			respond_to do |format|
 				format.js {}
 			end
@@ -190,12 +197,13 @@ module Institutes
 
 		def allocate
 			logger.debug "Params are: #{params.inspect}"
-			
+
+			batch = JSON.parse(params[:batch])
 			attributes = {
 				teacher_id: params[:teacher_id],
 				course_id: params[:course_id],
 				section_ids: params[:section_ids].try(:keys),
-				batch_id: params[:batch_id]
+				batch_id: batch["batch_id"]
 			}
 
 			@created_sections = Array.new
@@ -233,12 +241,12 @@ module Institutes
 					next
 				else
 					logger.debug "Not Present #{section}"
-					new_allocation = CourseAllocation.new do |allocation|
-						allocation.teacher_id = attributes[:teacher_id]
-						allocation.section_id = section
-						allocation.batch_id = attributes[:batch_id]
-						allocation.course_id = attributes[:course_id]
-						allocation.semester_id = @course.semester.id
+					new_allocation = CourseAllocation.new do |alloc|
+						alloc.teacher_id = attributes[:teacher_id]
+						alloc.section_id = section
+						alloc.batch_id = attributes[:batch_id]
+						alloc.course_id = attributes[:course_id]
+						alloc.semester_id = @course.semester.id
 					end
 				end
 
@@ -272,7 +280,7 @@ module Institutes
 
 					@msg = []
 					@msg << content_tag(:ul, :class => 'allocation_details_list') do
-						 
+
 					  failed.errors.full_messages.collect do |item|
 					    content_tag(:li, item)
 					  end.join.html_safe
@@ -281,8 +289,10 @@ module Institutes
 					render :json => { status: :error, msg: @msg  } and return
 				end
 
+				@semester_id = batch["semester_id"]
+
 				respond_to do |format|
-					
+
 					$redis.del("teacher_allocations")
 					get_current_semester()
 					get_removal_options[:course_id] = @course.id
@@ -315,7 +325,7 @@ module Institutes
 				course_id = @course.id
 
 				@teacher_allocations_for_removal = @teacher_allocations
-			else 
+			else
 			  if @assigned_courses.present?
 					course_id = @assigned_courses.first[:id]
 					@teacher_allocations_for_removal = @teacher_allocations.where(course_id: course_id)

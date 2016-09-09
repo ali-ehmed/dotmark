@@ -1,12 +1,12 @@
 class window.CourseAllocation
   constructor: ->
     @allocateTeachers()
-  
+
   @getAllCoursesAndSections: () ->
     $self = @
     _params = $self.parameters()
     unless _params['batch_id'] == ""
-      $url = "/institutes/course_allocations/#{_params['batch_id']}/courses_and_sections.js"
+      $url = "/institutes/course_allocations/#{_params['batch_id']}/courses_and_sections.js?semester_id=#{_params["semester_id"]}"
       $.ajax
         type: "Get"
         url: $url
@@ -15,8 +15,8 @@ class window.CourseAllocation
           AlertNotification.startLoaderIn(".loader")
         error: (response) ->
           swal 'oops', 'Something went wrong'
-    
-    
+
+
   @getSectionsByCourse: (elem) ->
     $self = @
     _params = $self.parameters()
@@ -141,7 +141,7 @@ class window.CourseAllocation
       batch_id: $batch_id,
       course_ids: $course_ids
     }
-    
+
     if $teacher_ids.length == 0 or $course_ids == 0
       $.notify {
         icon: 'glyphicon glyphicon-warning-sign'
@@ -159,15 +159,19 @@ class window.CourseAllocation
       batch_id: batch_id,
       course_ids: [course_id]
     }
-    
+
     Mailer.send_for_approval(_params, $url) unless teacher_id == "" or batch_id == "" or course_id == ""
 
   @parameters: () ->
     $teacher_id = $(".teacher_ID").val()
-    $batch_id = $(".batch_ID").val()
+    $batch_select = $(".batch_ID").val()
+    if $batch_select
+      $batch_select = $.parseJSON($batch_select)
+
     _params = {
       teacher_id: $teacher_id,
-      batch_id: $batch_id
+      batch_id: $batch_select.batch_id
+      semester_id: $batch_select.semester_id
     }
 
     _params
@@ -182,4 +186,3 @@ $(document).on "page:change", ->
 	$(".teacher_allocation").select2
 	  placeholder: "---Choose Teacher---",
 		allowClear: true
-

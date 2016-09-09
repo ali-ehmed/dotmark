@@ -15,6 +15,6 @@
 
 class ResourceAvatar < ActiveRecord::Base
 	belongs_to :resource, polymorphic: true
-	has_attached_file :image, styles: { profile: "230x230>", thumb: "100x100>" }, default_url: "user-avatar.png"
+	has_attached_file :image, styles: { profile: "230x230#", thumb: "50x50#" }, default_url: "user-avatar.png"
   validates_attachment_content_type :image, content_type: /\Aimage\/.*\Z/
 end

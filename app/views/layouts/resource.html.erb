@@ -11,8 +11,9 @@
       <div class="container">
         <%= render 'layouts/shared/breadcrumbs' %>
         <%= render 'layouts/shared/messages' %>
-        <%= render 'layouts/shared/institute_settings' %>
-        <%= render 'layouts/shared/settings' %>
+        <% if @sidebar %>
+          <%= render 'layouts/shared/aside' %>
+        <% end %>
         <%= yield %>
       </div>
     </main>

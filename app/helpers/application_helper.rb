@@ -75,7 +75,7 @@ module ApplicationHelper
     batches.map do |batch|
       grouped_options = if batches.count > 1
                           ["#{batch["name"]}",
-                            [["#{batch["semester"]}","#{batch["id"]}"]]
+                            [["#{batch["semester"]}","{\"batch_id\": #{batch["id"]}, \"semester_id\": #{batch["semester_id"]}}"]]
                           ]
                         else
                           ["#{batch}",

@@ -1,8 +1,11 @@
 module Institutes
 	class BaseController < ApplicationController
 		before_action :authenticate_admin!
+		before_action -> { sidebar(true) }
+		before_action -> { admin_institute_settings_aside(true) }
+
 		add_breadcrumb "Institutes"
-		
+
 		def get_sections
 			if params[:batch_id].blank?
 				@sections = []

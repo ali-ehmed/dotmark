@@ -26,7 +26,6 @@
 }
 
 .resizeable {
-	// z-index: 1;
 	.resize-section {
 		height: 300px;
 		resize: both;
@@ -62,14 +61,14 @@
     }
   }
 }
-blockquote { 
+blockquote {
 	margin:0;
 	border-left-color: #777777;
 }
-blockquote.blockquote-reverse { border-right-color: #777777; } 
+blockquote.blockquote-reverse { border-right-color: #777777; }
 
-.breadcrumb { 
-	background-color: #D4D4D4; 
+.breadcrumb {
+	background-color: #D4D4D4;
 	li + li:before { color: #1F1E1E; }
 }
 
@@ -88,7 +87,7 @@ $background-img: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAaCAYAA
   }
 }
 
-body { 
+body {
 	background-image: $background-img;
 	.settings-list-group a{
 		background-image: $background-img;

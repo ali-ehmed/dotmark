@@ -12,7 +12,7 @@
         <strong>Batch</strong>
       </blockquote>
       <br >
-      <%= select_tag :batch_id, grouped_options_for_select(grouped_batches_options(@batches)), class: "form-control input-sm batch_ID", id: "courses_and_sections", prompt: "--Choose Batch--", onchange: "CourseAllocation.getAllCoursesAndSections();" %>
+      <%= select_tag :batch, grouped_options_for_select(grouped_batches_options(@batches)), class: "form-control input-sm batch_ID", id: "courses_and_sections", prompt: "--Choose Batch--", onchange: "CourseAllocation.getAllCoursesAndSections();" %>
 		</div>
 	</div>
   <hr />
@@ -48,5 +48,5 @@
       </ul>
     </div>
   </div>
-  
+
 <% end %>

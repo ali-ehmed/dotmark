@@ -13,9 +13,9 @@
 			</div>
 		</div>
 	</div>
-	
+
 	<br />
-	<table class="table table-striped allocations_table allocations_table_for_<%= batch["id"] %> display responsive" data-source="<%= get_allocations_institutes_course_allocations_path(batch["id"], format: :json) %>" width="100%">
+	<table class="table table-striped allocations_table allocations_table_for_<%= batch["id"] %> display responsive" data-source="<%= get_allocations_institutes_course_allocations_path(batch["id"], semester_id: batch["semester_id"], format: :json) %>" width="100%">
 		<thead>
 	    <tr>
 	      <th>Teacher</th>
@@ -41,7 +41,7 @@
 			  ajax: $("table.allocations_table_for_<%= batch['id'] %>").data("source"),
 			  "fnDrawCallback": function (aoData) {
 			  	$loaded_table = $(this)
-			  	
+
 			  	if(aoData.json === undefined) {
 		  			console.log("Params are Blank")
 			  	} else {
