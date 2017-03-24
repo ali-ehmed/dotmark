@@ -30,8 +30,8 @@ development:
   reconnect: true
   database: dotmark_development
   pool: 10
-  username: aliahmed
-  password: aliahmed
+  username:
+  password:
   host: 127.0.0.1
   port: 5432
 
@@ -41,8 +41,8 @@ test:
   reconnect: true
   database: dotmark_test
   pool: 10
-  username: aliahmed
-  password: aliahmed
+  username:
+  password:
   host: 127.0.0.1
   port: 5432
 
@@ -54,7 +54,7 @@ production:
   pool: 50
   checkout_timeout: 10
   reaping_frequency: 3
-  username: postgres
-  password: click123
+  username:
+  password: 
   host: 127.0.0.1
   port: 5432
